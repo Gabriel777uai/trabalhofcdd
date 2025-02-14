@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
 @font-face {
     font-family: 'minha-fonte-local';
-    src: url(../fonte/Poppins-Black.ttf);
+    src: url(../font/Poppins-Black.ttf);
 }
 * {
     font-family: 'minha-fonte-local', sans-serif;
@@ -58,6 +58,12 @@ nav {
     border-radius: 10px;
     color: aliceblue;
 }
+.entrar {
+    background: #71d7ffa2;
+    padding: 10px;
+    border-radius: 10px;
+    color: aliceblue;
+}   
 .Login {
     text-align: center;
     margin-top: 3%;
@@ -73,7 +79,7 @@ nav {
 }
 @font-face {
     font-family: 'fonte-secundaria';
-    src: url("../fonte/Play-Bold.ttf");
+    src: url("../font/Play-Bold.ttf");
     
 }
 .Login .titulo h2 {
