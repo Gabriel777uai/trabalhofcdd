@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
+@font-face {
+    font-family: 'minha-fonte-local';
+    src: url(../../font/Poppins-Black.ttf);
+}
+* {
+    font-family: 'minha-fonte-local', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+body {
+    height: 100vh;
+    background-image: url(../../image/img2.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+header {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    top: 15px;
+    z-index: 1;
+
+}
+header section {
+    background: #1D221C;
+    border-radius: 10px;
+    padding: 20px 70px;
+}
+header section a{
+    
+    text-decoration: none;
+    
+}
+header section a h1 {
+    color: black;
+    background: #4b8ea8a2;
+    border-radius: 10px;
+    padding: 10px;
+    transition: .5s;
+}
+header section a h1:hover {
+    transform: scale(1.1);
+    background: #71d7ffa2;
+    color: aliceblue;
+}
+.sobre {
+    color: aliceblue;
+    position: relative;
+    top: 200px;
+    backdrop-filter: blur(5px);
+    background: #1d221c81;
+    height: auto;
+}
+.sobre h2 {
+    margin: 20px;
+}
+.conteudo, ul {
+    margin: 20px;
+}
+.apresentado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.texto-da-img {
+    position: relative;
+    top: 20px;
+    font-size: 1.5em;
+    flex: 1;
+}
+.img {
+    flex: 1;
+}
