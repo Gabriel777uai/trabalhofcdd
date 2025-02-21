@@ -92,7 +92,7 @@ nav {
     font-weight: 100;
 } 
 
-form .controle input[type='text'], input[type='password']{
+article .controle input[type='text'], input[type='password']{
     margin-bottom: 20px;
     border-radius: 10px;
    
@@ -100,7 +100,7 @@ form .controle input[type='text'], input[type='password']{
 .flex {
     flex: .3;
 }
-form .button input[type='submit'] {
+article .button input[type='submit'] {
     border: none;
     padding: 8px 30px;
     background: rgb(0, 255, 81);

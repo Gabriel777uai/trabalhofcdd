@@ -25,25 +25,26 @@
             <p>Login</p>
             <h2>Estoque<br>Inteligente</h2>
         </div>
-        <form method="post" class="d-flex justify-content-center">
+        <article class="d-flex justify-content-center">
             <div class="flex">
                 <div class="form-floating controle">
-                    <input class="form-control" id="floatingInput" type="text" name="Usuario" placeholder="Usuario:">
+                    <input class="form-control" id="usuario" type="text" name="Usuario" placeholder="Usuario:">
                     <label for="Usuario">Usuario:</label>
                 </div>
                 <div class="form-floating controle">
-                    <input class="form-control" id="floatingInput" type="password" name="Usuario" placeholder="Senha:">
+                    <input class="form-control" id="senha" type="password" name="Usuario" placeholder="Senha:" >
                     <label for="Usuario">Senha:</label>
                 </div>
                 <div class="button">
-                    <input type="submit" value="Entrar">
+                    <input type="submit" value="Entrar" onclick="Entrar()" >
                 </div>
             </div>
-        </form>
+        </article>
     </section>
     <footer>
         <p>&copy; Todos os direitos reservados. site empresarial.</p>
     </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="js/script.js"></script>
     <script> window.chtlConfig = { chatbotId: "9239611121" } </script>
     <script async data-id="9239611121" id="chatling-embed-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>

@@ -1,0 +1,75 @@
+* {
+    font-family: arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-image: url(../../image/img3.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: crisp-edges;
+}
+header {
+    color: aliceblue;
+    background-color: #121512dc;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    position: fixed;
+    width: 100%;
+}
+.logo-e-titulo i {
+    font-size: 2em;
+    cursor: pointer;
+    transition: .1s;
+    &:hover {
+        transform: scale(1.2);
+    }
+}
+.logo-e-titulo img {
+    width: 200px;
+}
+.logo-e-titulo {
+    display: flex;
+    align-items: center;
+}
+.menu-lateral div.conteudo {
+    font-size: 0px;
+    color: aliceblue;
+}
+.menu-lateral div.conteudo button {
+    display: none;
+    color: aliceblue;
+    border: 1px solid white;
+}
+.menu-lateral div.conteudo a {
+    color: aliceblue;
+    text-decoration: none;
+    margin-left: 40px;
+    
+}
+.menu-lateral.ativado div.conteudo button {
+    display: block;
+}
+.menu-lateral {
+    width: 0;
+    height: 0;
+    transition: .5s;
+    position: fixed;
+    top: 98px;
+}
+.menu-lateral.ativado div.conteudo {
+    font-size: 26px;
+    transition: .5s;
+  
+}
+.menu-lateral.ativado {
+    top: 97px;
+    transition: .5s;
+    position: fixed;
+    width: 10%;
+    background: #121512dc;
+    height: 87vh;
+}
