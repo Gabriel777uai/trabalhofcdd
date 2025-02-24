@@ -67,3 +67,9 @@ jQuery('#senha').keypress(function(event){
 	}
 
 });
+let myParam = location.href.split("?")
+let getValue = myParam[1]
+console.log(getValue)
+if (getValue == "aicmequbra") {
+    alert('Por favor efetuar o login')
+}
