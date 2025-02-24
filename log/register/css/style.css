@@ -1,0 +1,29 @@
+body {
+    background-image:url("../../../image/fundo-cadastro.jpeg") ;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+
+    background-attachment: fixed;
+}
+.container {
+    display: flex;
+    position: relative;
+    top: 125px;
+    justify-content: center;
+    align-content: center;
+    height: 50vh;
+}
+.formulario-de-entrega div input{
+    margin-top: 15px;
+}
+.border1px {
+    background: white;
+    border: .5px solid #cccc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 4px 5px #0000009a;
+}
+.d-flex {
+    height: 80vh;
+}

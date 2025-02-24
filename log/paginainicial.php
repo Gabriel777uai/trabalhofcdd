@@ -25,20 +25,19 @@
             <ul class="list-unstyled ps-0">
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true" style="margin-top: 20px;">
-                        
                         Produtos
                     </button>
                     <div class="collapse show" id="home-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                          <li><a href="#" class="link-dark rounded">Overview</a></li>
-                          <li><a href="#" class="link-dark rounded">Updates</a></li>
-                          <li><a href="#" class="link-dark rounded">Reports</a></li>
+                          <li><a href="#" class="link-dark rounded">Ferramentas</a></li>
+                          <li><a href="#" class="link-dark rounded">Automoveis</a></li>
+                          <li><a href="#" class="link-dark rounded">Motopeças</a></li>
                         </ul>
                       </div>
                 </li>
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse"style="margin-top: 20px;" >
-                        Produtos
+                        Relatorios
                     </button>
                     <div class="collapse" id="dashboard-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -50,7 +49,7 @@
                 </li>
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" style="margin-top: 20px;">
-                        Produtos
+                        Saidas
                     </button>
                     <div class="collapse" id="account-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
@@ -62,13 +61,13 @@
                 </li>
                 <li class="mb-1">
                     <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse"style="margin-top: 20px;" >
-                        Produtos
+                        Cadastros
                     </button>
                     <div class="collapse" id="orders-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                          <li><a href="#" class="link-dark rounded">Overview</a></li>
-                          <li><a href="#" class="link-dark rounded">Updates</a></li>
-                          <li><a href="#" class="link-dark rounded">Reports</a></li>
+                          <li><a href="register/index.php?go=produtos" class="link-dark rounded">Produtos</a></li>
+                          <li><a href="register/index.php?go=usuarios" class="link-dark rounded">Usuarios</a></li>
+                          <li><a href="register/index.php?go=saidas" class="link-dark rounded">Saidas</a></li>
                         </ul>
                       </div>
                 </li>

@@ -34,7 +34,7 @@ function Entrar() {
             }
         }
         if(validalogin == true) {
-            window.location.href = "log/paginainicial.html?logado";
+            window.location.href = "log/paginainicial.php?logado";
         }else {
             alert("usuario ou senha incorretos tente novamente");
         }
@@ -59,7 +59,7 @@ jQuery('#senha').keypress(function(event){
                 }
             }
             if(validalogin == true) {
-                window.location.href = "log/paginainicial.html?logado";
+                window.location.href = "log/paginainicial.php?logado";
             }else {
                 alert("usuario ou senha incorretos tente novamente");
             }

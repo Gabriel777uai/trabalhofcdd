@@ -2,7 +2,7 @@ let myParam = location.href.split("?")
 let getValue = myParam[1]
 
 if(getValue != "logado" || getValue == undefined) {
-    window.location.href = "../index.html?aicmequbra"
+    window.location.href = "../index.php?aicmequbra"
 }
 let menuLateral = document.getElementById('menu-lateral')
 
