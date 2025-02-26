@@ -46,8 +46,6 @@
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="js/script.js"></script>
-    <script> window.chtlConfig = { chatbotId: "9239611121" } </script>
-    <script async data-id="9239611121" id="chatling-embed-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
-    <script async data-id="9239611121" data-display="page_inline" id="chatling-embed-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+    
 </body>
 </html>

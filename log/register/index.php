@@ -54,22 +54,19 @@
         break;
         case 'usuarios':
         ?>
-                        <article class="container">
+                <article class="container">
                     <div class="border1px">
                         <h1>Cadastro de Usuarios</h1>
                         <div class="formulario-de-entrega">
                             <form action="" method="post">
-                                <div class="form-floating controle">
-                                    <input type="number" id="codproduto" name="codproduto" class="form-control">
-                                    <label for="cdoproduto">Codigo produto</label>
-                                </div>
+                            
                                 <div class="form-floating controle">
                                     <input type="text" id="produtoname" name="produtoname" class="form-control">
-                                    <label for="produtoname">Nome produto</label>
+                                    <label for="produtoname">Nome Usuarios</label>
                                 </div>
                                 <div class="form-floating controle">
                                     <input type="text" id="descproduto" name="descproduto" class="form-control">
-                                    <label for="descproduto">Descição Produto</label>
+                                    <label for="descproduto">Senha</label>
                                 </div>
                                 <div class="form-floating controle">
                                     <input type="date" name="datadecadastro" id="datadecadastro" class="form-control">
@@ -91,7 +88,7 @@
                 <?php
                 case 'saidas':
                     ?>
-                        <article class="container">
+                <article class="container">
                     <div class="border1px">
                         <h1>Controle de Saida</h1>
                         <div class="formulario-de-entrega">
@@ -128,7 +125,6 @@
                 echo "failed param";
             }
         ?>
-
     </section>
     <a href="../paginainicial.php?logado" class="btn btn-danger" style="margin-left: 10%;"> Voltar</a>
     <script src="js/script.js"></script>
