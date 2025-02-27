@@ -53,7 +53,10 @@ nav {
     border-radius: 10px;
 }
 .navbare nav ul li a:hover {
-    background: #71d7ffa2;
+    color: #1D221C;
+}
+.navbare nav ul li a{
+    background: #4b8ea8a2;
     padding: 10px;
     border-radius: 10px;
     color: aliceblue;

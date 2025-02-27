@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../image/favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="../font/Hover-master/css/demo-page.css">
+    <link rel="stylesheet" href="../font/Hover-master/css/hover-min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Estoque Inteligente</title>
@@ -12,62 +14,64 @@
 <body>
     <header>
         <section class="logo-e-titulo">
+          <div class="hvr-buzz">
             <i class="bi bi-list" id="menu-lateral"></i>
+          </div>
             <img src="../image/estoque-logo.png" alt="logo-estoque">
             <h1>Estoque inteligente</h1>
         </section>
         <section class="situação">
-            <p>Situaçao: <span>online</span></p>
+            <p>Situaçao: <span id="EstadoConta"></span></p>
         </section>
     </header>
     <section class="menu-lateral" id="addclass">
         <div class="conteudo">
             <ul class="list-unstyled ps-0">
                 <li class="mb-1">
-                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true" style="margin-top: 20px;">
+                    <button class="btn btn-toggle align-items-center rounded collapsed hvr-sweep-to-right" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true" style="margin-top: 20px;">
                         Produtos
                     </button>
                     <div class="collapse show" id="home-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                          <li><a href="#" class="link-dark rounded">Ferramentas</a></li>
-                          <li><a href="#" class="link-dark rounded">Automoveis</a></li>
-                          <li><a href="#" class="link-dark rounded">Motopeças</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Ferramentas</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Automoveis</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Motopeças</a></li>
                         </ul>
                       </div>
                 </li>
                 <li class="mb-1">
-                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse"style="margin-top: 20px;" >
+                    <button class="btn btn-toggle align-items-center rounded collapsed hvr-sweep-to-right" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse"style="margin-top: 20px;" >
                         Relatorios
                     </button>
                     <div class="collapse" id="dashboard-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                          <li><a href="#" class="link-dark rounded">Overview</a></li>
-                          <li><a href="#" class="link-dark rounded">Updates</a></li>
-                          <li><a href="#" class="link-dark rounded">Reports</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Pedidos</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Compras</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Cadastro</a></li>
                         </ul>
                       </div>
                 </li>
                 <li class="mb-1">
-                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" style="margin-top: 20px;">
+                    <button class="btn btn-toggle align-items-center rounded collapsed hvr-sweep-to-right" data-bs-toggle="collapse" data-bs-target="#account-collapse" style="margin-top: 20px;">
                         Saidas
                     </button>
                     <div class="collapse" id="account-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                          <li><a href="#" class="link-dark rounded">Overview</a></li>
-                          <li><a href="#" class="link-dark rounded">Updates</a></li>
-                          <li><a href="#" class="link-dark rounded">Reports</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Pesquisar saida de produtos</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Vendas</a></li>
+                          <li><a href="#" class="link-dark rounded hvr-underline-from-left">Compras</a></li>
                         </ul>
                       </div>
                 </li>
                 <li class="mb-1">
-                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse"style="margin-top: 20px;" >
+                    <button class="btn btn-toggle align-items-center rounded collapsed hvr-sweep-to-right" data-bs-toggle="collapse" data-bs-target="#orders-collapse"style="margin-top: 20px;" >
                         Cadastros
                     </button>
                     <div class="collapse" id="orders-collapse">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                          <li><a href="register/index.php?go=produtos" class="link-dark rounded">Produtos</a></li>
-                          <li><a href="register/index.php?go=usuarios" class="link-dark rounded">Usuarios</a></li>
-                          <li><a href="register/index.php?go=saidas" class="link-dark rounded">Saidas</a></li>
+                          <li><a href="register/index.php?go=produtos" class="link-dark rounded hvr-underline-from-left">Produtos</a></li>
+                          <li><a href="register/index.php?go=usuarios" class="link-dark rounded hvr-underline-from-left">Usuarios</a></li>
+                          <li><a href="register/index.php?go=saidas" class="link-dark rounded hvr-underline-from-left">Saidas</a></li>
                         </ul>
                       </div>
                 </li>
