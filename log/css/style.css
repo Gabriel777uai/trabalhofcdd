@@ -117,6 +117,9 @@ select.form-select {
     padding: 20px;
     overflow-y: scroll;
 }
+#EstadoConta{
+    color: tomato;
+}
 .colorOnline {
     color: rgb(11, 225, 11);
 }

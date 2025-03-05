@@ -1,6 +1,6 @@
 <?php
     $urlparm = $_GET['go'];
-  
+    include_once("../../conexaoBD/conect.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +51,9 @@
                     </div>
                 </article>
         <?php
+        if(isset($_POST["cadatrar"])){
+            
+        } 
         break;
         case 'usuarios':
         ?>
@@ -58,22 +61,22 @@
                     <div class="border1px">
                         <h1>Cadastro de Usuarios</h1>
                         <div class="formulario-de-entrega">
-                            <form action="" method="post">
-                            
+                            <form action="registros/usuario.php" method="post">
                                 <div class="form-floating controle">
-                                    <input type="text" id="produtoname" name="produtoname" class="form-control">
-                                    <label for="produtoname">Nome Usuarios</label>
+                                    <input type="text" id="username" name="username" class="form-control">
+                                    <label for="username">Nome Usuarios</label>
                                 </div>
                                 <div class="form-floating controle">
-                                    <input type="text" id="descproduto" name="descproduto" class="form-control">
-                                    <label for="descproduto">Senha</label>
+                                    <input type="text" id="cargoname" name="cargoname" class="form-control">
+                                    <label for="cargoname">cargo usuário</label>
                                 </div>
                                 <div class="form-floating controle">
-                                    <input type="date" name="datadecadastro" id="datadecadastro" class="form-control">
-                                    <label for="datadecadastro">Data de cadastro</label>
-                                </div >
+                                    <input type="text" id="senha" name="senhauser" class="form-control">
+                                    <label for="senha">Senha</label>
+                                </div>
                                 <div class="form-floating controle">
-                                    <p>Cadastrante:<?php ?></p>
+                                    <input type="date" id="data" name="data" class="form-control">
+                                    <label for="data">cadastro</label>
                                 </div>
                                 <div class="form-floating controle">
                                     <input type="submit" value="Cadastrar" name="cadastrar" class="btn btn-primary">
@@ -83,6 +86,7 @@
                     </div>
                 </article>
                 <?php
+                  
                 break;
                 ?>
                 <?php

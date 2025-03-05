@@ -21,7 +21,7 @@
             <h1>Estoque inteligente</h1>
         </section>
         <section class="situação">
-            <p>Situaçao: <span id="EstadoConta"></span></p>
+            <p>Situaçao: <span id="EstadoConta">Ocupado</span></p>
         </section>
     </header>
     <section class="menu-lateral" id="addclass">
