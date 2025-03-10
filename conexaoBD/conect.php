@@ -1,5 +1,6 @@
 <?php
-    $dns = "pgsql:dbname=postgres;host=192.168.1.32";
+    //$dns = "pgsql:dbname=postgres;host=192.168.1.32";
+    $dns = "pgsql:dbname=postgres;host=localhost";
     $password = "gabriel";
     $port = "5432";
     $user = "postgres";

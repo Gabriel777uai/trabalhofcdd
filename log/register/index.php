@@ -96,7 +96,7 @@
                     <div class="border1px">
                         <h1>Controle de Saida</h1>
                         <div class="formulario-de-entrega">
-                            <form action="" method="post">
+                            <form action="registros/pecas.php" method="post">
                                 <div class="form-floating controle">
                                     <input type="number" id="codproduto" name="codproduto" class="form-control">
                                     <label for="cdoproduto">Codigo produto</label>
