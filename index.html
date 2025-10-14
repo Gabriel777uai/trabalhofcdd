@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="assets/vendor/bootstrap/bootstrap.min.css">
+    <title>Login EIA</title>
+</head>
+<body>
+        <header id="cabecalho">
+        <section class="navbare d-flex justify-content-center flex-direction-colum">
+            <h1><i class="bi bi-shield-lock"></i> Login</h1>
+        </section>
+    </header>
+    
+    <section class="container Login">
+        <div class="titulo">
+            <p>Bem-vindo ao</p>
+            <h2>Estoque<br>Inteligente</h2>
+        </div>
+        
+        <article class="d-flex justify-content-center">
+            <form id="formLogin">
+                <div class="flex">
+                    <!-- Campo Usuário -->
+                    <div class="form-floating controle">
+                        <input class="form-control" 
+                               id="usuario" 
+                               type="text" 
+                               name="login" 
+                               placeholder="Digite seu usuário"
+                               required
+                               minlength="3"
+                               maxlength="50"
+                               autocomplete="username">
+                        <label for="usuario">
+                            <i class="bi bi-person"></i> Usuário
+                        </label>
+                        <div class="invalid-feedback">
+                            Por favor, digite um usuário válido (3-50 caracteres).
+                        </div>
+                    </div>
+                    
+                    <!-- Campo Senha -->
+                    <div class="form-floating controle">
+                        <input class="form-control" 
+                               id="senha" 
+                               type="password" 
+                               name="senha" 
+                               placeholder="Digite sua senha"
+                               required
+                               minlength="4"
+                               autocomplete="current-password">
+                        <label for="senha">
+                            <i class="bi bi-lock"></i> Senha
+                        </label>
+                        <div class="invalid-feedback">
+                            Por favor, digite uma senha válida (mínimo 6 caracteres).
+                        </div>
+                    </div>
+                    
+                    <!-- Botão de Login -->
+                    <div class="button">
+                        <div class="form-floating controle">
+                            <button type="submit" 
+                                    class="btn btn-success btn-lg w-100" 
+                                    name="entrar" 
+                                    id="btnLogin"
+                                    >
+                                <span id="carregando" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                <span id="textoBotao">Entrar</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Mostrar/Esconder Senha -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="mostrarSenha">
+                        <label class="form-check-label" for="mostrarSenha">
+                            <i class="bi bi-eye"></i> Mostrar senha
+                        </label>
+                    </div>
+                </div>
+            </form>
+        </article>
+    </section>
+
+    <footer class="text-center py-3">
+        <p class="mb-2">&copy; Todos os direitos reservados. Sistema Empresarial.</p>
+    </footer>
+    <script src="assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/login.js"></script>
+</body>
+</html>

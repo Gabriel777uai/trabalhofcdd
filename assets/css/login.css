@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
+@font-face {
+    font-family: 'fonte-principal';
+    src: url("../fonts/Poppins-Black.ttf");
+}
+* {
+    font-family: 'minha-fonte-local', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    background-image: url('../img/img1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+header#cabecalho {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    position: relative;
+    top: 20px;
+    color: aliceblue;
+    align-items: center;
+}
+.navbare h1 {
+    font-size: 2em;
+}
+.navbare nav ul li a {
+    text-decoration: none;
+    color: black;
+    transition: .3s;
+}
+.navbare {
+    text-align: center;
+    width: 30%;
+    background: #1D221C;
+    padding: 10px;
+    border-radius: 10px;
+}
+nav ul li {
+    display: inline-block;
+    margin: 0 50px;
+    list-style: none;
+    
+}
+nav {
+    background: #4b8ea8a2;
+    display: inline-block;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+.navbare nav ul li a:hover {
+    color: #1D221C;
+}
+.navbare nav ul li a{
+    background: #4b8ea8a2;
+    padding: 10px;
+    border-radius: 10px;
+    color: aliceblue;
+}
+.entrar {
+    background: #71d7ffa2;
+    padding: 10px;
+    border-radius: 10px;
+    color: aliceblue;
+}   
+.Login {
+    text-align: center;
+    margin-top: 3%;
+    backdrop-filter: blur(8px);
+    background: #1d221c3c;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 50px;
+    border-radius: 10px;
+}
+.Login .titulo p {
+    color: white;
+}
+@font-face {
+    font-family: 'fonte-secundaria';
+    src: url("../fonts/Play-Bold.ttf");
+    
+}
+.Login .titulo h2 {
+    font-family: "fonte-secundaria", sans-serif;
+    font-size: 6em;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: rgb(255, 255, 255);
+}
+#login-fonte {
+    font-weight: 100;
+} 
+
+article .controle input[type='text'], input[type='password']{
+    margin-bottom: 20px;
+    border-radius: 10px;
+   
+}
+.flex {
+    flex: .3;
+}
+article .button input[type='submit'] {
+    border: none;
+    padding: 8px 30px;
+    background: rgb(0, 255, 81);
+    border-radius: 5px;
+}
+footer {
+    color: rgb(255, 255, 255);
+    width: 100%;
+    position: fixed;
+    top: 95%;
+    left: 20px;
+}
+footer p {
+    display: inline-block;
+    backdrop-filter: blur(2px);
+    background: #1d221c65;
+    font-size: 1.5em;
+    border-radius: 10px;
+}
