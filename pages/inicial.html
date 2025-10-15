@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
     <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../assets/css/inicial.css">
     <title>Paínel</title>
@@ -35,13 +36,33 @@
     <div class="overlay" id="overlay"></div>
 
     <main>
-        <section>
+        <section class="search-section">
             <h2>Pesquisa de produtos</h2>
-            <div class="form-control">
-                <input type="text" id="pesquisaProduto" placeholder="Digite o nome do produto">
-                <button id="btnPesquisar">Pesquisar</button>
+            <div class="search-container">
+                <input type="text" class="form-control" id="pesquisaProduto" placeholder="Digite o nome do produto">
+                <button id="btnPesquisar"><i class="bi bi-search"></i></button>
+                <div class="filter-options">
+                    <select id="filterCategoria" class="form-control">
+                        <option value="">Todas as categorias</option>
+                        <option value="300">Automotivos</option>
+                        <option value="alimentos">Alimentos</option>
+                        <option value="vestuario">Vestuário</option>
+                        <option value="moveis">Móveis</option>
+                    </select>
+                    <select id="filterEstoque" class="form-control">
+                        <option value="">Todos os estoques</option>
+                        <option value="baixo">Estoque baixo</option>
+                        <option value="normal">Estoque normal</option>
+                        <option value="alto">Estoque alto</option>
+                    </select>
+                </div>
             </div>
             
+            <div class="products-grid container" id="listaProdutos">
+                <!-- Os produtos serão inseridos dinamicamente aqui -->
+                Carregando produtos...
+            </div>
+        
         </section>
         
     </main>
@@ -49,6 +70,7 @@
     <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/auth.js"></script>
     <script src="../assets/vendor/jquery/jquery.js"></script>
-    <script src="../assets/js/inicial.js"></script>
+    <script src="../assets/js/headerFooter.js"></script>
+    <script defer src="../assets/js/inicial.js"></script>
 </body>
 </html>

@@ -1,100 +1,218 @@
-@import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap");
 @font-face {
-    font-family: 'fonte-principal';
-    src: url("../fonts/Poppins-Black.ttf");
+  font-family: "fonte-principal";
+  src: url("../fonts/Poppins-Black.ttf");
 }
 * {
-    font-family: 'minha-fonte-local', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  font-family: "minha-fonte-local", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos para os Cards de Produtos */
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 20px;
+}
+.search-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 10px;
+}
+#btnPesquisar {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 7px 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+.filter-options {
+  display: flex;
+  gap: 5px;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.card-produto {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  width: 100%;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+  text-align: center;
+}
+
+.card-produto:hover {
+  transform: translateY(-5px); /* Efeito de elevação ao passar o mouse */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagem */
+.card-produto img {
+  width: 100%;
+  height: 200px; /* Altura fixa para a imagem */
+  object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+  border-bottom: 1px solid #eee;
+}
+
+/* Conteúdo textual */
+.card-conteudo {
+  padding: 15px;
+}
+
+.card-titulo {
+  font-size: 1.3em;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 5px;
+  height: 38px; /* Altura fixa para evitar pulo de layout */
+  overflow: hidden;
+}
+
+.card-descricao {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 15px;
+  height: 40px; /* Altura fixa para descrição */
+  overflow: hidden;
+}
+
+/* Preço */
+.card-preco {
+  font-size: 1.5em;
+  color: #007bff; /* Cor primária para o preço */
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Botão */
+.card-botao {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745; /* Cor de sucesso (verde) */
+  color: white;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s;
+}
+
+.card-botao:hover {
+  background-color: #218838;
+}
+
+/* ------------------------------------- */
+/* RESPONSIVIDADE (Opcional, mas útil)   */
+/* ------------------------------------- */
+@media (max-width: 650px) {
+  .lista-produtos {
+    flex-direction: column; /* Em telas pequenas, empilha os cards */
+    align-items: center;
+  }
 }
 
 /* Estilos do Menu Lateral */
 .menu-lateral {
-    position: fixed;
-    top: 0;
-    left: -300px;
-    width: 280px;
-    height: 100%;
-    background-color: var(--card-bg);
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    transition: left 0.3s ease;
-    z-index: 1000;
-    overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100%;
+  background-color: var(--card-bg);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
 }
 
 .menu-lateral.aberto {
-    left: 0;
+  left: 0;
 }
 
 .menu-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background-color: var(--primary-color);
-    color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: var(--primary-color);
+  color: rgb(122, 122, 122);
 }
 
 .btn-fechar {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
 }
 
 .menu-opcoes {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .menu-opcoes li {
-    border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .menu-opcoes li a {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background-color 0.2s;
 }
 
 .menu-opcoes li a:hover {
-    background-color: var(--primary-dark);
-    color: white;
+  background-color: var(--primary-dark);
+  color: white;
 }
 
 .menu-opcoes li a i {
-    margin-right: 10px;
-    font-size: 18px;
+  margin-right: 10px;
+  font-size: 18px;
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
 }
 
 .overlay.ativo {
-    display: block;
+  display: block;
 }
 :root {
   /* Paleta Escura (Modo Escuro) */
   --bg-primary: #3bf699;
   --bg-secondary: #3bf699;
   --bg-tertiary: #3a3a3a;
-  --primary-color: #51a8ff;
+  --primary-color: #3bf699;
   --primary-light: #51a8ff;
-  --primary-dark: #3a8bdb;
+  --primary-dark: #3bf699;
   --secondary-color: #efefef;
   --accent-color: #44c66c;
   --success-color: #44c66c;
@@ -102,9 +220,9 @@
   --warning-color: #f8c04f;
   --info-color: #58a6ff;
   --light-bg: #1e1e1e;
-  --card-bg: #2d2d2d;
+  --card-bg: #ffffff;
   --border-color: #404040;
-  --text-primary: #efefef;
+  --text-primary: #808080;
   --text-secondary: #b0b0b0;
   --text-muted: #888888;
   --text-white: #ffffff;
@@ -185,27 +303,44 @@
 }
 
 header {
-    background: var(--header-bg);
-    color: var(--header-text);
-    padding: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background: var(--header-bg);
+  color: var(--header-text);
+  padding: 6px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  z-index: 9;
+  top: 0;
 }
 
 header section {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 header img {
-    width: 100px;
+  width: 100px;
 }
+.card-botao {
 
-button {
-    background: none;
-    border: none;
-    color: var(--header-text);
-    font-size: 1.2em;
-    cursor: pointer;
+}
+header button {
+  background: var(--card-bg);
+  border: none;
+  border-radius: 60px 60px;
+  padding: 5px 10px;
+  color: var(--header-text);
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: .5s;
+}
+header button:hover {
+  background: var(--accent-color);
+  transform: scale(1.1);
+  transition: 0.3s ease-in-out;
+}
+main {
+  margin-top: 100px;
 }
