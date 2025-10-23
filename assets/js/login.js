@@ -48,7 +48,7 @@ formLogin.addEventListener("submit", async function (event) {
     let formData = new FormData(formLogin);
 
   try {
-    let response = await fetch("http://localhost:5000/api/v1/login", {
+    let response = await fetch("http://162.240.111.208:5000/api/v1/login", {
       method: "POST",
       body: formData
     });
