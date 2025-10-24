@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
+  <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/css/inicial.css">
+  <title>Cadastrar Produto</title>
+</head>
+<body>
+  <span id="topo"></span>
+  
+  <!-- Header -->
+  <div id="header">
+    <h1>Paínel de Controle</h1>
+    <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="120px">
+    <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
+  </div>
+
+  <!-- Menu lateral -->
+  <div class="menu-lateral" id="menuLateral">
+    <div class="menu-header">
+      <h3>Menu</h3>
+    </div>
+    <ul class="menu-opcoes">
+      <li><a href="inicial.html"><i class="bi bi-house-fill"></i> Início</a></li>
+      <li><a href="cadastroProdutos.html" class="active"><i class="bi bi-box-seam"></i> Cadastrar Produtos</a></li>
+      <li><a href="cadastroUsuarios.html"><i class="bi bi-person-plus"></i> Cadastrar Usuários</a></li>
+      <li><a href="compras.html"><i class="bi bi-cart-fill"></i> Compras</a></li>
+      <li><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
+      <li><a href="#"><i class="bi bi-graph-up"></i> Relatórios</a></li>
+      <li><a href="#"><i class="bi bi-gear-fill"></i> Configurações</a></li>
+      <li><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+    </ul>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Conteúdo principal -->
+  <main>
+    <section class="search-section">
+      <h2>Cadastro de Produtos</h2>
+      <p class="text-muted mb-4">Preencha as informações abaixo para adicionar um novo produto ao estoque.</p>
+
+      <form id="formCadastroProduto" class="p-4 border rounded bg-white shadow-sm">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="nomeProduto" class="form-label fw-bold">Nome do Produto</label>
+            <input type="text" class="form-control" id="nomeProduto" placeholder="Ex: Alicate Universal" required>
+          </div>
+          <div class="col-md-6">
+            <label for="codigoProduto" class="form-label fw-bold">Código do Produto</label>
+            <input type="text" class="form-control" id="codigoProduto" placeholder="Ex: NOV54-8AÇO">
+          </div>
+          <div class="col-md-12">
+            <label for="descricaoProduto" class="form-label fw-bold">Descrição</label>
+            <textarea class="form-control" id="descricaoProduto" rows="3" placeholder="Digite uma breve descrição..." required></textarea>
+          </div>
+          <div class="col-md-4">
+            <label for="categoriaProduto" class="form-label fw-bold">Categoria</label>
+            <select id="categoriaProduto" class="form-select" required>
+              <option value="">Selecione...</option>
+              <option value="ferramentas">Ferramentas</option>
+              <option value="motocicletas">Moto Peças</option>
+              <option value="automotivos">Automotivos</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="precoProduto" class="form-label fw-bold">Preço (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="precoProduto" placeholder="Ex: 49.90" required>
+          </div>
+          <div class="col-md-4">
+            <label for="estoqueProduto" class="form-label fw-bold">Quantidade em Estoque</label>
+            <input type="number" class="form-control" id="estoqueProduto" placeholder="Ex: 10" required>
+          </div>
+          <div class="col-md-6">
+            <label for="fornecedorProduto" class="form-label fw-bold">Fornecedor</label>
+            <input type="text" class="form-control" id="fornecedorProduto" placeholder="Ex: Bosch, Vonder, etc.">
+          </div>
+          <div class="col-md-6">
+            <label for="imagemProduto" class="form-label fw-bold">Imagem do Produto</label>
+            <input type="file" class="form-control" id="imagemProduto" accept="image/*">
+          </div>
+        </div>
+
+        <div class="mt-4 text-end">
+          <button type="reset" class="btn btn-secondary"><i class="bi bi-arrow-counterclockwise"></i> Limpar</button>
+          <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Cadastrar Produto</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/jquery/jquery.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/cadastroProduto.js"></script>
+  <script>
+    // Exemplo simples de salvamento temporário
+    $("#formCadastroProduto").on("submit", function(e) {
+      e.preventDefault();
+      alert("✅ Produto cadastrado com sucesso!");
+      this.reset();
+    });
+  </script>
+</body>
+</html>
