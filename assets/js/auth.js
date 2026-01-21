@@ -1,3 +1,6 @@
+document.addEventListener('DOMContentLoaded', function() {
+  verificarLogin();
+});
 function verificarLogin() {
   const token = localStorage.getItem('acessToken');
   if (!token) {
