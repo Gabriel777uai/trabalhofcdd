@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,6 +18,7 @@
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
+
         .total-container {
             font-size: 1.25rem;
             font-weight: bold;
@@ -24,13 +26,16 @@
             margin-top: 15px;
             color: #1976d2;
         }
+
         .product-item {
             cursor: pointer;
             transition: background 0.2s;
         }
+
         .product-item:hover {
             background-color: #f8f9fa;
         }
+
         #productSuggestions {
             position: absolute;
             width: 100%;
@@ -42,9 +47,50 @@
             border-radius: 0 0 8px 8px;
             display: none;
         }
-        
+
+        .table-responsive-scroll {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .modal-product-img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .price-badge {
+            background-color: #1976d2;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50% !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            padding: 0;
+        }
+        .table .table-sm .table-hover .border {
+            max-height: 100px;
+        }
     </style>
 </head>
+
 <body>
     <span id="topo"></span>
     <div id="header">
@@ -76,35 +122,113 @@
             <p class="text-muted">Selecione o cliente e adicione os produtos para finalizar a venda.</p>
 
             <div class="row g-3">
-                <!-- Seleção de Cliente -->
-                <div class="col-md-6">
-                    <label for="selectCliente" class="form-label fw-bold">Cliente</label>
-                    <select id="selectCliente" bvemd required>
-                        <option value="">Selecione um cliente...</option>
-                    </select>
-                </div>
-                
-                <!-- Identificador do Pedido (Gerado Automaticamente) -->
-                <div class="col-md-6">
-                    <label for="codigoCompra" class="form-label fw-bold">Código do Pedido</label>
-                    <input type="text" id="codigoCompra" class="form-control" readonly disabled>
-                </div>
+                <form id="formVenda">
+                    <div class="d-flex gap-3">
+                        <div class="col-md-6">
+                            <label for="selectCliente" class="form-label fw-bold">Cliente</label>
+                            <select id="selectCliente" required name="codigo_cliente">
+                                <option value="">Selecione um cliente...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="codigoCompra" class="form-label fw-bold">Código do Pedido</label>
+                            <input type="text" id="codigoCompra" class="form-control" readonly disabled>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" id="btnFinalizarVenda" class="btn btn-primary mt-2"><i
+                                class="bi bi-check-circle"></i> Gerar pedido</button>
+                    </div>
+                </form>
 
-                <!-- Adição de Produtos -->
-                <div class="col-md-12 position-relative">
+
+                <!-- Adição de Produtos (Inicialmente oculto) -->
+                <div id="sectionBuscaProduto" style="display: none;" class="col-md-12 position-relative mt-4">
                     <label for="inputProduto" class="form-label fw-bold">Buscar Produto</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        <input type="text" id="inputProduto" class="form-control" placeholder="Digite o nome ou código do produto...">
+                        <input type="text" id="inputProduto" class="form-control"
+                            placeholder="Digite o nome ou código do produto...">
                     </div>
-                    <div id="productSuggestions" class="list-group"></div>
+                    <div id="productResultsContainer" class="mt-2" style="display: none;">
+                        <table class="table table-sm table-hover border">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nome/Descrição</th>
+                                    <th>Preço</th>
+                                    <th>Estoque</th>
+                                    <th class="text-end">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listaProdutosBusca">
+                                <!-- Resultados da busca -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Quantidade -->
+            <div class="modal fade" id="modalQuantidade" tabindex="-1" aria-labelledby="modalQuantidadeLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalQuantidadeLabel">Adicionar Produto</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex gap-3 align-items-center mb-3">
+                                <img id="modalProdutoImg" src="" alt="Produto" class="modal-product-img border">
+                                <div>
+                                    <h5 id="modalProdutoNome" class="mb-1 fw-bold"></h5>
+                                    <p id="modalProdutoDesc" class="text-muted small mb-0"></p>
+                                </div>
+                            </div>
+
+                            <div class="bg-light p-3 rounded mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold text-secondary">Preço Unitário</span>
+                                    <span id="modalProdutoPrecoBadge" class="price-badge"
+                                        style="background-color: #6c757d;">R$ 0,00</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                    <span class="fw-bold text-dark">Subtotal Item</span>
+                                    <span id="modalItemSubtotal" class="price-badge"
+                                        style="background-color: #2e7d32;">R$ 0,00</span>
+                                </div>
+                            </div>
+
+                            <form id="formAdicionarItem">
+                                <input type="hidden" id="modalProdutoId">
+                                <input type="hidden" id="inputPrecoVenda">
+
+                                <label class="form-label fw-bold d-block text-center mb-3">Quantidade</label>
+                                <div class="qty-control justify-content-center">
+                                    <button type="button" id="btnDiminuir" class="btn btn-danger qty-btn">
+                                        <i class="bi bi-dash-lg"></i>
+                                    </button>
+                                    <input type="number" class="form-control text-center fw-bold fs-4"
+                                        id="inputQuantidade" value="1" min="1" style="width: 80px;" required>
+                                    <button type="button" id="btnAumentar" class="btn btn-success qty-btn">
+                                        <i class="bi bi-plus-lg"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" id="btnConfirmarAdicionar" class="btn btn-primary px-4">Confirmar e
+                                Adicionar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Tabela de Itens do Pedido -->
             <div class="cart-table-container">
                 <h5>Itens do Pedido</h5>
-                <div class="table-responsive">
+                <div class="table-responsive-scroll">
                     <table class="table table-hover align-middle" id="tableItens">
                         <thead class="table-light">
                             <tr>
@@ -126,22 +250,20 @@
             </div>
 
             <div class="mt-4 text-end">
-                <button type="button" id="btnLimparPedido" class="btn btn-secondary"><i class="bi bi-trash"></i> Limpar Pedido</button>
-                <button type="button" id="btnFinalizarVenda" class="btn btn-primary" disabled><i class="bi bi-check-circle"></i> Finalizar Venda</button>
+                <button type="button" id="btnLimparPedido" class="btn btn-secondary"><i class="bi bi-trash"></i> Limpar
+                    Pedido</button>
+                <button type="button" id="btnFinalizarVendaAcao" class="btn btn-primary" disabled><i
+                        class="bi bi-check-circle"></i> Finalizar Venda</button>
             </div>
         </section>
     </main>
-    <script src="../assets/js/vender.js"></script>
     <script src="../assets/vendor/tomselect/tom-select.complete.min.js"></script>
     <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../assets/vendor/jquery/jquery.js"></script>
+    <script src="../assets/js/vender.js"></script>
     <script src="../assets/js/auth.js"></script>
     <script src="../assets/js/logout.js"></script>
-    <script defer>
-        new TomSelect("#selectCliente", {
-            create: true,
-            sortField: {field: "text"}
-        });
-    </script>
+
 </body>
+
 </html>

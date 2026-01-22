@@ -25,7 +25,7 @@ formLogin.addEventListener("submit", async function (event) {
 
     let data = await response.json();
     if (data.response) {   
-        localStorage.setItem("acessToken", data.token);
+        localStorage.setItem("acessToken", data.refreshToken);
         localStorage.setItem("id", data.id);
         localStorage.setItem("usuario", data.userName);
         if (localStorage.getItem('acessToken')) {
