@@ -85,13 +85,76 @@
             font-size: 1.2rem;
             padding: 0;
         }
-        .table .table-sm .table-hover .border {
-            max-height: 100px;
+        .table-responsive {
+            max-height: 200px;
+            overflow: auto;
+        }
+        #btnVisualizarPedidos {
+            position: fixed;
+            bottom: 20px;
+            z-index: 8;   
+            background-color: #1976d2;
+            color: white;
+            padding: 10px 10px;
+            border-radius: 55%;
+            cursor: pointer;
+            border: none;
+        }
+        .visualizar-pedidos-control{
+            transition: 0.3s ease-in-out;
+            position: fixed;
+            top: 60px;
+            padding: 20px;
+            left: 100%;
+            overflow-y: auto;
+            width: 500px;
+            height: 100vh;
+            border-left: 1px solid #ddd;
+            background-color: #fcfcfc;
+            z-index: 10;
+        }
+        .overlay-pedidos {
+            position: fixed;
+            cursor: not-allowed;
+            width: 100%;
+            top: 60px;
+            /* left: 0; */
+            left: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9;
+            transition: 0.6s;
+        }
+        #btnFecharPedidos {
+            border: none;
+            background-color: transparent;
+            color: #d21919;
+        }
+        .btn-excluir {
+            border: none;
+            background-color: transparent;
+            color: #d21919;
+        }
+        .btn-finalizar {
+            border: none;
+            background-color: transparent;
+            color: #38d219;
+        }
+        .btn-visualizar {
+            border: none;
+            background-color: transparent;
+            color: #1976d2;
+        }
+        .box-pedidos {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 
 <body>
+    <div class="overlay-pedidos" id="overlay">s</div>
     <span id="topo"></span>
     <div id="header">
         <h1>Paínel de Controle</h1>
@@ -151,19 +214,21 @@
                             placeholder="Digite o nome ou código do produto...">
                     </div>
                     <div id="productResultsContainer" class="mt-2" style="display: none;">
-                        <table class="table table-sm table-hover border">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Nome/Descrição</th>
-                                    <th>Preço</th>
-                                    <th>Estoque</th>
-                                    <th class="text-end">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="listaProdutosBusca">
-                                <!-- Resultados da busca -->
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover border">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nome/Descrição</th>
+                                        <th>Preço</th>
+                                        <th>Estoque</th>
+                                        <th class="text-end">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaProdutosBusca">
+                                    <!-- Resultados da busca -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -256,6 +321,21 @@
                         class="bi bi-check-circle"></i> Finalizar Venda</button>
             </div>
         </section>
+
+        <section class="visualizar-pedidos-control">
+            <!-- Conteudo no js -->
+            <div >
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Pedidos em Andamento</h2>
+                    <button id="btnFecharPedidos" class="" title="Fechar"><i class="bi bi-x-circle"></i></button>
+                </div>
+                <div class="list-group">
+                    <!-- Conteudo no js -->
+                </div>
+            </div>
+        </section>
+
+        <button id="btnVisualizarPedidos" title="Visualizar Pedidos em andamento"><i class="bi bi-cart"></i></button>
     </main>
     <script src="../assets/vendor/tomselect/tom-select.complete.min.js"></script>
     <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>

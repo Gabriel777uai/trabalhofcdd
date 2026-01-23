@@ -1,5 +1,9 @@
 let url_base = "http://localhost:8000/";
 
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("user").textContent = localStorage.getItem("usuario");
+});
+
 async function listClientsSelect(id) {
   try {
     const response = await fetch(`${url_base}api/v1/getclientsforuser/${id}`, {
@@ -329,11 +333,18 @@ async function loadOrderItems(pedidoId) {
 
     totalPedido.textContent = `R$ ${total.toFixed(2)}`;
 
-    // Enable Finalizar button if there are items
-    if (items.length > 0) {
+    // Enable Finalizar button if there are items and the order is not finalized
+    if (items.length > 0 && !window.currentOrderIsFinalized) {
       if (btnFinalizar) btnFinalizar.disabled = false;
     } else {
       if (btnFinalizar) btnFinalizar.disabled = true;
+    }
+
+    // Hide remove button for finalized orders
+    if (window.currentOrderIsFinalized) {
+      document
+        .querySelectorAll("#tableItens .btn-outline-danger")
+        .forEach((btn) => (btn.style.display = "none"));
     }
   } catch (error) {
     console.error("Erro ao carregar itens:", error);
@@ -345,16 +356,19 @@ document
   .getElementById("btnFinalizarVendaAcao")
   ?.addEventListener("click", async () => {
     const pedidoId = document.getElementById("codigoCompra").value;
-    const response = await fetch(`${url_base}api/v1/finalizarpedido/${pedidoId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+    const response = await fetch(
+      `${url_base}api/v1/finalizarpedido/${pedidoId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+        body: JSON.stringify({
+          codigo_compra: pedidoId,
+        }),
       },
-      body: JSON.stringify({
-        "codigo_compra": pedidoId
-      }),
-    });
+    );
     if (!response.ok) {
       throw new Error(`Erro ao finalizar venda: ${response.status}`);
     }
@@ -397,3 +411,213 @@ window.removeItem = async (itemId, pedidoId) => {
     console.error("Erro ao remover:", error);
   }
 };
+
+//configurção para abrir e fechar o modal de pedidos
+
+function criarListPedidos(
+  cd_pedido,
+  vlr_pedido,
+  cd_cliente,
+  situacao,
+  quantidade_itens,
+) {
+  const formatador = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
+  let valorFormatado = formatador.format(vlr_pedido);
+  let stringForlist = document.querySelector(".list-group");
+  let btns = "";
+  const isFechado = situacao === "S";
+
+  if (!isFechado) {
+    situacao = "Em andamento";
+    btns = `
+    <button class="btn-visualizar" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'N')" title="Visualizar"><i class="bi bi-eye"></i></button>
+    <button class="btn-finalizar" onclick="finalizarPedido(${cd_pedido})" title="Finalizar"><i class="bi bi-check-circle"></i></button>
+    <button class="btn-excluir" onclick="excluirPedido(${cd_pedido})" title="Excuir pedido e cancelar"><i class="bi bi-x-circle"></i></button>
+    `;
+  } else {
+    situacao = "Pedido Finalizado";
+    btns = `
+    <button class="btn-visualizar" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'S')" title="Visualizar"><i class="bi bi-eye"></i></button>`;
+  }
+  let html = `
+     <article class="box-pedidos">
+        <div class="d-flex gap-5">
+            <div>
+                <h4>Pedido ${cd_pedido}</h4>
+                <span>Cliente: ${cd_cliente}</span>
+            </div>
+            <div class="d-inline-flex flex-column">
+                <span class="mb-3">Itens: ${quantidade_itens}</span>
+                <span class="fw-bold">Status: ${situacao}</span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div>
+                <span>Valor: ${valorFormatado}</span>
+            </div>
+            <div>
+                ${btns}
+            </div>
+        </div>
+    </article>`;
+
+  stringForlist.innerHTML += html;
+}
+
+async function visualizarPedido(cd_pedido, cd_cliente, status) {
+  try {
+    const select = document.getElementById("selectCliente");
+
+    // Define se o pedido está finalizado globalmente para outras funções usarem
+    window.currentOrderIsFinalized = status !== "N";
+
+    // Se o TomSelect estiver inicializado, use a API dele para selecionar o cliente
+    if (select.tomselect) {
+      select.tomselect.setValue(cd_cliente);
+    } else {
+      select.value = cd_cliente;
+    }
+
+    document.getElementById("codigoCompra").value = cd_pedido;
+    document.getElementById("btnFinalizarVenda").disabled = true;
+    document
+      .getElementById("selectCliente")
+      .setAttribute("disabled", "disabled");
+
+    if (window.currentOrderIsFinalized) {
+      document.getElementById("sectionBuscaProduto").style.display = "none";
+      document.getElementById("btnFinalizarVendaAcao").disabled = true;
+      document.getElementById("btnLimparPedido").disabled = true;
+    } else {
+      document.getElementById("sectionBuscaProduto").style.display = "block";
+      document.getElementById("btnLimparPedido").disabled = false;
+    }
+
+    loadOrderItems(cd_pedido);
+
+    // Fecha o painel lateral
+    document.getElementById("btnFecharPedidos").click();
+  } catch (error) {
+    console.error("Erro ao visualizar pedido:", error);
+    alert("Falha ao carregar o pedido.");
+  }
+}
+
+async function finalizarPedido(cd_pedido) {
+  if (!confirm(`Deseja realmente finalizar o pedido ${cd_pedido}?`)) return;
+
+  try {
+    const response = await fetch(
+      `${url_base}api/v1/finalizarpedido/${cd_pedido}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+        body: JSON.stringify({
+          codigo_compra: cd_pedido,
+        }),
+      },
+    );
+
+    if (!response.ok) throw new Error("Erro ao finalizar pedido");
+
+    alert(`Pedido ${cd_pedido} finalizado com sucesso!`);
+
+    // Recarrega a lista de pedidos no painel lateral
+    document.getElementById("btnVisualizarPedidos").click();
+  } catch (error) {
+    console.error("Erro ao finalizar pedido:", error);
+    alert("Falha ao finalizar o pedido.");
+  }
+}
+
+async function excluirPedido(cd_pedido) {
+  if (
+    !confirm(
+      `Tem certeza que deseja excluir e cancelar o pedido ${cd_pedido}? Esta ação não pode ser desfeita.`,
+    )
+  )
+    return;
+
+  try {
+    const response = await fetch(
+      `${url_base}api/v1/deletarpedidovenda/${cd_pedido}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+      },
+    );
+
+    if (!response.ok) throw new Error("Erro ao excluir pedido");
+
+    alert(`Pedido ${cd_pedido} excluído com sucesso!`);
+
+    // Recarrega a lista de pedidos no painel lateral
+    document.getElementById("btnVisualizarPedidos").click();
+
+    // Se o pedido excluído for o que está aberto na tela, limpa a tela
+    if (document.getElementById("codigoCompra").value == cd_pedido) {
+      location.reload();
+    }
+  } catch (error) {
+    console.error("Erro ao excluir pedido:", error);
+    alert(
+      "Falha ao excluir o pedido. Verifique se a API de exclusão está correta.",
+    );
+  }
+}
+
+let button_open = document.getElementById("btnVisualizarPedidos");
+
+button_open.addEventListener("click", async () => {
+  document.querySelector(".visualizar-pedidos-control").style.left = "63.5%";
+  document.querySelector(".overlay-pedidos").style.left = "0%";
+
+  const response = await fetch(
+    `${url_base}api/v1/getpedidosforuser/${localStorage.getItem("id")}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error(`Erro ao buscar pedidos: ${response.status}`);
+  }
+  const data = await response.json();
+  console.log(data);
+  if (data.length === 0) {
+    document.querySelector(".list-group").innerHTML =
+      "<p>Nenhum pedido encontrado</p>";
+  } else {
+    document.querySelector(".list-group").innerHTML = "";
+    data.forEach((pedido) => {
+      criarListPedidos(
+        pedido.codigo_compra,
+        pedido.vlr_total,
+        pedido.cd_cliente,
+        pedido.f_fechado,
+        pedido.total_itens,
+      );
+    });
+  }
+  //  data.output.forEach(pedido => {
+  //     criarListPedidos(pedido.cd_pedido, pedido.vlr_pedido, pedido.cd_clinte, pedido.situacao, pedido.quantidade_itens);
+  //  });
+});
+let button_close = document.getElementById("btnFecharPedidos");
+
+button_close.addEventListener("click", () => {
+  document.querySelector(".visualizar-pedidos-control").style.left = "100%";
+  document.querySelector(".overlay-pedidos").style.left = "100%";
+});
