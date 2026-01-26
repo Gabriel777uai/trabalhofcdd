@@ -244,15 +244,16 @@ document
           nr_quantidade: quantidade,
           vlr_item: precoVenda,
           numero_compra: pedidoId,
+          cd_usuario: localStorage.getItem("id"),
         }),
       });
 
       console.log("Status da resposta adicionar:", response.status);
       const dataResponse = await response.json().catch(() => ({}));
 
-      if (!response.ok || dataResponse.response === false) {
-        console.error("Erro detalhes:", dataResponse);
-        throw new Error(dataResponse.message || "Erro ao adicionar item");
+      if (dataResponse.response === false && dataResponse.code === 3) {
+        alert(dataResponse.output);
+        return;
       }
 
       // Hide modal
@@ -322,7 +323,7 @@ async function loadOrderItems(pedidoId) {
                 <td>R$ ${vlr.toFixed(2)}</td>
                 <td>R$ ${itemTotal.toFixed(2)}</td>
                 <td>
-                    <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${item.id}, '${pedidoId}')">
+                    <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${item.codigo_item}, '${pedidoId}')">
                         <i class="bi bi-trash"></i>
                     </button>
                 </td>
@@ -333,11 +334,15 @@ async function loadOrderItems(pedidoId) {
 
     totalPedido.textContent = `R$ ${total.toFixed(2)}`;
 
-    // Enable Finalizar button if there are items and the order is not finalized
+    // Enable Finalizar and Cancelar buttons if there are items and the order is not finalized
     if (items.length > 0 && !window.currentOrderIsFinalized) {
       if (btnFinalizar) btnFinalizar.disabled = false;
+      if (document.getElementById("btnCancelarVendaAcao"))
+        document.getElementById("btnCancelarVendaAcao").disabled = false;
     } else {
       if (btnFinalizar) btnFinalizar.disabled = true;
+      if (document.getElementById("btnCancelarVendaAcao"))
+        document.getElementById("btnCancelarVendaAcao").disabled = true;
     }
 
     // Hide remove button for finalized orders
@@ -395,7 +400,7 @@ window.removeItem = async (itemId, pedidoId) => {
 
   try {
     const response = await fetch(
-      `${url_base}api/v1/removeritempedido/${itemId}`,
+      `${url_base}api/v1/deleteitempedido/${itemId}/${pedidoId}`,
       {
         method: "DELETE",
         headers: {
@@ -429,19 +434,21 @@ function criarListPedidos(
   let valorFormatado = formatador.format(vlr_pedido);
   let stringForlist = document.querySelector(".list-group");
   let btns = "";
-  const isFechado = situacao === "S";
-
-  if (!isFechado) {
+  if (situacao === "N") {
     situacao = "Em andamento";
     btns = `
     <button class="btn-visualizar" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'N')" title="Visualizar"><i class="bi bi-eye"></i></button>
     <button class="btn-finalizar" onclick="finalizarPedido(${cd_pedido})" title="Finalizar"><i class="bi bi-check-circle"></i></button>
-    <button class="btn-excluir" onclick="excluirPedido(${cd_pedido})" title="Excuir pedido e cancelar"><i class="bi bi-x-circle"></i></button>
+    <button class="btn-cancelar" onclick="abrirModalCancelar(${cd_pedido})" title="Cancelar pedido"><i class="bi bi-x-circle"></i></button>
     `;
-  } else {
+  } else if (situacao === "S") {
     situacao = "Pedido Finalizado";
     btns = `
     <button class="btn-visualizar" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'S')" title="Visualizar"><i class="bi bi-eye"></i></button>`;
+  } else if (situacao === "C") {
+    situacao = "Pedido Cancelado";
+    btns = `
+    <button class="btn-visualizar" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'C')" title="Visualizar"><i class="bi bi-eye"></i></button>`;
   }
   let html = `
      <article class="box-pedidos">
@@ -472,7 +479,7 @@ async function visualizarPedido(cd_pedido, cd_cliente, status) {
   try {
     const select = document.getElementById("selectCliente");
 
-    // Define se o pedido está finalizado globalmente para outras funções usarem
+    // Define se o pedido está finalizado ou cancelado globalmente para outras funções usarem
     window.currentOrderIsFinalized = status !== "N";
 
     // Se o TomSelect estiver inicializado, use a API dele para selecionar o cliente
@@ -491,10 +498,14 @@ async function visualizarPedido(cd_pedido, cd_cliente, status) {
     if (window.currentOrderIsFinalized) {
       document.getElementById("sectionBuscaProduto").style.display = "none";
       document.getElementById("btnFinalizarVendaAcao").disabled = true;
+      if (document.getElementById("btnCancelarVendaAcao"))
+        document.getElementById("btnCancelarVendaAcao").disabled = true;
       document.getElementById("btnLimparPedido").disabled = true;
     } else {
       document.getElementById("sectionBuscaProduto").style.display = "block";
       document.getElementById("btnLimparPedido").disabled = false;
+      if (document.getElementById("btnCancelarVendaAcao"))
+        document.getElementById("btnCancelarVendaAcao").disabled = false;
     }
 
     loadOrderItems(cd_pedido);
@@ -504,6 +515,70 @@ async function visualizarPedido(cd_pedido, cd_cliente, status) {
   } catch (error) {
     console.error("Erro ao visualizar pedido:", error);
     alert("Falha ao carregar o pedido.");
+  }
+}
+
+async function abrirModalCancelar(cd_pedido) {
+  document.getElementById("modalCancelOrderId").textContent = cd_pedido;
+  document.getElementById("motivoCancelamento").value = "";
+
+  const modal = new bootstrap.Modal(
+    document.getElementById("modalCancelarPedido"),
+  );
+  modal.show();
+
+  // Update the click handler for the confirm button
+  const btnConfirmar = document.getElementById("btnConfirmarCancelamento");
+
+  // Remove existing listeners to avoid multiple triggers
+  const newBtn = btnConfirmar.cloneNode(true);
+  btnConfirmar.parentNode.replaceChild(newBtn, btnConfirmar);
+
+  newBtn.addEventListener("click", () => confirmarCancelamento(cd_pedido));
+}
+
+async function confirmarCancelamento(cd_pedido) {
+  const motivo = document.getElementById("motivoCancelamento").value.trim();
+
+  if (!motivo) {
+    alert("Por favor, informe o motivo do cancelamento.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${url_base}api/v1/cancelarpedido`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+      },
+      body: JSON.stringify({
+        codigo_compra: cd_pedido.toString(),
+        c_motivo: motivo,
+      }),
+    });
+
+    if (!response.ok) throw new Error("Erro ao cancelar pedido");
+
+    const data = await response.json();
+    alert(`Pedido ${cd_pedido} cancelado com sucesso!`);
+
+    // Hide modal
+    const modalElement = document.getElementById("modalCancelarPedido");
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    if (modal) modal.hide();
+
+    // Recarrega a lista de pedidos no painel lateral
+    document.getElementById("btnVisualizarPedidos").click();
+
+    // Se o pedido cancelado for o que está aberto na tela, atualiza a visualização sem recarregar
+    if (document.getElementById("codigoCompra").value == cd_pedido) {
+      const clienteId = document.getElementById("selectCliente").value;
+      visualizarPedido(cd_pedido, clienteId, "C");
+    }
+  } catch (error) {
+    console.error("Erro ao cancelar pedido:", error);
+    alert("Falha ao cancelar o pedido.");
   }
 }
 
@@ -538,41 +613,8 @@ async function finalizarPedido(cd_pedido) {
 }
 
 async function excluirPedido(cd_pedido) {
-  if (
-    !confirm(
-      `Tem certeza que deseja excluir e cancelar o pedido ${cd_pedido}? Esta ação não pode ser desfeita.`,
-    )
-  )
-    return;
-
-  try {
-    const response = await fetch(
-      `${url_base}api/v1/deletarpedidovenda/${cd_pedido}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-        },
-      },
-    );
-
-    if (!response.ok) throw new Error("Erro ao excluir pedido");
-
-    alert(`Pedido ${cd_pedido} excluído com sucesso!`);
-
-    // Recarrega a lista de pedidos no painel lateral
-    document.getElementById("btnVisualizarPedidos").click();
-
-    // Se o pedido excluído for o que está aberto na tela, limpa a tela
-    if (document.getElementById("codigoCompra").value == cd_pedido) {
-      location.reload();
-    }
-  } catch (error) {
-    console.error("Erro ao excluir pedido:", error);
-    alert(
-      "Falha ao excluir o pedido. Verifique se a API de exclusão está correta.",
-    );
-  }
+  // This function is kept for compatibility but renamed its action to cancel
+  abrirModalCancelar(cd_pedido);
 }
 
 let button_open = document.getElementById("btnVisualizarPedidos");
@@ -621,3 +663,13 @@ button_close.addEventListener("click", () => {
   document.querySelector(".visualizar-pedidos-control").style.left = "100%";
   document.querySelector(".overlay-pedidos").style.left = "100%";
 });
+
+// Event Listener for the main Cancel button
+document
+  .getElementById("btnCancelarVendaAcao")
+  ?.addEventListener("click", () => {
+    const pedidoId = document.getElementById("codigoCompra").value;
+    if (pedidoId) {
+      abrirModalCancelar(pedidoId);
+    }
+  });

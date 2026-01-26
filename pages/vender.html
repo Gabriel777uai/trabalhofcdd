@@ -85,14 +85,16 @@
             font-size: 1.2rem;
             padding: 0;
         }
+
         .table-responsive {
             max-height: 200px;
             overflow: auto;
         }
+
         #btnVisualizarPedidos {
             position: fixed;
             bottom: 20px;
-            z-index: 8;   
+            z-index: 8;
             background-color: #1976d2;
             color: white;
             padding: 10px 10px;
@@ -100,7 +102,8 @@
             cursor: pointer;
             border: none;
         }
-        .visualizar-pedidos-control{
+
+        .visualizar-pedidos-control {
             transition: 0.3s ease-in-out;
             position: fixed;
             top: 60px;
@@ -113,6 +116,7 @@
             background-color: #fcfcfc;
             z-index: 10;
         }
+
         .overlay-pedidos {
             position: fixed;
             cursor: not-allowed;
@@ -125,26 +129,37 @@
             z-index: 9;
             transition: 0.6s;
         }
+
         #btnFecharPedidos {
             border: none;
             background-color: transparent;
             color: #d21919;
         }
+
         .btn-excluir {
             border: none;
             background-color: transparent;
             color: #d21919;
         }
+
         .btn-finalizar {
             border: none;
             background-color: transparent;
             color: #38d219;
         }
+
+        .btn-cancelar {
+            border: none;
+            background-color: transparent;
+            color: #d21919;
+        }
+
         .btn-visualizar {
             border: none;
             background-color: transparent;
             color: #1976d2;
         }
+
         .box-pedidos {
             border: 1px solid #ddd;
             padding: 10px;
@@ -317,6 +332,8 @@
             <div class="mt-4 text-end">
                 <button type="button" id="btnLimparPedido" class="btn btn-secondary"><i class="bi bi-trash"></i> Limpar
                     Pedido</button>
+                <button type="button" id="btnCancelarVendaAcao" class="btn btn-danger" disabled><i
+                        class="bi bi-x-circle"></i> Cancelar Venda</button>
                 <button type="button" id="btnFinalizarVendaAcao" class="btn btn-primary" disabled><i
                         class="bi bi-check-circle"></i> Finalizar Venda</button>
             </div>
@@ -324,9 +341,9 @@
 
         <section class="visualizar-pedidos-control">
             <!-- Conteudo no js -->
-            <div >
+            <div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <h2>Pedidos em Andamento</h2>
+                    <h2>Meus Pedidos</h2>
                     <button id="btnFecharPedidos" class="" title="Fechar"><i class="bi bi-x-circle"></i></button>
                 </div>
                 <div class="list-group">
@@ -337,6 +354,35 @@
 
         <button id="btnVisualizarPedidos" title="Visualizar Pedidos em andamento"><i class="bi bi-cart"></i></button>
     </main>
+
+    <!-- Modal de Cancelamento de Pedido -->
+    <div class="modal fade" id="modalCancelarPedido" tabindex="-1" aria-labelledby="modalCancelarPedidoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="modalCancelarPedidoLabel"><i
+                            class="bi bi-exclamation-triangle-fill me-2"></i>Cancelar Pedido</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Você está prestes a cancelar o pedido <strong id="modalCancelOrderId"></strong>.</p>
+                    <div class="mb-3">
+                        <label for="motivoCancelamento" class="form-label fw-bold">Motivo do Cancelamento</label>
+                        <textarea class="form-control" id="motivoCancelamento" rows="3"
+                            placeholder="Descreva aqui o motivo do cancelamento..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" id="btnConfirmarCancelamento" class="btn btn-danger">Confirmar
+                        Cancelamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../assets/vendor/tomselect/tom-select.complete.min.js"></script>
     <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../assets/vendor/jquery/jquery.js"></script>
