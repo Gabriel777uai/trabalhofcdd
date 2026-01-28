@@ -18,7 +18,7 @@ formLogin.addEventListener("submit", async function (event) {
     let formData = new FormData(formLogin);
 
   try {
-    let response = await fetch("http://localhost:8000/api/v1/login", {
+    let response = await fetch("https://trabalhofcdd-backend.onrender.com/api/v1/login", {
       method: "POST",
       body: formData
     });

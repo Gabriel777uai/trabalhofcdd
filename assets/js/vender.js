@@ -1,4 +1,4 @@
-let url_base = "http://localhost:8000/";
+let url_base = "https://trabalhofcdd-backend.onrender.com/";
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("user").textContent = localStorage.getItem("usuario");
