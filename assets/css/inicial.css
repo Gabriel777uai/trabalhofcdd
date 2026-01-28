@@ -216,18 +216,13 @@ main {
 
 /* Responsividade: Menu lateral como hambúrguer em telas pequenas */
 @media (max-width: 768px) {
-  .menu-lateral {
-    transform: translateX(-100%);
-  }
-  .menu-lateral.open {
-    transform: translateX(0);
-  }
+
   main {
     margin-left: 0;
   }
-  .overlay {
-    display: block;
-  }
+
+  
+
   .products-grid {
     grid-template-columns: 1fr;
   }

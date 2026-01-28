@@ -500,7 +500,6 @@ async function visualizarPedido(cd_pedido, cd_cliente, status) {
       document.getElementById("btnFinalizarVendaAcao").disabled = true;
       if (document.getElementById("btnCancelarVendaAcao"))
         document.getElementById("btnCancelarVendaAcao").disabled = true;
-      document.getElementById("btnLimparPedido").disabled = true;
     } else {
       document.getElementById("sectionBuscaProduto").style.display = "block";
       document.getElementById("btnLimparPedido").disabled = false;
