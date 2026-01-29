@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +10,10 @@
   <link rel="stylesheet" href="../assets/css/inicial.css">
   <title>Cadastrar Produto</title>
 </head>
+
 <body>
   <span id="topo"></span>
-  
+
   <!-- Header -->
   <div id="header">
     <h1>Paínel de Controle</h1>
@@ -47,41 +49,46 @@
       <form id="formCadastroProduto" class="p-4 border rounded bg-white shadow-sm">
         <div class="row g-3">
           <div class="col-md-6">
-            <label for="nomeProduto" class="form-label fw-bold">Nome do Produto</label>
-            <input type="text" class="form-control" id="nomeProduto" placeholder="Ex: Alicate Universal" required>
+            <label for="produto" class="form-label fw-bold">Nome do Produto</label>
+            <input type="text" class="form-control" id="produto" placeholder="Ex: Alicate Universal" required>
           </div>
-          <div class="col-md-6">
-            <label for="codigoProduto" class="form-label fw-bold">Código do Produto</label>
-            <input type="text" class="form-control" id="codigoProduto" placeholder="Ex: NOV54-8AÇO">
+          <div class="col-md-3">
+            <label for="quantidadeMin" class="form-label fw-bold">Qtd. Mínima</label>
+            <input type="number" class="form-control" id="quantidadeMin" placeholder="Ex: 5" required>
+          </div>
+          <div class="col-md-3">
+            <label for="quantidadeIdeal" class="form-label fw-bold">Qtd. Ideal</label>
+            <input type="number" class="form-control" id="quantidadeIdeal" placeholder="Ex: 20" required>
           </div>
           <div class="col-md-12">
-            <label for="descricaoProduto" class="form-label fw-bold">Descrição</label>
-            <textarea class="form-control" id="descricaoProduto" rows="3" placeholder="Digite uma breve descrição..." required></textarea>
+            <label for="descricao" class="form-label fw-bold">Descrição</label>
+            <textarea class="form-control" id="descricao" rows="3" placeholder="Digite uma breve descrição..."
+              required></textarea>
           </div>
           <div class="col-md-4">
-            <label for="categoriaProduto" class="form-label fw-bold">Categoria</label>
-            <select id="categoriaProduto" class="form-select" required>
+            <label for="grupo" class="form-label fw-bold">Categoria (Grupo)</label>
+            <select id="grupo" class="form-select" required>
               <option value="">Selecione...</option>
-              <option value="ferramentas">Ferramentas</option>
-              <option value="motocicletas">Moto Peças</option>
-              <option value="automotivos">Automotivos</option>
+              <option value="100">Ferramentas</option>
+              <option value="200">Moto Peças</option>
+              <option value="300">Automotivos</option>
             </select>
           </div>
           <div class="col-md-4">
-            <label for="precoProduto" class="form-label fw-bold">Preço (R$)</label>
-            <input type="number" step="0.01" class="form-control" id="precoProduto" placeholder="Ex: 49.90" required>
+            <label for="valor" class="form-label fw-bold">Preço (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="valor" placeholder="Ex: 49.90" required>
           </div>
           <div class="col-md-4">
-            <label for="estoqueProduto" class="form-label fw-bold">Quantidade em Estoque</label>
-            <input type="number" class="form-control" id="estoqueProduto" placeholder="Ex: 10" required>
+            <label for="quantidade" class="form-label fw-bold">Quantidade em Estoque</label>
+            <input type="number" class="form-control" id="quantidade" placeholder="Ex: 10" required>
           </div>
           <div class="col-md-6">
-            <label for="fornecedorProduto" class="form-label fw-bold">Fornecedor</label>
-            <input type="text" class="form-control" id="fornecedorProduto" placeholder="Ex: Bosch, Vonder, etc.">
+            <label for="quantidadeEmbalagem" class="form-label fw-bold">Qtd. na Embalagem</label>
+            <input type="number" class="form-control" id="quantidadeEmbalagem" placeholder="Ex: 1" required>
           </div>
           <div class="col-md-6">
-            <label for="imagemProduto" class="form-label fw-bold">Imagem do Produto</label>
-            <input type="file" class="form-control" id="imagemProduto" accept="image/*">
+            <label for="img" class="form-label fw-bold">Link da Imagem</label>
+            <input type="text" class="form-control" id="img" placeholder="https://exemplo.com/imagem.jpg">
           </div>
         </div>
 
@@ -97,13 +104,6 @@
   <script src="../assets/vendor/jquery/jquery.js"></script>
   <script src="../assets/js/auth.js"></script>
   <script src="../assets/js/cadastroProduto.js"></script>
-  <script>
-    // Exemplo simples de salvamento temporário
-    $("#formCadastroProduto").on("submit", function(e) {
-      e.preventDefault();
-      alert("✅ Produto cadastrado com sucesso!");
-      this.reset();
-    });
-  </script>
 </body>
+
 </html>

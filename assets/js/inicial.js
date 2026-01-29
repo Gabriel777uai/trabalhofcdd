@@ -2,13 +2,14 @@ let usename = document.getElementById("user");
 let user = localStorage.getItem("usuario");
 usename.innerHTML = user;
 
-const API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/products";
+const API_BASE_URL =
+  "https://trabalhofcdd-backend.onrender.com/api/v1/products";
 
 async function getDataApi(url) {
   const request = await fetch(url, {
     headers: {
-      "Authorization": `Bearer ${localStorage.getItem("acessToken")}`
-    }
+      Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+    },
   });
   const data = await request.json();
 
@@ -29,15 +30,9 @@ async function getDataApi(url) {
       }</strong></small></p>
       </div>
       <div class="card-footer d-flex gap-2">
-      <button class="btn btn-sm btn-primary" data-id="${
-        data[i].ia_idproduto
-      }">Visualizar</button>
-      <button class="btn btn-sm btn-warning" data-id="${
-        data[i].ia_idproduto
-      }">Editar</button>
-      <button class="btn btn-sm btn-danger" data-id="${
-        data[i].ia_idproduto
-      }">Excluir</button>
+      <button class="btn btn-sm btn-primary" onclick="visualizarProduto('${data[i].ia_idproduto}')">Visualizar</button>
+      <button class="btn btn-sm btn-warning" onclick="editarProduto('${data[i].ia_idproduto}')">Editar</button>
+      <button class="btn btn-sm btn-danger" onclick="excluirProduto('${data[i].ia_idproduto}')">Excluir</button>
       </div>
     </div>
     `);
@@ -46,19 +41,19 @@ async function getDataApi(url) {
 getDataApi(API_BASE_URL);
 
 let search = document.getElementById("pesquisaProduto");
-search.addEventListener('keyup', () => {
-  let list = $('#listaProdutos')
+search.addEventListener("keyup", () => {
+  let list = $("#listaProdutos");
 
-  list.html('Pesquisando...')
-})
+  list.html("Pesquisando...");
+});
 search.addEventListener("keyup", async () => {
   let list = $("#listaProdutos");
   if (search.value.length > 0) {
     let pesquisaFeita = `${API_BASE_URL}/${search.value}`;
     const request = await fetch(pesquisaFeita, {
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("acessToken")}`
-      }
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+      },
     });
     const data = await request.json();
 
@@ -78,15 +73,9 @@ search.addEventListener("keyup", async () => {
       }</strong></small></p>
       </div>
       <div class="card-footer d-flex gap-2">
-      <button class="btn btn-sm btn-primary" data-id="${
-        data[i].ia_idproduto
-      }">Visualizar</button>
-      <button class="btn btn-sm btn-warning" data-id="${
-        data[i].ia_idproduto
-      }">Editar</button>
-      <button class="btn btn-sm btn-danger" data-id="${
-        data[i].ia_idproduto
-      }">Excluir</button>
+      <button class="btn btn-sm btn-primary" onclick="visualizarProduto('${data[i].ia_idproduto}')">Visualizar</button>
+      <button class="btn btn-sm btn-warning" onclick="editarProduto('${data[i].ia_idproduto}')">Editar</button>
+      <button class="btn btn-sm btn-danger" onclick="excluirProduto('${data[i].ia_idproduto}')">Excluir</button>
       </div>
     </div>
     `);
@@ -95,8 +84,8 @@ search.addEventListener("keyup", async () => {
     let pesquisaFeita = `${API_BASE_URL}`;
     const request = await fetch(pesquisaFeita, {
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("acessToken")}`
-      }
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+      },
     });
     const data = await request.json();
 
@@ -116,18 +105,191 @@ search.addEventListener("keyup", async () => {
       }</strong></small></p>
       </div>
       <div class="card-footer d-flex gap-2">
-      <button class="btn btn-sm btn-primary" data-id="${
-        data[i].ia_idproduto
-      }">Visualizar</button>
-      <button class="btn btn-sm btn-warning" data-id="${
-        data[i].ia_idproduto
-      }">Editar</button>
-      <button class="btn btn-sm btn-danger" data-id="${
-        data[i].ia_idproduto
-      }">Excluir</button>
+      <button class="btn btn-sm btn-primary btn-visualizar" onclick="visualizarProduto('${data[i].ia_idproduto}')">Visualizar</button>
+      <button class="btn btn-sm btn-warning btn-editar" onclick="editarProduto('${data[i].ia_idproduto}')">Editar</button>
+      <button class="btn btn-sm btn-danger btn-excluir" onclick="excluirProduto('${data[i].ia_idproduto}')">Excluir</button>
       </div>
     </div>
     `);
     }
   }
 });
+
+// Global functions for inline onclick calls
+window.visualizarProduto = async function (id) {
+  if (!window.bootstrap) {
+    console.error("Bootstrap não foi carregado corretamente.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://trabalhofcdd-backend.onrender.com/api/v1/productsforid/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+      },
+    );
+    const data = await response.json();
+
+    const produto = data[0];
+
+    if (produto) {
+      document.getElementById("viewImg").src =
+        produto.ia_imagenslink ||
+        "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1";
+      document.getElementById("viewNome").textContent = produto.ia_nomeproduto;
+      document.getElementById("viewCodigo").textContent =
+        produto.ia_codigoproduto;
+      document.getElementById("viewGrupo").textContent =
+        produto.ia_grupoproduto;
+      document.getElementById("viewDescricao").textContent =
+        produto.ia_descricaoproduto;
+      document.getElementById("viewPreco").textContent =
+        "R$ " + (parseFloat(produto.ia_valor) || 0).toFixed(2);
+      document.getElementById("viewEstoque").textContent =
+        produto.ia_quantidadeproduto;
+      document.getElementById("viewMin").textContent = produto.ia_quantidademin;
+      document.getElementById("viewIdeal").textContent =
+        produto.ia_quantidadeideal;
+      document.getElementById("viewEmbalagem").textContent =
+        produto.ia_quantidadeembalagem;
+      document.getElementById("viewCadastro").textContent =
+        produto.ia_cadastroproduto;
+
+      const modal = new window.bootstrap.Modal(
+        document.getElementById("modalVisualizarProduto"),
+      );
+      modal.show();
+    }
+  } catch (error) {
+    console.error("Erro ao buscar produto:", error);
+  }
+};
+
+window.editarProduto = async function (id) {
+  if (!window.bootstrap) {
+    console.error("Bootstrap não foi carregado corretamente.");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://trabalhofcdd-backend.onrender.com/api/v1/productsforid/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+      },
+    );
+    const data = await response.json();
+
+    const produto = data[0];
+
+    if (produto) {
+      document.getElementById("editId").value = produto.ia_idproduto;
+      document.getElementById("editNome").value = produto.ia_nomeproduto;
+      document.getElementById("editCodigo").value = produto.ia_codigoproduto;
+      document.getElementById("editDescricao").value =
+        produto.ia_descricaoproduto;
+
+      const editGrupo = document.getElementById("editGrupo");
+      if (editGrupo) editGrupo.value = produto.ia_grupoproduto;
+
+      document.getElementById("editPreco").value = produto.ia_valor;
+      document.getElementById("editEstoque").value =
+        produto.ia_quantidadeproduto;
+      document.getElementById("editMin").value = produto.ia_quantidademin;
+      document.getElementById("editIdeal").value = produto.ia_quantidadeideal;
+      document.getElementById("editEmbalagem").value =
+        produto.ia_quantidadeembalagem;
+      document.getElementById("editImg").value = produto.ia_imagenslink;
+
+      const modal = new window.bootstrap.Modal(
+        document.getElementById("modalEditarProduto"),
+      );
+      modal.show();
+    }
+  } catch (error) {
+    console.error("Erro ao buscar produto para edição:", error);
+  }
+};
+
+window.salvarProduto = async function () {
+  const id = document.getElementById("editId").value;
+  if (!id) {
+    alert("Erro: ID do produto não encontrado.");
+    return;
+  }
+
+  const dados = {
+    newName: document.getElementById("editNome").value,
+    newDescricao: document.getElementById("editDescricao").value,
+    newQuantIdeal: document.getElementById("editIdeal").value,
+    newValor: document.getElementById("editPreco").value,
+    newImage: document.getElementById("editImg").value,
+    newGrupo: document.getElementById("editGrupo").value,
+  };
+
+  try {
+    const response = await fetch(
+      `https://trabalhofcdd-backend.onrender.com/api/v1/update/produto/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+        body: JSON.stringify(dados),
+      },
+    );
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Produto atualizado com sucesso!");
+      // Fechar modal
+      const modalElement = document.getElementById("modalEditarProduto");
+      const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+      // Recarregar lista
+      getDataApi(API_BASE_URL);
+    } else {
+      alert(
+        "Erro ao atualizar produto: " + (result.status || "Erro desconhecido"),
+      );
+    }
+  } catch (error) {
+    console.error("Erro na requisição de atualização:", error);
+    alert("Erro de conexão ao tentar atualizar o produto.");
+  }
+};
+
+window.excluirProduto = async function (id) {
+  if (confirm("Tem certeza que deseja excluir este produto?")) {
+    try {
+      const response = await fetch(
+        `https://trabalhofcdd-backend.onrender.com/api/v1/delete/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+          },
+        },
+      );
+
+      if (response.ok) {
+        alert("Produto excluído com sucesso!");
+        getDataApi(API_BASE_URL);
+      } else {
+        alert("Erro ao excluir produto.");
+      }
+    } catch (error) {
+      console.error("Erro ao excluir:", error);
+      alert("Erro ao tentar excluir o produto.");
+    }
+  }
+};
