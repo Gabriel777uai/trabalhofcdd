@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/inicial.css">
+    <link rel="stylesheet" href="../assets/css/relatorio.css">
+    <title>Relatórios e Dashboard</title>
+</head>
+
+<body>
+    <span id="topo"></span>
+    <div id="header">
+        <h1>Dashboard e Relatórios</h1>
+        <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="50px" class="ms-4">
+        <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
+    </div>
+
+    <div class="menu-lateral" id="menuLateral">
+        <div class="menu-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="menu-opcoes">
+            <li><a href="inicial.html"><i class="bi bi-house-fill"></i> Início</a></li>
+            <li><a href="cadastroProdutos.html"><i class="bi bi-box-seam"></i> Cadastrar Produtos</a></li>
+            <li><a href="cadastroUsuarios.html"><i class="bi bi-person-plus"></i> Cadastrar Usuários</a></li>
+            <li><a href="compras.html"><i class="bi bi-cart-fill"></i> Compras</a></li>
+            <li><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
+            <li><a href="#"><i class="bi bi-graph-up"></i> Relatórios</a></li>
+            <li><a href="configuracoes.html"><i class="bi bi-gear-fill"></i> Configurações</a></li>
+            <li><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <main>
+        <div class="container-fluid py-3 pt-1">
+            <!-- Estatísticas Rápidas -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-sales"><i class="bi bi-currency-dollar"></i></div>
+                        <div>
+                            <h6 class="text-muted mb-0">Vendas (Mês)</h6>
+                            <h4 class="mb-0 fw-bold">R$ 15.240</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-users"><i class="bi bi-people-fill"></i></div>
+                        <div>
+                            <h6 class="text-muted mb-0">Clientes Ativos</h6>
+                            <h4 class="mb-0 fw-bold">428</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-products"><i class="bi bi-box-seam"></i></div>
+                        <div>
+                            <h6 class="text-muted mb-0">Produtos em Estoque</h6>
+                            <h4 class="mb-0 fw-bold">1.250</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-orders"><i class="bi bi-cart-check-fill"></i></div>
+                        <div>
+                            <h6 class="text-muted mb-0">Pedidos Pendentes</h6>
+                            <h4 class="mb-0 fw-bold">12</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-8">
+                    <div class="card report-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Volume de Vendas Anual</h5>
+                            <div id="chartVendas"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card report-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Distribuição por Categoria</h5>
+                            <div id="chartCategorias"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Novos Gráficos -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card report-card">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Performance de Vendedores</h5>
+                            <div id="chartVendedores"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card report-card">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Atividade de Usuários (Compras vs Valor)</h5>
+                            <div id="chartUsuarioAtividade"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="card report-card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold">Top Cliente do Mês</h5>
+                            <div id="chartTopCliente"></div>
+                            <h4 class="mt-2 fw-bold" id="nomeTopCliente">Gabriel Souza</h4>
+                            <p class="text-muted">Total: R$ 4.250,00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card report-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Opções Adicionais</h5>
+                            <p class="text-muted">Explore outros dados e previsões.</p>
+                            <div class="placeholder-glow">
+                                <span class="placeholder col-12"></span>
+                                <span class="placeholder col-12"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opções de Relatórios -->
+            <div class="card report-card">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-4">Gerar Relatórios Detalhados</h5>
+                    <div class="d-flex flex-wrap gap-3">
+                        <button class="btn btn-outline-primary shadow-sm" onclick="gerarRelatorio('clientes')">
+                            <i class="bi bi-person-lines-fill"></i> Relatório de Clientes
+                        </button>
+                        <button class="btn btn-outline-success shadow-sm" onclick="gerarRelatorio('pedidos')">
+                            <i class="bi bi-journal-check"></i> Relatório de Pedidos
+                        </button>
+                        <button class="btn btn-outline-dark shadow-sm" onclick="gerarRelatorio('usuarios')">
+                            <i class="bi bi-people"></i> Relatório de Usuários
+                        </button>
+                        <button class="btn btn-outline-danger shadow-sm" onclick="gerarRelatorio('estoque')">
+                            <i class="bi bi-box-arrow-down"></i> Baixo Estoque
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <!--Start of Chatling Script-->
+    <script> window.chtlConfig = { chatbotId: "4416448636" } </script>
+    <script async data-id="4416448636" id="chtl-script" type="text/javascript"
+        src="https://chatling.ai/js/embed.js"></script>
+    <!--End of Chatling Script-->
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/jquery/jquery.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/relatorios.js"></script>
+    <script src="../assets/js/logout.js"></script>
+</body>
+
+</html>

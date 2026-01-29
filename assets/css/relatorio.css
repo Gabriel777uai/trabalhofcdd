@@ -1,0 +1,46 @@
+.report-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+}
+
+.report-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.bg-sales {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.bg-users {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.bg-products {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.bg-orders {
+  background-color: #fff3e0;
+  color: #f57c00;
+}

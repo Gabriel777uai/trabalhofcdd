@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap");
+@font-face {
+  font-family: "fonte-principal";
+  src: url("../fonts/Montserrat-Medium.ttf");
+}
+
+* {
+  font-family: "fonte-principal", sans-serif;
+}
+
+.cart-table-container {
+  margin-top: 20px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.total-container {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: right;
+  margin-top: 15px;
+  color: #1976d2;
+}
+
+.product-item {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.product-item:hover {
+  background-color: #f8f9fa;
+}
+
+#productSuggestions {
+  position: absolute;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 0 0 8px 8px;
+  display: none;
+}
+
+.table-responsive-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.modal-product-img {
+  max-width: 150px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.price-badge {
+  background-color: #1976d2;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  padding: 0;
+}
+
+.table-responsive {
+  max-height: 200px;
+  overflow: auto;
+}
+
+#btnVisualizarPedidos {
+  position: fixed;
+  bottom: 20px;
+  z-index: 8;
+  background-color: #1976d2;
+  color: white;
+  padding: 10px 10px;
+  border-radius: 55%;
+  cursor: pointer;
+  border: none;
+}
+
+.visualizar-pedidos-control {
+  transition: 0.3s ease-in-out;
+  position: fixed;
+  top: 60px;
+  padding: 20px;
+  left: 100%;
+  overflow-y: auto;
+  width: 500px;
+  height: 100vh;
+  border-left: 1px solid #ddd;
+  background-color: #fcfcfc;
+  z-index: 10;
+}
+
+.overlay-pedidos {
+  position: fixed;
+  cursor: not-allowed;
+  width: 100%;
+  top: 60px;
+  /* left: 0; */
+  left: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+  transition: 0.6s;
+}
+
+#btnFecharPedidos {
+  border: none;
+  background-color: transparent;
+  color: #d21919;
+}
+
+.btn-excluir {
+  border: none;
+  background-color: transparent;
+  color: #d21919;
+}
+
+.btn-finalizar {
+  border: none;
+  background-color: transparent;
+  color: #38d219;
+}
+
+.btn-cancelar {
+  border: none;
+  background-color: transparent;
+  color: #d21919;
+}
+
+.btn-visualizar {
+  border: none;
+  background-color: transparent;
+  color: #1976d2;
+}
+
+.box-pedidos {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 5px;
+}
