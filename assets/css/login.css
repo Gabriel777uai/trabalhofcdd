@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap');
 @font-face {
     font-family: 'fonte-principal';
-    src: url("../fonts/Poppins-Black.ttf");
+    src: url("../fonts/Montserrat-Medium.ttf");
 }
 * {
-    font-family: 'minha-fonte-local', sans-serif;
+    font-family: 'fonte-principal', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;

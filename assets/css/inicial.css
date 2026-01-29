@@ -1,13 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&display=swap");
 @font-face {
   font-family: "fonte-principal";
-  src: url("../fonts/Poppins-Black.ttf");
+  src: url("../fonts/Montserrat-Medium.ttf");
 }
 /* Tema geral mais suave: Fundo claro, cores suaves para os olhos */
 body {
   background-color: #f8f9fa; /* Fundo cinza muito claro */
   color: #333; /* Texto escuro para contraste */
-  font-family: Arial, sans-serif;
+  font-family: 'fonte-principal', sans-serif;
 }
 .card-img-top { object-fit: cover; height: auto; }
 .truncate { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
