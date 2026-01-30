@@ -73,7 +73,7 @@ body {
   transition: background-color 0.3s;
 }
 .menu-lateral .menu-opcoes li a:hover {
-  background-color: #f8f9fa;
+  background-color: #8ec3f89a;
 }
 .menu-lateral .btn-fechar {
   background: none;
@@ -213,16 +213,15 @@ main {
 .product-card .btn-delete:hover {
   background-color: #c82333;
 }
-
+.active {
+  background-color: #8ec3f89a;
+  
+}
 /* Responsividade: Menu lateral como hambúrguer em telas pequenas */
 @media (max-width: 768px) {
-
   main {
     margin-left: 0;
   }
-
-  
-
   .products-grid {
     grid-template-columns: 1fr;
   }
