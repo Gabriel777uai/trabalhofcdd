@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/inicial.css">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/vender.css">
+    <title>Compras - Entrada de Estoque</title>
+</head>
+
+<body>
+    <div class="overlay-pedidos" id="overlay"></div>
+    <span id="topo"></span>
+    <div id="header">
+        <button id="btnMobileToggle"><i class="bi bi-list"></i></button>
+        <h1>Painel de Controle</h1>
+        <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="50px" class="ms-4">
+        <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
+    </div>
+
+    <div class="menu-lateral" id="menuLateral">
+        <div class="menu-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="menu-opcoes">
+            <li><a href="inicial.html"><i class="bi bi-house-fill"></i> Início</a></li>
+            <li><a href="cadastroProdutos.html"><i class="bi bi-box-seam"></i> Cadastrar Produtos</a></li>
+            <li><a href="cadastroUsuarios.html"><i class="bi bi-person-plus"></i> Cadastrar Usuários</a></li>
+            <li><a href="compras.html" class="active"><i class="bi bi-cart-fill"></i> Compras</a></li>
+            <li><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
+            <li><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
+            <li><a href="configuracoes.html"><i class="bi bi-gear-fill"></i> Configurações</a></li>
+            <li><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <main>
+        <section class="order-section">
+            <h2>Registrar Nova Compra (Entrada)</h2>
+            <p class="text-muted">Selecione o fornecedor e adicione os produtos para repor o estoque.</p>
+
+            <div class="row g-3">
+                <form id="formCompra">
+                    <div class="d-flex gap-3">
+                        <div class="col-md-6">
+                            <label for="selectFornecedor" class="form-label fw-bold">Fornecedor</label>
+                            <select id="selectFornecedor" required name="codigo_fornecedor">
+                                <option value="">Selecione um fornecedor...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="codigoPedido" class="form-label fw-bold">Código do Pedido</label>
+                            <input type="text" id="codigoPedido" class="form-control" readonly disabled>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" id="btnGerarPedido" class="btn btn-primary mt-2"><i
+                                class="bi bi-check-circle"></i> Gerar pedido de compra</button>
+                    </div>
+                </form>
+
+
+                <!-- Adição de Produtos (Inicialmente oculto) -->
+                <div id="sectionBuscaProduto" style="display: none;" class="col-md-12 position-relative mt-4">
+                    <label for="inputProduto" class="form-label fw-bold">Buscar Produto para Reposição</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" id="inputProduto" class="form-control"
+                            placeholder="Digite o nome ou código do produto...">
+                    </div>
+                    <div id="productResultsContainer" class="mt-2" style="display: none;">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover border">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nome/Descrição</th>
+                                        <th>Preço Venda</th>
+                                        <th>Estoque Atual</th>
+                                        <th class="text-end">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaProdutosBusca">
+                                    <!-- Resultados da busca -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Quantidade -->
+            <div class="modal fade" id="modalQuantidade" tabindex="-1" aria-labelledby="modalQuantidadeLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalQuantidadeLabel">Adicionar Produto à Compra</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex gap-3 align-items-center mb-3">
+                                <img id="modalProdutoImg" src="" alt="Produto" class="modal-product-img border">
+                                <div>
+                                    <h5 id="modalProdutoNome" class="mb-1 fw-bold"></h5>
+                                    <p id="modalProdutoDesc" class="text-muted small mb-0"></p>
+                                </div>
+                            </div>
+
+                            <div class="bg-light p-3 rounded mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold text-secondary">Preço Unit. Compra</span>
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="number" step="0.01" id="inputPrecoCompra" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                    <span class="fw-bold text-dark">Subtotal Item</span>
+                                    <span id="modalItemSubtotal" class="price-badge"
+                                        style="background-color: #2e7d32;">R$ 0,00</span>
+                                </div>
+                            </div>
+
+                            <form id="formAdicionarItem">
+                                <input type="hidden" id="modalProdutoId">
+
+                                <label class="form-label fw-bold d-block text-center mb-3">Quantidade comprada</label>
+                                <div class="qty-control justify-content-center">
+                                    <button type="button" id="btnDiminuir" class="btn btn-danger qty-btn">
+                                        <i class="bi bi-dash-lg"></i>
+                                    </button>
+                                    <input type="number" class="form-control text-center fw-bold fs-4"
+                                        id="inputQuantidade" value="1" min="1" style="width: 80px;" required>
+                                    <button type="button" id="btnAumentar" class="btn btn-success qty-btn">
+                                        <i class="bi bi-plus-lg"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" id="btnConfirmarAdicionar" class="btn btn-primary px-4">Adicionar ao
+                                Carrinho</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Itens do Pedido -->
+            <div class="cart-table-container">
+                <h5>Itens da Compra</h5>
+                <div class="table-responsive-scroll">
+                    <table class="table table-hover align-middle" id="tableItens">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Produto</th>
+                                <th style="width: 120px;">Qtd</th>
+                                <th>Vlr Unit.</th>
+                                <th>Total</th>
+                                <th style="width: 50px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Itens inseridos dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="total-container">
+                    Total da Compra: <span id="totalPedido">R$ 0,00</span>
+                </div>
+            </div>
+
+            <div class="mt-4 text-end">
+                <button type="button" id="btnLimparPedido" class="btn btn-secondary"><i class="bi bi-trash"></i> Limpar
+                    Pedido</button>
+                <button type="button" id="btnCancelarCompraAcao" class="btn btn-danger" disabled><i
+                        class="bi bi-x-circle"></i> Cancelar Compra</button>
+                <button type="button" id="btnFinalizarCompraAcao" class="btn btn-primary" disabled><i
+                        class="bi bi-check-circle"></i> Finalizar Compra</button>
+            </div>
+        </section>
+
+        <section class="visualizar-pedidos-control">
+            <div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>Histórico de Compras</h2>
+                    <button id="btnFecharPedidos" class="" title="Fechar"><i class="bi bi-x-circle"></i></button>
+                </div>
+                <div class="list-group">
+                    <!-- Conteudo no js -->
+                </div>
+            </div>
+        </section>
+
+        <button id="btnVisualizarPedidos" title="Visualizar Compras em andamento"><i class="bi bi-cart"></i></button>
+    </main>
+
+    <!-- Modal de Cancelamento -->
+    <div class="modal fade" id="modalCancelarPedido" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Cancelar Compra</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Você está prestes a cancelar a compra <strong id="modalCancelOrderId"></strong>.</p>
+                    <div class="mb-3">
+                        <label for="motivoCancelamento" class="form-label fw-bold">Motivo do Cancelamento</label>
+                        <textarea class="form-control" id="motivoCancelamento" rows="3"
+                            placeholder="Descreva aqui o motivo..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" id="btnConfirmarCancelamento" class="btn btn-danger">Confirmar
+                        Cancelamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/vendor/tomselect/tom-select.complete.min.js"></script>
+    <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/jquery/jquery.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/logout.js"></script>
+    <script src="../assets/js/responsive.js"></script>
+    <script src="../assets/js/compras.js"></script>
+
+</body>
+
+</html>

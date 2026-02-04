@@ -7,10 +7,19 @@
 body {
   background-color: #f8f9fa; /* Fundo cinza muito claro */
   color: #333; /* Texto escuro para contraste */
-  font-family: 'fonte-principal', sans-serif;
+  font-family: "fonte-principal", sans-serif;
 }
-.card-img-top { object-fit: cover; height: auto; }
-.truncate { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.card-img-top {
+  object-fit: cover;
+  height: auto;
+}
+.truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-clamp: 3;
+}
 /* Estilos para header fixado - Agora em azul claro suave */
 #header {
   position: fixed;
@@ -31,8 +40,8 @@ body {
   font-size: 1.5rem;
 }
 #header h4 {
-    align-self: flex-end;
-    flex: 5;
+  align-self: flex-end;
+  flex: 5;
 }
 
 /* Estilos para menu lateral fixo - Fundo branco suave */
@@ -118,7 +127,9 @@ main {
   padding: 10px;
   font-size: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 .search-container input:focus,
 .search-container select:focus {
@@ -156,7 +167,9 @@ main {
   padding: 0;
   background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -215,14 +228,72 @@ main {
 }
 .active {
   background-color: #8ec3f89a;
-  
 }
-/* Responsividade: Menu lateral como hambúrguer em telas pequenas */
-@media (max-width: 768px) {
+/* Botão de menu hambúrguer para mobile */
+#btnMobileToggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #1976d2;
+  font-size: 1.8rem;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+/* Responsividade: Ajustes para telas pequenas */
+@media (max-width: 992px) {
+  #btnMobileToggle {
+    display: block;
+  }
+
+  #header {
+    justify-content: space-between;
+  }
+
+  #header h1 {
+    font-size: 1.2rem;
+    flex-grow: 1;
+  }
+
+  #header h4 {
+    display: none; /* Esconde o "Olá, Usuário" em telas muito pequenas para ganhar espaço */
+  }
+
+  .menu-lateral {
+    transform: translateX(-100%);
+    top: 60px;
+    height: calc(100vh - 60px);
+    width: 280px;
+  }
+
+  .menu-lateral.aberto {
+    transform: translateX(0);
+  }
+
   main {
     margin-left: 0;
+    padding: 15px;
   }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .filter-options {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  #header h1 {
+    font-size: 1rem;
+  }
+
   .products-grid {
     grid-template-columns: 1fr;
+  }
+
+  .search-section h2 {
+    font-size: 1.5rem;
   }
 }
