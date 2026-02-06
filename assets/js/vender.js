@@ -257,6 +257,7 @@ document
 
       console.log("Status da resposta adicionar:", response.status);
       const dataResponse = await response.json().catch(() => ({}));
+      alert(dataResponse.output);
 
       if (dataResponse.response === false && dataResponse.code === 3) {
         alert(dataResponse.output);
