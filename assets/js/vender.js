@@ -1,17 +1,15 @@
 let url_base;
 if (window.location.hostname === "localhost" || "127.0.0.1") {
-  console.log('Testes em Desenvolvimento');
+  console.log("Testes em Desenvolvimento");
   url_base = "http://localhost:8000/";
 } else {
-  console.log('Rodando em Produção');
+  console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("user").textContent = localStorage.getItem("usuario");
 });
-
-
 
 async function listClientsSelect(id) {
   try {
@@ -541,6 +539,8 @@ function renderOrders(orders) {
       statusClass = "text-success";
       btns = `
                 <button class="btn btn-sm btn-outline-primary" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'S')" title="Visualizar"><i class="bi bi-eye"></i></button>
+                <button class="btn btn-sm btn-outline-secondary ms-1" onclick="generateNFe(${cd_pedido})" title="Baixar XML"><i class="bi bi-file-earmark-code"></i></button>
+                <button class="btn btn-sm btn-outline-info ms-1" onclick="viewDANFE(${cd_pedido})" title="Ver DANFE"><i class="bi bi-printer"></i></button>
             `;
     } else if (status === "C") {
       statusText = "Cancelado";
@@ -558,6 +558,7 @@ function renderOrders(orders) {
     }
 
     const item = document.createElement("div");
+
     item.className = "list-group-item";
     item.innerHTML = `
             <div class="d-flex w-100 justify-content-between align-items-center mb-1">
@@ -733,3 +734,268 @@ document
       abrirModalCancelar(pedidoId);
     }
   });
+
+// --- NFE & DANFE GENERATION ---
+
+async function getNFeXML(pedidoId) {
+  const itemsResponse = await fetch(
+    `${url_base}api/v1/getitemsfororder/${pedidoId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+      },
+    },
+  );
+
+  if (!itemsResponse.ok) throw new Error("Falha ao buscar itens do pedido.");
+
+  const data = await itemsResponse.json();
+  const rawItems = Array.isArray(data.output) ? data.output : [];
+
+  if (rawItems.length === 0) {
+    throw new Error("Este pedido não possui itens. Não é possível gerar NFe.");
+  }
+
+  const items = rawItems.map((item) => ({
+    ...item,
+    nr_quantidade: parseFloat(item.nr_quantidade) || 0,
+    vlr_item: parseFloat(item.vlr_item) || 0,
+  }));
+
+  const totalVenda = items.reduce(
+    (acc, i) => acc + i.nr_quantidade * i.vlr_item,
+    0,
+  );
+
+  const now = new Date();
+  const aamm =
+    now.getFullYear().toString().slice(-2) +
+    (now.getMonth() + 1).toString().padStart(2, "0");
+  const cnpjEmit = "99405451000176";
+  const mod = "55";
+  const serie = "001";
+  const nNF = pedidoId.toString().padStart(9, "0");
+  const tpEmis = "1";
+  const cNF = Math.floor(Math.random() * 99999999)
+    .toString()
+    .padStart(8, "0");
+  const cUF = "35";
+
+  const keyWithoutDV = `${cUF}${aamm}${cnpjEmit}${mod}${serie}${nNF}${tpEmis}${cNF}`;
+
+  const calculateDV = (key) => {
+    let sum = 0;
+    let weight = 2;
+    for (let i = key.length - 1; i >= 0; i--) {
+      sum += parseInt(key[i]) * weight;
+      weight = weight === 9 ? 2 : weight + 1;
+    }
+    const rest = sum % 11;
+    const dv = 11 - rest;
+    return dv >= 10 ? 0 : dv;
+  };
+
+  const cDV = calculateDV(keyWithoutDV);
+  const chaveAcesso = `${keyWithoutDV}${cDV}`;
+
+  const nfeObj = {
+    _declaration: { _attributes: { version: "1.0", encoding: "UTF-8" } },
+    NFe: {
+      _attributes: { xmlns: "http://www.portalfiscal.inf.br/nfe" },
+      infNFe: {
+        _attributes: {
+          Id: `NFe${chaveAcesso}`,
+          versao: "4.00",
+        },
+        ide: {
+          cUF: { _text: cUF },
+          cNF: { _text: cNF },
+          natOp: { _text: "VENDA DE MERCADORIA" },
+          mod: { _text: mod },
+          serie: { _text: "1" },
+          nNF: { _text: pedidoId },
+          dhEmi: { _text: now.toISOString().split(".")[0] + "-03:00" },
+          tpNF: { _text: "1" },
+          idDest: { _text: "1" },
+          cMunFG: { _text: "3550308" },
+          tpImp: { _text: "1" },
+          tpEmis: { _text: tpEmis },
+          cDV: { _text: cDV },
+          tpAmb: { _text: "2" },
+          finNFe: { _text: "1" },
+          indFinal: { _text: "1" },
+          indPres: { _text: "1" },
+          procEmi: { _text: "0" },
+          verProc: { _text: "1.0.0" },
+        },
+        emit: {
+          CNPJ: { _text: cnpjEmit },
+          xNome: { _text: "ESTOQUE INTELIGENTE LTDA" },
+          xFant: { _text: "ESTOQUE INTELIGENTE" },
+          enderEmit: {
+            xLgr: { _text: "RUA DE EXEMPLO, LOTE  39 QUADRA 12" },
+            nro: { _text: "123" },
+            xBairro: { _text: "BAIRRO DE EXEMPLO" },
+            cMun: { _text: "3550308" },
+            xMun: { _text: "SAO PAULO" },
+            UF: { _text: "SP" },
+            CEP: { _text: "01310100" },
+            cPais: { _text: "1058" },
+            xPais: { _text: "BRASIL" },
+          },
+          IE: { _text: "123456789111" },
+          CRT: { _text: "3" },
+        },
+        dest: {
+          xNome: { _text: "CONSUMIDOR FINAL - AMBIENTE DE HOMOLOGAÇÃO" },
+          CPF: { _text: "00000000000" },
+          enderDest: {
+            xLgr: { _text: "RUA DE EXEMPLO" },
+            nro: { _text: "123" },
+            xBairro: { _text: "BAIRRO DE EXEMPLO" },
+            cMun: { _text: "3550308" },
+            xMun: { _text: "SAO PAULO" },
+            UF: { _text: "SP" },
+            CEP: { _text: "01001000" },
+            cPais: { _text: "1058" },
+            xPais: { _text: "BRASIL" },
+          },
+          indIEDest: { _text: "9" },
+        },
+        det: items.map((item, index) => ({
+          _attributes: { nItem: index + 1 },
+          prod: {
+            cProd: { _text: item.codigo_item || "0" },
+            cEAN: { _text: "SEM GTIN" },
+            xProd: { _text: item.nome_produto || "PRODUTO TESTE" },
+            NCM: { _text: "85171231" },
+            CFOP: { _text: "5102" },
+            uCom: { _text: "UN" },
+            qCom: { _text: item.nr_quantidade.toFixed(4) },
+            vUnCom: { _text: item.vlr_item.toFixed(4) },
+            vProd: { _text: (item.nr_quantidade * item.vlr_item).toFixed(2) },
+            cEANTrib: { _text: "SEM GTIN" },
+            uTrib: { _text: "UN" },
+            qTrib: { _text: item.nr_quantidade.toFixed(4) },
+            vUnTrib: { _text: item.vlr_item.toFixed(4) },
+            indTot: { _text: "1" },
+          },
+          imposto: {
+            vTotTrib: { _text: "0.00" },
+            ICMS: {
+              ICMS00: {
+                orig: { _text: "0" },
+                CST: { _text: "00" },
+                modBC: { _text: "3" },
+                vBC: {
+                  _text: (item.nr_quantidade * item.vlr_item).toFixed(2),
+                },
+                pICMS: { _text: "0.00" },
+                vICMS: { _text: "0.00" },
+              },
+            },
+            PIS: {
+              PISOutr: {
+                CST: { _text: "99" },
+                vBC: { _text: "0.00" },
+                pPIS: { _text: "0.00" },
+                vPIS: { _text: "0.00" },
+              },
+            },
+            COFINS: {
+              COFINSOutr: {
+                CST: { _text: "99" },
+                vBC: { _text: "0.00" },
+                pCOFINS: { _text: "0.00" },
+                vCOFINS: { _text: "0.00" },
+              },
+            },
+          },
+        })),
+        total: {
+          ICMSTot: {
+            vBC: { _text: "0.00" },
+            vICMS: { _text: "0.00" },
+            vICMSDeson: { _text: "0.00" },
+            vFCP: { _text: "0.00" },
+            vBCST: { _text: "0.00" },
+            vST: { _text: "0.00" },
+            vFCPSTRet: { _text: "0.00" },
+            vProd: { _text: totalVenda.toFixed(2) },
+            vFrete: { _text: "0.00" },
+            vSeg: { _text: "0.00" },
+            vDesc: { _text: "0.00" },
+            vII: { _text: "0.00" },
+            vIPI: { _text: "0.00" },
+            vIPIDevol: { _text: "0.00" },
+            vPIS: { _text: "0.00" },
+            vCOFINS: { _text: "0.00" },
+            vOutro: { _text: "0.00" },
+            vNF: { _text: totalVenda.toFixed(2) },
+          },
+        },
+        transp: { modFrete: { _text: "9" } },
+      },
+    },
+  };
+
+  const js2xml =
+    window.js2xml || (window.xmljs && window.xmljs.js2xml) || window.json2xml;
+  if (typeof js2xml !== "function") {
+    throw new Error("Biblioteca de conversão XML não carregada corretamente.");
+  }
+
+  return js2xml(nfeObj, { compact: true, spaces: 4 });
+}
+
+async function generateNFe(pedidoId) {
+  if (!confirm(`Baixar XML da NFe para o pedido ${pedidoId}?`)) return;
+  try {
+    const xml = await getNFeXML(pedidoId);
+    const blob = new Blob([xml], { type: "application/xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `nfe-${pedidoId}.xml`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Erro ao baixar NFe:", error);
+    alert("Erro: " + error.message);
+  }
+}
+
+async function viewDANFE(pedidoId) {
+  try {
+    const rawXml = await getNFeXML(pedidoId);
+
+    // Most visualizers expect the XML to be wrapped in <nfeProc>
+    // We'll wrap it and add a fake protocol to make it look "authorized" for the previewer
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
+${rawXml.replace('<?xml version="1.0" encoding="UTF-8"?>', "").trim()}
+<protNFe versao="4.00"><infProt><tpAmb>2</tpAmb><verAplic>1.0.0</verAplic><chNFe>${pedidoId}</chNFe><dhRecbto>${new Date().toISOString()}</dhRecbto><nProt>000000000000000</nProt><digVal>abc=</digVal><cStat>100</cStat><xMotivo>Autorizado o uso da NF-e</xMotivo></infProt></protNFe>
+</nfeProc>`;
+
+    // Create a hidden form to post the XML to the user-suggested service
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "https://www.webdanfeonline.com.br/print.php";
+    form.target = "_blank"; // Open in new tab
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "xml";
+    input.value = xml;
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  } catch (error) {
+    console.error("Erro ao visualizar DANFE:", error);
+    alert("Erro: " + error.message);
+  }
+}
