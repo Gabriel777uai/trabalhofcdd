@@ -31,6 +31,7 @@
             <li><a href="inicial.html"><i class="bi bi-house-fill"></i> Início</a></li>
             <li><a href="cadastroProdutos.html"><i class="bi bi-box-seam"></i> Cadastrar Produtos</a></li>
             <li><a href="cadastroUsuarios.html"><i class="bi bi-person-plus"></i> Cadastrar Usuários</a></li>
+            <li><a href="cadastroClientes.html"><i class="bi bi-people-fill"></i> Cadastrar Clientes</a></li>
             <li><a href="compras.html"><i class="bi bi-cart-fill"></i> Compras</a></li>
             <li><a href="vender.html" class="active"><i class="bi bi-cash-coin"></i> Vendas</a></li>
             <li><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
@@ -185,20 +186,23 @@
             </div>
         </section>
 
-        <section class="visualizar-pedidos-control">
-            <!-- Conteudo no js -->
-            <div>
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2>Meus Pedidos</h2>
-                    <button id="btnFecharPedidos" class="" title="Fechar"><i class="bi bi-x-circle"></i></button>
-                </div>
-                <div class="list-group">
-                    <!-- Conteudo no js -->
+        <!-- Offcanvas Lista de Pedidos -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPedidos" aria-labelledby="offcanvasPedidosLabel"
+            style="width: 400px;">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasPedidosLabel">Meus Pedidos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div id="listaPedidosContainer" class="list-group list-group-flush border-top">
+                    <!-- Lista será preenchida via JS -->
+                    <div class="text-center p-3 text-muted">Carregando...</div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <button id="btnVisualizarPedidos" title="Visualizar Pedidos em andamento"><i class="bi bi-cart"></i></button>
+        <button id="btnVisualizarPedidos" title="Visualizar Pedidos em andamento" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasPedidos" aria-controls="offcanvasPedidos"><i class="bi bi-cart"></i></button>
     </main>
 
     <!-- Modal de Cancelamento de Pedido -->
@@ -224,6 +228,34 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                     <button type="button" id="btnConfirmarCancelamento" class="btn btn-danger">Confirmar
                         Cancelamento</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Item Carrinho -->
+    <div class="modal fade" id="modalEditarItem" tabindex="-1" aria-labelledby="modalEditarItemLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEditarItemLabel">Editar Quantidade</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditarItem">
+                        <input type="hidden" id="editItemId">
+                        <input type="hidden" id="editPedidoId">
+                        <input type="hidden" id="editOldQtd">
+
+                        <label for="inputEditQuantidade" class="form-label fw-bold">Nova Quantidade</label>
+                        <input type="number" class="form-control text-center fs-4" id="inputEditQuantidade" min="1"
+                            required>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" id="btnSalvarEdicaoItem" class="btn btn-primary">Salvar</button>
                 </div>
             </div>
         </div>

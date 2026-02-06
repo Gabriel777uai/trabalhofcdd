@@ -1,4 +1,11 @@
-let url_base = "https://trabalhofcdd-backend.onrender.com/";
+let url_base;
+if (window.location.hostname === "localhost" || "127.0.0.1") {
+  console.log('Testes em Desenvolvimento');
+  url_base = "http://localhost:8000/";
+} else {
+  console.log('Rodando emProdução');
+  url_base = "https://trabalhofcdd-backend.onrender.com/";
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const user = localStorage.getItem("usuario");

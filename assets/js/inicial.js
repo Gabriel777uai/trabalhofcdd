@@ -2,9 +2,15 @@ let usename = document.getElementById("user");
 let user = localStorage.getItem("usuario");
 usename.innerHTML = user;
 
-const API_BASE_URL =
-  "https://trabalhofcdd-backend.onrender.com/api/v1/products";
 
+let API_BASE_URL;
+if (window.location.hostname === "localhost" || "127.0.0.1") {
+  console.log('Testes em Desenvolvimento');
+  API_BASE_URL = "http://localhost:8000/api/v1/products";
+} else {
+  console.log('Rodando emProdução');
+  API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/products";
+}
 async function getDataApi(url) {
   const request = await fetch(url, {
     headers: {

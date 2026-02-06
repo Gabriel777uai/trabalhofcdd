@@ -1,13 +1,17 @@
-const url_base = "https://trabalhofcdd-backend.onrender.com/api/v1/";
-
-// Configuração de usuário
+let url_base;
+if (window.location.hostname === "localhost" || "127.0.0.1") {
+  console.log('Testes em Desenvolvimento');
+  url_base = "http://localhost:8000/api/v1/";
+} else {
+  console.log('Rodando emProdução');
+  url_base = "https://trabalhofcdd-backend.onrender.com/api/v1/";
+}
 const usename = document.getElementById("user");
 const user = localStorage.getItem("usuario");
 if (usename && user) {
   usename.innerHTML = user;
 }
 
-// Helpers
 async function fetchData(endpoint) {
   try {
     const response = await fetch(`${url_base}relatorios/${endpoint}`, {
@@ -22,7 +26,7 @@ async function fetchData(endpoint) {
       throw new Error(`Erro API ${endpoint}: ${response.status}`);
     const data = await response.json();
     console.log(`Dados recebidos de ${endpoint}:`, data);
-    return data.output || data; // Tenta retornar output se existir, senão o próprio data
+    return data.output || data;
   } catch (error) {
     console.error(error);
     return null;
@@ -30,9 +34,6 @@ async function fetchData(endpoint) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  // Inicialização dos Gráficos com dados vazios ou skeletons
-
-  // 1. Vendas e Chart Vendas (Area)
   const dadosVendasMes = await fetchData("getVlrOrderForMonth");
   let totalVendasMes = 0;
   let seriesVendas = [];
@@ -41,11 +42,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (dadosVendasMes && Array.isArray(dadosVendasMes)) {
     if (dadosVendasMes.length > 0 && dadosVendasMes[0].sum) {
       totalVendasMes = parseFloat(dadosVendasMes[0].sum);
-      // Como só temos o total, adicionamos como um único ponto no gráfico por enquanto
       categoriesVendas.push("Mês Atual");
       seriesVendas.push(totalVendasMes);
     } else {
-      // Caso 2: Lista de histórico de vendas
       dadosVendasMes.forEach((item) => {
         const mes = item.mes || item.month || "Mês";
         const valor = parseFloat(
@@ -54,8 +53,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         categoriesVendas.push(mes);
         seriesVendas.push(parseFloat(valor.toFixed(2)));
       });
-
-      // Se temos histórico, assumimos que o valor do "Mês" no card é o último do gráfico
       if (seriesVendas.length > 0) {
         totalVendasMes = seriesVendas[seriesVendas.length - 1];
       }
@@ -84,15 +81,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     xaxis: {
       categories: categoriesVendas.length ? categoriesVendas : ["Sem dados"],
     },
-    tooltip: { y: { formatter: (val) => `R$ ${val}` } }, // Corrigido format
+    tooltip: { y: { formatter: (val) => `R$ ${val}` } },
   };
   new ApexCharts(
     document.querySelector("#chartVendas"),
     optionsVendas,
   ).render();
 
-  // 2. Clientes Ativos (Card + Potencial Gráfico)
-  // 2. Clientes Ativos (Card + Potencial Gráfico)
   const dadosClientes = await fetchData("getClientesActives");
 
   let qtdClientes = 0;
@@ -102,10 +97,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       typeof dadosClientes === "object" &&
       dadosClientes.quantidade_clientes !== undefined
     ) {
-      // Caso: {"quantidade_clientes": 2}
       qtdClientes = dadosClientes.quantidade_clientes;
     } else if (Array.isArray(dadosClientes) && dadosClientes.length > 0) {
-      // Fallback para array [{ total: 10 }]
       qtdClientes =
         dadosClientes[0].total ||
         dadosClientes[0].count ||
@@ -114,14 +107,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       typeof dadosClientes === "number" ||
       typeof dadosClientes === "string"
     ) {
-      // Fallback para valor direto
       qtdClientes = dadosClientes;
     }
   }
 
   document.getElementById("cardClientesAtivos").textContent = qtdClientes;
 
-  // 3. Produtos em Estoque (Card)
   const dadosProdutos = await fetchData("getQuantTheProducts");
 
   let qtdProdutos = 0;
@@ -132,19 +123,15 @@ document.addEventListener("DOMContentLoaded", async function () {
       dadosProdutos.length > 0 &&
       dadosProdutos[0].count !== undefined
     ) {
-      // Caso: [{"count": 79}]
       qtdProdutos = dadosProdutos[0].count;
     } else if (Array.isArray(dadosProdutos)) {
-      // Fallback length ou total
       qtdProdutos = dadosProdutos[0]?.total || dadosProdutos.length;
     } else {
-      // Objeto direto ou valor
       qtdProdutos = dadosProdutos.total || dadosProdutos;
     }
   }
   document.getElementById("cardProdutosEstoque").textContent = qtdProdutos;
 
-  // 4. Pedidos Pendentes (Card)
   const dadosPedidos = await fetchData("getOrdersOpens");
 
   let qtdPedidos = 0;
@@ -155,7 +142,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       dadosPedidos.length > 0 &&
       dadosPedidos[0].count !== undefined
     ) {
-      // Caso: [{"count": 0}]
       qtdPedidos = dadosPedidos[0].count;
     } else if (Array.isArray(dadosPedidos)) {
       qtdPedidos = dadosPedidos[0]?.total || dadosPedidos.length;
@@ -165,14 +151,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   document.getElementById("cardPedidosPendentes").textContent = qtdPedidos;
 
-  // 5. Categorias (Pie Chart)
   const dadosCategorias = await fetchData("getProductsToGroup");
   let seriesCat = [];
   let labelsCat = [];
 
   if (dadosCategorias && Array.isArray(dadosCategorias)) {
     dadosCategorias.forEach((cat) => {
-      // Formato: {"quantidade_itens": 50, "c_grupo": "SEM GRUPO"}
       const grupo = cat.c_grupo || cat.categoria || cat.nome || "Outros";
       const qtd = parseInt(
         cat.quantidade_itens || cat.quantidade || cat.total || 0,
@@ -200,14 +184,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     optionsCategorias,
   ).render();
 
-  // 6. Vendedores (Bar Chart)
   const dadosVendedores = await fetchData("getVendedores");
   let seriesVend = [];
   let categoriesVend = [];
 
   if (dadosVendedores && Array.isArray(dadosVendedores)) {
     dadosVendedores.forEach((vend) => {
-      // Formato: {"count": 4, "ia_nomeusuario": "GABRIEL"}
       const nome =
         vend.ia_nomeusuario || vend.nome_usuario || vend.vendedor || "User";
       const total = parseInt(
@@ -231,18 +213,64 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.querySelector("#chartVendedores"),
     optionsVendedores,
   ).render();
+  const dadosTopCliente = await fetchData("getTopClientes");
+  if (
+    dadosTopCliente &&
+    Array.isArray(dadosTopCliente) &&
+    dadosTopCliente.length > 0
+  ) {
+    const top = dadosTopCliente[0];
+    const nome = top.nome_cliente || "Sem dados";
+    const total = parseFloat(top.vlr_total || 0);
+    const pedidos = top.contagem_pedidos || 0;
 
-  const optionsTopCliente = {
-    series: [75], // Placeholder
-    chart: { height: 250, type: "radialBar" },
-    plotOptions: { radialBar: { hollow: { size: "70%" } } },
-    labels: ["Meta Atingida"],
-    colors: ["#1976d2"],
-  };
-  new ApexCharts(
-    document.querySelector("#chartTopCliente"),
-    optionsTopCliente,
-  ).render();
+    document.getElementById("nomeTopCliente").textContent = nome;
+
+    const pTotal = document.getElementById("nomeTopCliente").nextElementSibling;
+    if (pTotal) {
+      pTotal.innerHTML = `Total: ${new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      }).format(total)} <br> <small>${pedidos} Pedidos</small>`;
+    }
+    const optionsTopCliente = {
+      series: [100],
+      chart: { height: 250, type: "radialBar" },
+      plotOptions: {
+        radialBar: {
+          hollow: { size: "70%" },
+          dataLabels: {
+            name: { show: false },
+            value: {
+              fontSize: "22px",
+              show: true,
+              formatter: function (val) {
+                return pedidos + " Ped.";
+              },
+            },
+          },
+        },
+      },
+      labels: ["Campeão"],
+      colors: ["#1976d2"],
+    };
+
+    const chartDiv = document.querySelector("#chartTopCliente");
+    chartDiv.innerHTML = "";
+    new ApexCharts(chartDiv, optionsTopCliente).render();
+  } else {
+    const optionsTopCliente = {
+      series: [0],
+      chart: { height: 250, type: "radialBar" },
+      plotOptions: { radialBar: { hollow: { size: "70%" } } },
+      labels: ["Sem dados"],
+      colors: ["#1976d2"],
+    };
+    new ApexCharts(
+      document.querySelector("#chartTopCliente"),
+      optionsTopCliente,
+    ).render();
+  }
   const optionsUsuarioAtividade = {
     series: [
       { name: "Itens", type: "column", data: [0] },
@@ -263,7 +291,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   ).render();
 });
 
-// Botões
 function gerarRelatorio(tipo) {
   const nomes = {
     clientes: "Clientes",

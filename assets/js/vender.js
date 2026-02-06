@@ -1,8 +1,17 @@
-let url_base = "https://trabalhofcdd-backend.onrender.com/";
+let url_base;
+if (window.location.hostname === "localhost" || "127.0.0.1") {
+  console.log('Testes em Desenvolvimento');
+  url_base = "http://localhost:8000/";
+} else {
+  console.log('Rodando em Produção');
+  url_base = "https://trabalhofcdd-backend.onrender.com/";
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("user").textContent = localStorage.getItem("usuario");
 });
+
+
 
 async function listClientsSelect(id) {
   try {
@@ -323,7 +332,10 @@ async function loadOrderItems(pedidoId) {
                 <td>R$ ${vlr.toFixed(2)}</td>
                 <td>R$ ${itemTotal.toFixed(2)}</td>
                 <td>
-                    <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${item.codigo_item}, '${pedidoId}')">
+                    <button class="btn btn-sm btn-outline-primary me-1" onclick="openEditItemModal('${item.codigo_item}', '${pedidoId}', ${qtd})" title="Editar Quantidade">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="removeItem(${item.codigo_item}, '${pedidoId}')" title="Remover Item">
                         <i class="bi bi-trash"></i>
                     </button>
                 </td>
@@ -345,10 +357,10 @@ async function loadOrderItems(pedidoId) {
         document.getElementById("btnCancelarVendaAcao").disabled = true;
     }
 
-    // Hide remove button for finalized orders
+    // Hide remove/edit buttons for finalized orders
     if (window.currentOrderIsFinalized) {
       document
-        .querySelectorAll("#tableItens .btn-outline-danger")
+        .querySelectorAll("#tableItens button")
         .forEach((btn) => (btn.style.display = "none"));
     }
   } catch (error) {
@@ -356,43 +368,79 @@ async function loadOrderItems(pedidoId) {
   }
 }
 
-// Finalize Sale Action
+// Open Edit Modal
+window.openEditItemModal = (itemId, pedidoId, currentQtd) => {
+  document.getElementById("editItemId").value = itemId;
+  document.getElementById("editPedidoId").value = pedidoId;
+  document.getElementById("editOldQtd").value = currentQtd;
+  document.getElementById("inputEditQuantidade").value = currentQtd;
+
+  const modal = new bootstrap.Modal(document.getElementById("modalEditarItem"));
+  modal.show();
+
+  // Focus input after modal is shown
+  document.getElementById("modalEditarItem").addEventListener(
+    "shown.bs.modal",
+    function () {
+      document.getElementById("inputEditQuantidade").focus();
+      document.getElementById("inputEditQuantidade").select();
+    },
+    { once: true },
+  );
+};
+
+// Save Edit Action
 document
-  .getElementById("btnFinalizarVendaAcao")
+  .getElementById("btnSalvarEdicaoItem")
   ?.addEventListener("click", async () => {
-    const pedidoId = document.getElementById("codigoCompra").value;
-    const response = await fetch(
-      `${url_base}api/v1/finalizarpedido/${pedidoId}`,
-      {
+    const itemId = document.getElementById("editItemId").value;
+    const pedidoId = document.getElementById("editPedidoId").value;
+    const oldQtd = parseInt(document.getElementById("editOldQtd").value);
+    const newQtd = parseInt(
+      document.getElementById("inputEditQuantidade").value,
+    );
+
+    if (!newQtd || newQtd <= 0) {
+      alert("Quantidade inválida!");
+      return;
+    }
+
+    if (newQtd === oldQtd) {
+      // No change, just close
+      const modalElement = document.getElementById("modalEditarItem");
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      if (modal) modal.hide();
+      return;
+    }
+
+    try {
+      const response = await fetch(`${url_base}api/v1/atualiza-item-carrinho`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
         },
         body: JSON.stringify({
-          codigo_compra: pedidoId,
+          numero_compra: pedidoId.toString(),
+          nova_quantidade: newQtd,
+          codigo_produto: parseInt(itemId),
         }),
-      },
-    );
-    if (!response.ok) {
-      throw new Error(`Erro ao finalizar venda: ${response.status}`);
-    }
-    const data = await response.json();
-    alert(`Venda ${pedidoId} finalizada com sucesso!`);
-    // Here you would normally call an API to change status or redirect
-    location.reload();
-  });
+      });
 
-// Clear Order Logic
-document.getElementById("btnLimparPedido")?.addEventListener("click", () => {
-  if (
-    confirm(
-      "Tem certeza que deseja limpar o pedido atual? Todas as alterações não finalizadas serão perdidas.",
-    )
-  ) {
-    location.reload();
-  }
-});
+      if (!response.ok) throw new Error("Erro ao atualizar item");
+
+      // Hide modal
+      const modalElement = document.getElementById("modalEditarItem");
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      if (modal) modal.hide();
+
+      // Refresh items
+      loadOrderItems(pedidoId);
+    } catch (error) {
+      console.error("Erro updateItemQuantity:", error);
+      alert("Falha ao atualizar quantidade.");
+    }
+  });
 
 // Global function for removal (or could be attached via listener)
 window.removeItem = async (itemId, pedidoId) => {
@@ -417,63 +465,119 @@ window.removeItem = async (itemId, pedidoId) => {
   }
 };
 
-//configurção para abrir e fechar o modal de pedidos
+// --- ORDER LIST (OFFCANVAS) LOGIC ---
 
-function criarListPedidos(
-  cd_pedido,
-  vlr_pedido,
-  cd_cliente,
-  situacao,
-  quantidade_itens,
-) {
+const offcanvasPedidos = document.getElementById("offcanvasPedidos");
+const listaPedidosContainer = document.getElementById("listaPedidosContainer");
+
+if (offcanvasPedidos) {
+  offcanvasPedidos.addEventListener("show.bs.offcanvas", () => {
+    fetchOrders();
+  });
+}
+
+async function fetchOrders() {
+  if (!listaPedidosContainer) return;
+  listaPedidosContainer.innerHTML =
+    '<div class="text-center p-3 text-muted"><span class="spinner-border spinner-border-sm"></span> Carregando...</div>';
+
+  try {
+    const response = await fetch(
+      `${url_base}api/v1/getpedidosforuser/${localStorage.getItem("id")}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar pedidos: ${response.status}`);
+    }
+
+    const data = await response.json();
+    renderOrders(data);
+  } catch (error) {
+    console.error("Erro fetchOrders:", error);
+    listaPedidosContainer.innerHTML =
+      '<div class="text-center p-3 text-danger">Erro ao carregar pedidos.</div>';
+  }
+}
+
+function renderOrders(orders) {
+  if (!listaPedidosContainer) return;
+  listaPedidosContainer.innerHTML = "";
+
+  const list = Array.isArray(orders) ? orders : orders.output || [];
+
+  if (list.length === 0) {
+    listaPedidosContainer.innerHTML =
+      '<div class="text-center p-3 text-muted">Nenhum pedido encontrado.</div>';
+    return;
+  }
+
+  // Sort by most recent (assuming higher code is newer)
+  list.sort((a, b) => b.codigo_compra - a.codigo_compra);
+
   const formatador = new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
 
-  let valorFormatado = formatador.format(vlr_pedido);
-  let stringForlist = document.querySelector(".list-group");
-  let btns = "";
-  if (situacao === "N") {
-    situacao = "Em andamento";
-    btns = `
-    <button class="btn-visualizar" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'N')" title="Visualizar"><i class="bi bi-eye"></i></button>
-    <button class="btn-finalizar" onclick="finalizarPedido(${cd_pedido})" title="Finalizar"><i class="bi bi-check-circle"></i></button>
-    <button class="btn-cancelar" onclick="abrirModalCancelar(${cd_pedido})" title="Cancelar pedido"><i class="bi bi-x-circle"></i></button>
-    `;
-  } else if (situacao === "S") {
-    situacao = "Pedido Finalizado";
-    btns = `
-    <button class="btn-visualizar" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'S')" title="Visualizar"><i class="bi bi-eye"></i></button>`;
-  } else if (situacao === "C") {
-    situacao = "Pedido Cancelado";
-    btns = `
-    <button class="btn-visualizar" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'C')" title="Visualizar"><i class="bi bi-eye"></i></button>`;
-  }
-  let html = `
-     <article class="box-pedidos">
-        <div class="d-flex gap-5">
-            <div>
-                <h4>Pedido ${cd_pedido}</h4>
-                <span>Cliente: ${cd_cliente}</span>
+  list.forEach((pedido) => {
+    const cd_pedido = pedido.codigo_compra || pedido.cd_pedido;
+    const vlr_total = parseFloat(pedido.vlr_total || pedido.vlr_pedido || 0);
+    const cd_cliente = pedido.cd_cliente || pedido.cd_clinte; // API typo fallback
+
+    let status = pedido.f_fechado || pedido.situacao || "N";
+    let statusText = "Em andamento";
+    let statusClass = "text-warning";
+    let btns = "";
+
+    if (status === "S") {
+      statusText = "Finalizado";
+      statusClass = "text-success";
+      btns = `
+                <button class="btn btn-sm btn-outline-primary" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'S')" title="Visualizar"><i class="bi bi-eye"></i></button>
+            `;
+    } else if (status === "C") {
+      statusText = "Cancelado";
+      statusClass = "text-danger";
+      btns = `
+                <button class="btn btn-sm btn-outline-primary" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'C')" title="Visualizar"><i class="bi bi-eye"></i></button>
+            `;
+    } else {
+      // Em andamento
+      btns = `
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'N')" title="Visualizar"><i class="bi bi-eye"></i></button>
+                <button class="btn btn-sm btn-success me-1" onclick="finalizarPedido(${cd_pedido})" title="Finalizar"><i class="bi bi-check-lg"></i></button>
+                <button class="btn btn-sm btn-danger" onclick="abrirModalCancelar(${cd_pedido})" title="Cancelar"><i class="bi bi-x-lg"></i></button>
+            `;
+    }
+
+    const item = document.createElement("div");
+    item.className = "list-group-item";
+    item.innerHTML = `
+            <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                <h6 class="mb-0 fw-bold">Pedido #${cd_pedido}</h6>
+                <span class="badge bg-light ${statusClass}">${statusText}</span>
             </div>
-            <div class="d-inline-flex flex-column">
-                <span class="mb-3">Itens: ${quantidade_itens}</span>
-                <span class="fw-bold">Status: ${situacao}</span>
+            <div class="d-flex w-100 justify-content-between align-items-center mb-2">
+                <small class="text-muted">Cliente: ${cd_cliente}</small>
+                <small class="fw-bold">${formatador.format(vlr_total)}</small>
             </div>
-        </div>
-        <div class="d-flex justify-content-between">
-            <div>
-                <span>Valor: ${valorFormatado}</span>
-            </div>
-            <div>
+            <div class="d-flex justify-content-end">
                 ${btns}
             </div>
-        </div>
-    </article>`;
+        `;
 
-  stringForlist.innerHTML += html;
+    listaPedidosContainer.appendChild(item);
+  });
 }
+
+// --- HELPER FUNCTIONS ---
 
 async function visualizarPedido(cd_pedido, cd_cliente, status) {
   try {
@@ -509,8 +613,13 @@ async function visualizarPedido(cd_pedido, cd_cliente, status) {
 
     loadOrderItems(cd_pedido);
 
-    // Fecha o painel lateral
-    document.getElementById("btnFecharPedidos").click();
+    // Close offcanvas
+    const offcanvasEl = document.getElementById("offcanvasPedidos");
+    const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasEl);
+    if (offcanvasInstance) offcanvasInstance.hide();
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
     console.error("Erro ao visualizar pedido:", error);
     alert("Falha ao carregar o pedido.");
@@ -559,7 +668,6 @@ async function confirmarCancelamento(cd_pedido) {
 
     if (!response.ok) throw new Error("Erro ao cancelar pedido");
 
-    const data = await response.json();
     alert(`Pedido ${cd_pedido} cancelado com sucesso!`);
 
     // Hide modal
@@ -567,10 +675,10 @@ async function confirmarCancelamento(cd_pedido) {
     const modal = bootstrap.Modal.getInstance(modalElement);
     if (modal) modal.hide();
 
-    // Recarrega a lista de pedidos no painel lateral
-    document.getElementById("btnVisualizarPedidos").click();
+    // Refresh list
+    fetchOrders();
 
-    // Se o pedido cancelado for o que está aberto na tela, atualiza a visualização sem recarregar
+    // If current order, refresh view
     if (document.getElementById("codigoCompra").value == cd_pedido) {
       const clienteId = document.getElementById("selectCliente").value;
       visualizarPedido(cd_pedido, clienteId, "C");
@@ -603,65 +711,18 @@ async function finalizarPedido(cd_pedido) {
 
     alert(`Pedido ${cd_pedido} finalizado com sucesso!`);
 
-    // Recarrega a lista de pedidos no painel lateral
-    document.getElementById("btnVisualizarPedidos").click();
+    // Refresh list
+    fetchOrders();
+
+    // Clear screen if it was the current order
+    if (document.getElementById("codigoCompra").value == cd_pedido) {
+      location.reload();
+    }
   } catch (error) {
     console.error("Erro ao finalizar pedido:", error);
     alert("Falha ao finalizar o pedido.");
   }
 }
-
-async function excluirPedido(cd_pedido) {
-  // This function is kept for compatibility but renamed its action to cancel
-  abrirModalCancelar(cd_pedido);
-}
-
-let button_open = document.getElementById("btnVisualizarPedidos");
-
-button_open.addEventListener("click", async () => {
-  document.querySelector(".visualizar-pedidos-control").style.left = "63.5%";
-  document.querySelector(".overlay-pedidos").style.left = "0%";
-
-  const response = await fetch(
-    `${url_base}api/v1/getpedidosforuser/${localStorage.getItem("id")}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-      },
-    },
-  );
-  if (!response.ok) {
-    throw new Error(`Erro ao buscar pedidos: ${response.status}`);
-  }
-  const data = await response.json();
-  console.log(data);
-  if (data.length === 0) {
-    document.querySelector(".list-group").innerHTML =
-      "<p>Nenhum pedido encontrado</p>";
-  } else {
-    document.querySelector(".list-group").innerHTML = "";
-    data.forEach((pedido) => {
-      criarListPedidos(
-        pedido.codigo_compra,
-        pedido.vlr_total,
-        pedido.cd_cliente,
-        pedido.f_fechado,
-        pedido.total_itens,
-      );
-    });
-  }
-  //  data.output.forEach(pedido => {
-  //     criarListPedidos(pedido.cd_pedido, pedido.vlr_pedido, pedido.cd_clinte, pedido.situacao, pedido.quantidade_itens);
-  //  });
-});
-let button_close = document.getElementById("btnFecharPedidos");
-
-button_close.addEventListener("click", () => {
-  document.querySelector(".visualizar-pedidos-control").style.left = "100%";
-  document.querySelector(".overlay-pedidos").style.left = "100%";
-});
 
 // Event Listener for the main Cancel button
 document
