@@ -10,7 +10,7 @@ if (window.location.hostname === "localhost" || window.location.hostname ===  "1
   console.log('Testes em Desenvolvimento');
   API_BASE_URL = "http://localhost:8000/api/v1";
 } else {
-  console.log('Rodando emProdução');
+  console.log('Rodando em Produção');
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1";
 }
 

@@ -84,14 +84,12 @@ document.getElementById("formVenda").addEventListener("submit", async (e) => {
 
     document.getElementById("codigoCompra").value = data.numero_pedido;
 
-    // Disable order creation and show product search
-    document.getElementById("btnFinalizarVenda").disabled = true; // Button inside form
+    document.getElementById("btnFinalizarVenda").disabled = true;
     document
       .getElementById("selectCliente")
       .setAttribute("disabled", "disabled");
     document.getElementById("sectionBuscaProduto").style.display = "block";
 
-    // Clear list of items if it's a new order
     loadOrderItems(data.numero_pedido);
   } catch (error) {
     console.error("Falha ao gerar pedido:", error);
@@ -99,7 +97,6 @@ document.getElementById("formVenda").addEventListener("submit", async (e) => {
   }
 });
 
-// Product Search on keyup
 document.getElementById("inputProduto").addEventListener("keyup", async (e) => {
   const search = e.target.value.trim();
   const resultsContainer = document.getElementById("productResultsContainer");
@@ -153,7 +150,6 @@ document.getElementById("inputProduto").addEventListener("keyup", async (e) => {
         tableBody.appendChild(tr);
       });
 
-      // Add event listeners to "Visualizar" buttons
       document.querySelectorAll(".btn-visualizar").forEach((btn) => {
         btn.addEventListener("click", function () {
           const id = this.getAttribute("data-id");
@@ -191,7 +187,6 @@ document.getElementById("inputProduto").addEventListener("keyup", async (e) => {
   }
 });
 
-// Quantity Plus/Minus buttons
 document.getElementById("btnAumentar").addEventListener("click", () => {
   const input = document.getElementById("inputQuantidade");
   input.value = parseInt(input.value) + 1;
@@ -206,7 +201,6 @@ document.getElementById("btnDiminuir").addEventListener("click", () => {
   }
 });
 
-// Update subtotal when quantity changes manually
 document
   .getElementById("inputQuantidade")
   .addEventListener("input", updateModalSubtotal);
@@ -221,7 +215,6 @@ function updateModalSubtotal() {
     `R$ ${subtotal.toFixed(2)}`;
 }
 
-// Confirm Adding Item to Order
 document
   .getElementById("btnConfirmarAdicionar")
   .addEventListener("click", async () => {
@@ -264,22 +257,17 @@ document
         return;
       }
 
-      // Hide modal
       const modalElement = document.getElementById("modalQuantidade");
       const modal = bootstrap.Modal.getInstance(modalElement);
       modal.hide();
 
-      // Refresh items list
       loadOrderItems(pedidoId);
-
-      // Success message or toast could be added here
     } catch (error) {
       console.error("Erro ao adicionar item:", error);
       alert("Falha ao adicionar item ao pedido.");
     }
   });
 
-// Load and display order items
 async function loadOrderItems(pedidoId) {
   const tableBody = document.querySelector("#tableItens tbody");
   const totalPedido = document.getElementById("totalPedido");
@@ -307,7 +295,6 @@ async function loadOrderItems(pedidoId) {
     const data = await response.json();
     console.log("Dados recebidos loadOrderItems:", data);
 
-    // Suporte para o formato confirmado pela API: data.output
     const items = Array.isArray(data.output) ? data.output : [];
 
     tableBody.innerHTML = "";
@@ -318,7 +305,6 @@ async function loadOrderItems(pedidoId) {
         '<tr><td colspan="5" class="text-center">Nenhum item encontrado.</td></tr>';
     } else {
       items.forEach((item) => {
-        // Mapeamento baseado no JSON fornecido pelo usuário
         const qtd = parseFloat(item.nr_quantidade) || 0;
         const vlr = parseFloat(item.vlr_item) || 0;
         const itemTotal = qtd * vlr;
@@ -345,7 +331,6 @@ async function loadOrderItems(pedidoId) {
 
     totalPedido.textContent = `R$ ${total.toFixed(2)}`;
 
-    // Enable Finalizar and Cancelar buttons if there are items and the order is not finalized
     if (items.length > 0 && !window.currentOrderIsFinalized) {
       if (btnFinalizar) btnFinalizar.disabled = false;
       if (document.getElementById("btnCancelarVendaAcao"))
@@ -356,7 +341,6 @@ async function loadOrderItems(pedidoId) {
         document.getElementById("btnCancelarVendaAcao").disabled = true;
     }
 
-    // Hide remove/edit buttons for finalized orders
     if (window.currentOrderIsFinalized) {
       document
         .querySelectorAll("#tableItens button")
@@ -367,7 +351,6 @@ async function loadOrderItems(pedidoId) {
   }
 }
 
-// Open Edit Modal
 window.openEditItemModal = (itemId, pedidoId, currentQtd) => {
   document.getElementById("editItemId").value = itemId;
   document.getElementById("editPedidoId").value = pedidoId;
@@ -377,7 +360,6 @@ window.openEditItemModal = (itemId, pedidoId, currentQtd) => {
   const modal = new bootstrap.Modal(document.getElementById("modalEditarItem"));
   modal.show();
 
-  // Focus input after modal is shown
   document.getElementById("modalEditarItem").addEventListener(
     "shown.bs.modal",
     function () {
@@ -388,7 +370,6 @@ window.openEditItemModal = (itemId, pedidoId, currentQtd) => {
   );
 };
 
-// Save Edit Action
 document
   .getElementById("btnSalvarEdicaoItem")
   ?.addEventListener("click", async () => {
@@ -405,7 +386,6 @@ document
     }
 
     if (newQtd === oldQtd) {
-      // No change, just close
       const modalElement = document.getElementById("modalEditarItem");
       const modal = bootstrap.Modal.getInstance(modalElement);
       if (modal) modal.hide();
@@ -428,12 +408,10 @@ document
 
       if (!response.ok) throw new Error("Erro ao atualizar item");
 
-      // Hide modal
       const modalElement = document.getElementById("modalEditarItem");
       const modal = bootstrap.Modal.getInstance(modalElement);
       if (modal) modal.hide();
 
-      // Refresh items
       loadOrderItems(pedidoId);
     } catch (error) {
       console.error("Erro updateItemQuantity:", error);
@@ -441,7 +419,6 @@ document
     }
   });
 
-// Global function for removal (or could be attached via listener)
 window.removeItem = async (itemId, pedidoId) => {
   if (!confirm("Remover este item?")) return;
 
@@ -463,8 +440,6 @@ window.removeItem = async (itemId, pedidoId) => {
     console.error("Erro ao remover:", error);
   }
 };
-
-// --- ORDER LIST (OFFCANVAS) LOGIC ---
 
 const offcanvasPedidos = document.getElementById("offcanvasPedidos");
 const listaPedidosContainer = document.getElementById("listaPedidosContainer");
@@ -517,7 +492,6 @@ function renderOrders(orders) {
     return;
   }
 
-  // Sort by most recent (assuming higher code is newer)
   list.sort((a, b) => b.codigo_compra - a.codigo_compra);
 
   const formatador = new Intl.NumberFormat("pt-BR", {
@@ -528,7 +502,7 @@ function renderOrders(orders) {
   list.forEach((pedido) => {
     const cd_pedido = pedido.codigo_compra || pedido.cd_pedido;
     const vlr_total = parseFloat(pedido.vlr_total || pedido.vlr_pedido || 0);
-    const cd_cliente = pedido.cd_cliente || pedido.cd_clinte; // API typo fallback
+    const cd_cliente = pedido.cd_cliente || pedido.cd_clinte; 
 
     let status = pedido.f_fechado || pedido.situacao || "N";
     let statusText = "Em andamento";
@@ -550,7 +524,6 @@ function renderOrders(orders) {
                 <button class="btn btn-sm btn-outline-primary" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'C')" title="Visualizar"><i class="bi bi-eye"></i></button>
             `;
     } else {
-      // Em andamento
       btns = `
                 <button class="btn btn-sm btn-outline-primary me-1" onclick="visualizarPedido(${cd_pedido}, '${cd_cliente}', 'N')" title="Visualizar"><i class="bi bi-eye"></i></button>
                 <button class="btn btn-sm btn-success me-1" onclick="finalizarPedido(${cd_pedido})" title="Finalizar"><i class="bi bi-check-lg"></i></button>
@@ -579,16 +552,12 @@ function renderOrders(orders) {
   });
 }
 
-// --- HELPER FUNCTIONS ---
-
 async function visualizarPedido(cd_pedido, cd_cliente, status) {
   try {
     const select = document.getElementById("selectCliente");
 
-    // Define se o pedido está finalizado ou cancelado globalmente para outras funções usarem
     window.currentOrderIsFinalized = status !== "N";
 
-    // Se o TomSelect estiver inicializado, use a API dele para selecionar o cliente
     if (select.tomselect) {
       select.tomselect.setValue(cd_cliente);
     } else {
@@ -618,12 +587,10 @@ async function visualizarPedido(cd_pedido, cd_cliente, status) {
     });
     loadOrderItems(cd_pedido);
 
-    // Close offcanvas
     const offcanvasEl = document.getElementById("offcanvasPedidos");
     const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvasEl);
     if (offcanvasInstance) offcanvasInstance.hide();
 
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
     console.error("Erro ao visualizar pedido:", error);
@@ -640,10 +607,8 @@ async function abrirModalCancelar(cd_pedido) {
   );
   modal.show();
 
-  // Update the click handler for the confirm button
   const btnConfirmar = document.getElementById("btnConfirmarCancelamento");
 
-  // Remove existing listeners to avoid multiple triggers
   const newBtn = btnConfirmar.cloneNode(true);
   btnConfirmar.parentNode.replaceChild(newBtn, btnConfirmar);
 
@@ -714,12 +679,11 @@ async function finalizarPedido(cd_pedido) {
 
     if (!response.ok) throw new Error("Erro ao finalizar pedido");
 
-    alert(`Pedido ${cd_pedido} finalizado com sucesso!`);
+    const data = await response.json();
+    alert(data.output);
 
-    // Refresh list
     fetchOrders();
 
-    // Clear screen if it was the current order
     if (document.getElementById("codigoCompra").value == cd_pedido) {
       location.reload();
     }
@@ -729,7 +693,6 @@ async function finalizarPedido(cd_pedido) {
   }
 }
 
-// Event Listener for the main Cancel button
 document
   .getElementById("btnCancelarVendaAcao")
   ?.addEventListener("click", () => {
@@ -739,7 +702,6 @@ document
     }
   });
 
-// Event Listener for the main Finalize button
 document
   .getElementById("btnFinalizarVendaAcao")
   ?.addEventListener("click", () => {
@@ -748,8 +710,6 @@ document
       finalizarPedido(pedidoId);
     }
   });
-
-// --- NFE & DANFE GENERATION ---
 
 async function getNFeXML(pedidoId) {
   const itemsResponse = await fetch(
@@ -985,19 +945,16 @@ async function viewDANFE(pedidoId) {
   try {
     const rawXml = await getNFeXML(pedidoId);
 
-    // Most visualizers expect the XML to be wrapped in <nfeProc>
-    // We'll wrap it and add a fake protocol to make it look "authorized" for the previewer
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <nfeProc xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
 ${rawXml.replace('<?xml version="1.0" encoding="UTF-8"?>', "").trim()}
 <protNFe versao="4.00"><infProt><tpAmb>2</tpAmb><verAplic>1.0.0</verAplic><chNFe>${pedidoId}</chNFe><dhRecbto>${new Date().toISOString()}</dhRecbto><nProt>000000000000000</nProt><digVal>abc=</digVal><cStat>100</cStat><xMotivo>Autorizado o uso da NF-e</xMotivo></infProt></protNFe>
 </nfeProc>`;
 
-    // Create a hidden form to post the XML to the user-suggested service
     const form = document.createElement("form");
     form.method = "POST";
     form.action = "https://www.webdanfeonline.com.br/print.php";
-    form.target = "_blank"; // Open in new tab
+    form.target = "_blank";
 
     const input = document.createElement("input");
     input.type = "hidden";

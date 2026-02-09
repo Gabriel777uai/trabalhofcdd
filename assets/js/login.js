@@ -16,7 +16,7 @@ if (window.location.hostname === "localhost" || window.location.hostname ===  "1
   
   url_base = "http://localhost:8000/";
 } else {
-  console.log('Rodando emProdução');
+  console.log('Rodando em Produção');
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 formLogin.addEventListener("submit", async function (event) {

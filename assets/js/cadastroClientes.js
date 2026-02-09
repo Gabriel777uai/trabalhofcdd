@@ -3,7 +3,7 @@ if (window.location.hostname === "localhost"  ||  window.location.hostname ===  
   console.log('Testes em Desenvolvimento');
   url_base = "http://localhost:8000/";
 } else {
-  console.log('Rodando emProdução');
+  console.log('Rodando em Produção');
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 
