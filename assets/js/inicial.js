@@ -6,9 +6,10 @@ usename.innerHTML = user;
 let API_BASE_URL;
 if (window.location.hostname === "localhost" || "127.0.0.1") {
   console.log('Testes em Desenvolvimento');
+  console.log(window.location.hostname);
   API_BASE_URL = "http://localhost:8000/api/v1/products";
 } else {
-  console.log('Rodando emProdução');
+  console.log('Rodando em Produção');
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/products";
 }
 async function getDataApi(url) {

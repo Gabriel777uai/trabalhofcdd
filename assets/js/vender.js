@@ -613,6 +613,9 @@ async function visualizarPedido(cd_pedido, cd_cliente, status) {
         document.getElementById("btnCancelarVendaAcao").disabled = false;
     }
 
+    document.getElementById("btnLimparPedido").addEventListener("click", () => {
+      document.location.reload();
+    });
     loadOrderItems(cd_pedido);
 
     // Close offcanvas
@@ -733,6 +736,16 @@ document
     const pedidoId = document.getElementById("codigoCompra").value;
     if (pedidoId) {
       abrirModalCancelar(pedidoId);
+    }
+  });
+
+// Event Listener for the main Finalize button
+document
+  .getElementById("btnFinalizarVendaAcao")
+  ?.addEventListener("click", () => {
+    const pedidoId = document.getElementById("codigoCompra").value;
+    if (pedidoId) {
+      finalizarPedido(pedidoId);
     }
   });
 
