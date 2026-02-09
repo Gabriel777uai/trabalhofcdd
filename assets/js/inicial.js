@@ -4,7 +4,7 @@ usename.innerHTML = user;
 
 
 let API_BASE_URL;
-if (window.location.hostname === "localhost" || "127.0.0.1") {
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
   console.log('Testes em Desenvolvimento');
   console.log(window.location.hostname);
   API_BASE_URL = "http://localhost:8000/api/v1/products";
