@@ -297,3 +297,6 @@ main {
     font-size: 1.5rem;
   }
 }
+#arow {
+  transition: 1.5s ease-in-out;
+}

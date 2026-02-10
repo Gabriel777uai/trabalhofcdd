@@ -51,7 +51,7 @@
                 <input type="hidden" id="userId">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="nome" class="form-label fw-bold">Nome</label>
+                        <label for="nome" class="form-label fw-bold">Nome (Lembrando que este será seu nome para login)</label>
                         <input type="text" class="form-control" id="nome" required>
                     </div>
                     <div class="col-md-6">
@@ -77,10 +77,47 @@
                 </div>
 
                 <div class="mt-4 text-end">
-                    <button type="submit" class="btn btn-primary" disabled><i class="bi bi-save"></i> Salvar
+                    <button type="submit" class="btn btn-primary" ><i class="bi bi-save"></i> Salvar
                         Alterações</button>
                 </div>
             </form>
+            <p class="text-center mt-2">
+            <button class="btn" type="button" id="btnCollapse" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <span style="color: brown;">Area de risco </span>(alterar senha) <span id="arow"><i class="bi bi-chevron-down"></i></span>
+            </button>
+            </p>
+            <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+                <form id="alterarPass">
+                    <h6 style="color: brown;">Atenção! está area vai trocar sua senha de acesso coloque alguma que você não esqueça!</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="senha" class="form-label fw-bold">Senha Atual</label>
+                            <input type="password" class="form-control" id="senha"
+                            name="senha" placeholder="******" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="senha" class="form-label fw-bold">Nova Senha</label>
+                            <input type="password" class="form-control" id="passNow" 
+                            name="passNow" placeholder="******" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="senha" class="form-label fw-bold">Confirmar Nova Senha</label>
+                            <input type="password" class="form-control" id="passConfirm" 
+                            name="passConfirm" placeholder="******" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-check-label" for="senha">Mostrar Senhas</label>
+                            <input type="checkbox" class="form-check-input" id="mostrarSenha">
+                        </div>
+                    </div>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Enviar nova senha</button>
+                    </div>
+                    <span id="res"></span>
+                </form>
+            </div>
+            </div>
         </section>
     </main>
     <script> window.chtlConfig = { chatbotId: "4416448636" } </script>
