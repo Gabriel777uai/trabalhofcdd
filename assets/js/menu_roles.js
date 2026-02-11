@@ -8,12 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const decodedToken = jwtDecode(token);
     const userRole = parseInt(decodedToken.role) || 1;
 
-    console.log("User Role:", userRole);
-
     const menuItems = document.querySelectorAll(
       "#menuLateral .menu-opcoes li[data-role]",
     );
-
+    if (userRole < document.getElementById("menuLateral").getAttribute("data-role")) {
+      document.body.innerHTML = "";
+    }
     menuItems.forEach((item) => {
       const requiredRole = parseInt(item.getAttribute("data-role"));
       if (userRole < requiredRole) {

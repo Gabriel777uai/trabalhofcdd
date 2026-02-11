@@ -1,4 +1,14 @@
+import { jwtDecode } from "jwt-decode";
+const token = localStorage.getItem("acessToken");
+const decodedToken = jwtDecode(token);
+const userRole = parseInt(decodedToken.role) || 1;
+
+if (userRole < 1) {
+  document.getElementById("conteudo").innerHTML = "<h1 id='msg'>Você não tem permissão para acessar esta página!<br><span>consulte um administrador para mais informações.<br> <a href='inicial.html'>Voltar para a página inicial</a></span></h1>";
+  throw new Error("Sem permissão para acessar esta página!");
+}
 let url_base;
+
 if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
@@ -140,7 +150,25 @@ document.getElementById("inputProduto").addEventListener("keyup", async (e) => {
           product.ia_imagenslink ||
           product.ia_imagem ||
           "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1";
+        const media = product.ia_quantidadeproduto;
+        const estoque = product.ia_quantidadeideal;
+        let message = "Estoque Normal!";
+        let classBadge = "bg-success";
+        if (media < estoque) {
+          message = "Estoque baixo!";
+          classBadge = "bg-warning";
+        }
+        if (media < estoque / 2) {
+          message = "Estoque muito baixo!";
+          classBadge = "bg-danger";
+        }
+        if (media == 0) {
+          message = "Estoque zerado!";
+          classBadge = "bg-dark";
+        }
         tr.innerHTML = `
+        <td><img src="${productImg}" alt="${product.ia_nomeproduto}" class="img-fluid" style="max-width: 50px; max-height: 50px; object-fit: cover; border-radius: 5px;"></td>
+        <span class="badge ${classBadge}" style="color: #fffffff5">${message}</span>
                     <td>${product.ia_nomeproduto}</td>
                     <td>R$ ${(Number(product.ia_valor) || 0).toFixed(2)}</td>
                     <td>${product.ia_quantidadeproduto || 0}</td>

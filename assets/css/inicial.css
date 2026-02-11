@@ -300,3 +300,12 @@ main {
 #arow {
   transition: 1.5s ease-in-out;
 }
+#msg {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  font-size: 2rem;
+}
+#msg span {
+  font-size: 1rem;
+}

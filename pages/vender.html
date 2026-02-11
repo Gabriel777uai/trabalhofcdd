@@ -42,7 +42,7 @@
     </div>
     <div class="overlay" id="overlay"></div>
 
-    <main>
+    <main id="conteudo">
         <section class="order-section">
             <h2>Criar Novo Pedido de Venda</h2>
             <p class="text-muted">Selecione o cliente e adicione os produtos para finalizar a venda.</p>
@@ -81,6 +81,8 @@
                             <table class="table table-sm table-hover border">
                                 <thead class="table-light">
                                     <tr>
+                                        <th>Imagem</th>
+                                        <th>Estoque</th>
                                         <th>Nome/Descrição</th>
                                         <th>Preço</th>
                                         <th>Estoque</th>
@@ -280,7 +282,7 @@
     }
     </script>
     <script type="module" src="../assets/js/menu_roles.js"></script>
-    <script src="../assets/js/vender.js"></script>
+    <script type="module" src="../assets/js/vender.js"></script>
     <script src="../assets/js/auth.js"></script>
     <script src="../assets/js/logout.js"></script>
     <script src="../assets/js/responsive.js"></script>

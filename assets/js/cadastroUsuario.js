@@ -1,4 +1,14 @@
+import { jwtDecode } from "jwt-decode";
+const token = localStorage.getItem("acessToken");
+const decodedToken = jwtDecode(token);
+const userRole = parseInt(decodedToken.role) || 1;
+
+if (userRole < 5) {
+  document.getElementById("conteudo").innerHTML = "<h1 id='msg'>Você não tem permissão para acessar esta página!<br><span>consulte um administrador para mais informações.<br> <a href='inicial.html'>Voltar para a página inicial</a></span></h1>";
+  throw new Error("Sem permissão para acessar esta página!");
+}
 let url_base;
+
 if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"

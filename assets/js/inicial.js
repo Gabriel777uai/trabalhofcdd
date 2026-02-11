@@ -25,8 +25,25 @@ async function getDataApi(url) {
   let list = $("#listaProdutos");
   list.html("");
   for (let i = 0; i < data.length; i++) {
+    let media = data[i].ia_quantidadeproduto;
+    let estoque = data[i].ia_quantidadeideal;
+    let message = "Estoque Normal!";
+    let classBadge = "bg-success";
+    if (media < estoque) {
+      message = "Estoque muito baixo!";
+      classBadge = "bg-danger";
+    }
+    if (media < estoque / 2) {
+      message = "Estoque baixo!";
+      classBadge = "bg-warning";
+    }
+    if (media == 0) {
+      message = "Estoque zerado!";
+      classBadge = "bg-dark";
+    }
     list.append(`
     <div class="card h-100">
+    <span class="badge ${classBadge}">${message}</span>
     <img src="${
       data[i].ia_imagenslink ||
       "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"
