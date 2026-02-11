@@ -2,14 +2,16 @@ let usename = document.getElementById("user");
 let user = localStorage.getItem("usuario");
 usename.innerHTML = user;
 
-
 let API_BASE_URL;
-if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-  console.log('Testes em Desenvolvimento');
+if (
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+) {
+  console.log("Testes em Desenvolvimento");
   console.log(window.location.hostname);
   API_BASE_URL = "http://localhost:8000/api/v1/products";
 } else {
-  console.log('Rodando em Produção');
+  console.log("Rodando em Produção");
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/products";
 }
 async function getDataApi(url) {
@@ -226,7 +228,12 @@ window.editarProduto = async function (id) {
 window.salvarProduto = async function () {
   const id = document.getElementById("editId").value;
   if (!id) {
-    alert("Erro: ID do produto não encontrado.");
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: "Erro: ID do produto não encontrado.",
+      confirmButtonColor: "#4a90e2",
+    });
     return;
   }
 
@@ -255,7 +262,12 @@ window.salvarProduto = async function () {
     const result = await response.json();
 
     if (response.ok) {
-      alert("Produto atualizado com sucesso!");
+      Swal.fire({
+        icon: "success",
+        title: "Sucesso!",
+        text: "Produto atualizado com sucesso!",
+        confirmButtonColor: "#4a90e2",
+      });
       // Fechar modal
       const modalElement = document.getElementById("modalEditarProduto");
       const modalInstance = window.bootstrap.Modal.getInstance(modalElement);
@@ -265,18 +277,37 @@ window.salvarProduto = async function () {
       // Recarregar lista
       getDataApi(API_BASE_URL);
     } else {
-      alert(
-        "Erro ao atualizar produto: " + (result.status || "Erro desconhecido"),
-      );
+      Swal.fire({
+        icon: "error",
+        title: "Erro ao atualizar",
+        text: result.status || "Erro desconhecido",
+        confirmButtonColor: "#4a90e2",
+      });
     }
   } catch (error) {
     console.error("Erro na requisição de atualização:", error);
-    alert("Erro de conexão ao tentar atualizar o produto.");
+    Swal.fire({
+      icon: "error",
+      title: "Erro de conexão",
+      text: "Erro de conexão ao tentar atualizar o produto.",
+      confirmButtonColor: "#4a90e2",
+    });
   }
 };
 
 window.excluirProduto = async function (id) {
-  if (confirm("Tem certeza que deseja excluir este produto?")) {
+  const result = await Swal.fire({
+    title: "Tem certeza?",
+    text: "Deseja realmente excluir este produto?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sim, excluir!",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (result.isConfirmed) {
     try {
       const response = await fetch(
         `https://trabalhofcdd-backend.onrender.com/api/v1/delete/${id}`,
@@ -289,14 +320,29 @@ window.excluirProduto = async function (id) {
       );
 
       if (response.ok) {
-        alert("Produto excluído com sucesso!");
+        Swal.fire({
+          icon: "success",
+          title: "Excluído!",
+          text: "Produto excluído com sucesso!",
+          confirmButtonColor: "#4a90e2",
+        });
         getDataApi(API_BASE_URL);
       } else {
-        alert("Erro ao excluir produto.");
+        Swal.fire({
+          icon: "error",
+          title: "Erro",
+          text: "Erro ao excluir produto.",
+          confirmButtonColor: "#4a90e2",
+        });
       }
     } catch (error) {
       console.error("Erro ao excluir:", error);
-      alert("Erro ao tentar excluir o produto.");
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: "Erro ao tentar excluir o produto.",
+        confirmButtonColor: "#4a90e2",
+      });
     }
   }
 };

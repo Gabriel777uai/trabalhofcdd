@@ -11,12 +11,15 @@
 
 let formLogin = document.getElementById("form-login");
 let url_base;
-if (window.location.hostname === "localhost" || window.location.hostname ===  "127.0.0.1") {
-  console.log('Testes em Desenvolvimento');
-  
+if (
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+) {
+  console.log("Testes em Desenvolvimento");
+
   url_base = "http://localhost:8000/";
 } else {
-  console.log('Rodando em Produção');
+  console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 formLogin.addEventListener("submit", async function (event) {
@@ -25,13 +28,10 @@ formLogin.addEventListener("submit", async function (event) {
   let formData = new FormData(formLogin);
 
   try {
-    let response = await fetch(
-      `${url_base}api/v1/login`,
-      {
-        method: "POST",
-        body: formData,
-      },
-    );
+    let response = await fetch(`${url_base}api/v1/login`, {
+      method: "POST",
+      body: formData,
+    });
 
     let data = await response.json();
     if (data.response) {
@@ -52,6 +52,11 @@ formLogin.addEventListener("submit", async function (event) {
     }
   } catch (error) {
     console.error("Erro:", error);
-    alert("Ocorreu um erro. Por favor, tente novamente.");
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: "Ocorreu um erro. Por favor, tente novamente.",
+      confirmButtonColor: "#4a90e2",
+    });
   }
 });

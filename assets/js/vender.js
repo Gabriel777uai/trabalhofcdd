@@ -1,5 +1,8 @@
 let url_base;
-if (window.location.hostname === "localhost" || window.location.hostname ===  "127.0.0.1") {
+if (
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+) {
   console.log("Testes em Desenvolvimento");
   url_base = "http://localhost:8000/";
 } else {
@@ -93,7 +96,12 @@ document.getElementById("formVenda").addEventListener("submit", async (e) => {
     loadOrderItems(data.numero_pedido);
   } catch (error) {
     console.error("Falha ao gerar pedido:", error);
-    alert("Erro ao criar pedido. Verifique os dados.");
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: "Erro ao criar pedido. Verifique os dados.",
+      confirmButtonColor: "#4a90e2",
+    });
   }
 });
 
@@ -227,7 +235,12 @@ document
     const clienteId = document.getElementById("selectCliente").value;
 
     if (!quantidade || quantidade <= 0) {
-      alert("Informe uma quantidade válida.");
+      Swal.fire({
+        icon: "warning",
+        title: "Atenção",
+        text: "Informe uma quantidade válida.",
+        confirmButtonColor: "#4a90e2",
+      });
       return;
     }
 
@@ -250,12 +263,24 @@ document
 
       console.log("Status da resposta adicionar:", response.status);
       const dataResponse = await response.json().catch(() => ({}));
-      alert(dataResponse.output);
 
       if (dataResponse.response === false && dataResponse.code === 3) {
-        alert(dataResponse.output);
+        Swal.fire({
+          icon: "error",
+          title: "Erro",
+          text: dataResponse.output,
+          confirmButtonColor: "#4a90e2",
+        });
         return;
       }
+
+      Swal.fire({
+        icon: "success",
+        title: "Item adicionado",
+        text: dataResponse.output,
+        timer: 2000,
+        showConfirmButton: false,
+      });
 
       const modalElement = document.getElementById("modalQuantidade");
       const modal = bootstrap.Modal.getInstance(modalElement);
@@ -264,7 +289,12 @@ document
       loadOrderItems(pedidoId);
     } catch (error) {
       console.error("Erro ao adicionar item:", error);
-      alert("Falha ao adicionar item ao pedido.");
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: "Falha ao adicionar item ao pedido.",
+        confirmButtonColor: "#4a90e2",
+      });
     }
   });
 
@@ -381,7 +411,12 @@ document
     );
 
     if (!newQtd || newQtd <= 0) {
-      alert("Quantidade inválida!");
+      Swal.fire({
+        icon: "warning",
+        title: "Quantidade inválida",
+        text: "Por favor, informe uma quantidade maior que zero.",
+        confirmButtonColor: "#4a90e2",
+      });
       return;
     }
 
@@ -415,12 +450,28 @@ document
       loadOrderItems(pedidoId);
     } catch (error) {
       console.error("Erro updateItemQuantity:", error);
-      alert("Falha ao atualizar quantidade.");
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: "Falha ao atualizar quantidade.",
+        confirmButtonColor: "#4a90e2",
+      });
     }
   });
 
 window.removeItem = async (itemId, pedidoId) => {
-  if (!confirm("Remover este item?")) return;
+  const result = await Swal.fire({
+    title: "Remover item?",
+    text: "Deseja realmente remover este item do pedido?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sim, remover",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (!result.isConfirmed) return;
 
   try {
     const response = await fetch(
@@ -502,7 +553,7 @@ function renderOrders(orders) {
   list.forEach((pedido) => {
     const cd_pedido = pedido.codigo_compra || pedido.cd_pedido;
     const vlr_total = parseFloat(pedido.vlr_total || pedido.vlr_pedido || 0);
-    const cd_cliente = pedido.cd_cliente || pedido.cd_clinte; 
+    const cd_cliente = pedido.cd_cliente || pedido.cd_clinte;
 
     let status = pedido.f_fechado || pedido.situacao || "N";
     let statusText = "Em andamento";
@@ -594,7 +645,12 @@ async function visualizarPedido(cd_pedido, cd_cliente, status) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   } catch (error) {
     console.error("Erro ao visualizar pedido:", error);
-    alert("Falha ao carregar o pedido.");
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: "Falha ao carregar o pedido.",
+      confirmButtonColor: "#4a90e2",
+    });
   }
 }
 
@@ -619,7 +675,12 @@ async function confirmarCancelamento(cd_pedido) {
   const motivo = document.getElementById("motivoCancelamento").value.trim();
 
   if (!motivo) {
-    alert("Por favor, informe o motivo do cancelamento.");
+    Swal.fire({
+      icon: "warning",
+      title: "Campo obrigatório",
+      text: "Por favor, informe o motivo do cancelamento.",
+      confirmButtonColor: "#4a90e2",
+    });
     return;
   }
 
@@ -638,7 +699,12 @@ async function confirmarCancelamento(cd_pedido) {
 
     if (!response.ok) throw new Error("Erro ao cancelar pedido");
 
-    alert(`Pedido ${cd_pedido} cancelado com sucesso!`);
+    Swal.fire({
+      icon: "success",
+      title: "Pedido Cancelado",
+      text: `Pedido ${cd_pedido} cancelado com sucesso!`,
+      confirmButtonColor: "#4a90e2",
+    });
 
     // Hide modal
     const modalElement = document.getElementById("modalCancelarPedido");
@@ -655,12 +721,28 @@ async function confirmarCancelamento(cd_pedido) {
     }
   } catch (error) {
     console.error("Erro ao cancelar pedido:", error);
-    alert("Falha ao cancelar o pedido.");
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: "Falha ao cancelar o pedido.",
+      confirmButtonColor: "#4a90e2",
+    });
   }
 }
 
 async function finalizarPedido(cd_pedido) {
-  if (!confirm(`Deseja realmente finalizar o pedido ${cd_pedido}?`)) return;
+  const result = await Swal.fire({
+    title: "Finalizar pedido?",
+    text: `Deseja realmente finalizar o pedido ${cd_pedido}?`,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sim, finalizar",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (!result.isConfirmed) return;
 
   try {
     const response = await fetch(
@@ -680,7 +762,12 @@ async function finalizarPedido(cd_pedido) {
     if (!response.ok) throw new Error("Erro ao finalizar pedido");
 
     const data = await response.json();
-    alert(data.output);
+    Swal.fire({
+      icon: "success",
+      title: "Sucesso",
+      text: data.output,
+      confirmButtonColor: "#4a90e2",
+    });
 
     fetchOrders();
 
@@ -689,7 +776,12 @@ async function finalizarPedido(cd_pedido) {
     }
   } catch (error) {
     console.error("Erro ao finalizar pedido:", error);
-    alert("Falha ao finalizar o pedido.");
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: "Falha ao finalizar o pedido.",
+      confirmButtonColor: "#4a90e2",
+    });
   }
 }
 
@@ -923,7 +1015,18 @@ async function getNFeXML(pedidoId) {
 }
 
 async function generateNFe(pedidoId) {
-  if (!confirm(`Baixar XML da NFe para o pedido ${pedidoId}?`)) return;
+  const result = await Swal.fire({
+    title: "Baixar XML?",
+    text: `Deseja baixar o XML da NFe para o pedido ${pedidoId}?`,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#4a90e2",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sim, baixar",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (!result.isConfirmed) return;
   try {
     const xml = await getNFeXML(pedidoId);
     const blob = new Blob([xml], { type: "application/xml" });
@@ -937,7 +1040,12 @@ async function generateNFe(pedidoId) {
     URL.revokeObjectURL(url);
   } catch (error) {
     console.error("Erro ao baixar NFe:", error);
-    alert("Erro: " + error.message);
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: error.message,
+      confirmButtonColor: "#4a90e2",
+    });
   }
 }
 
@@ -967,6 +1075,11 @@ ${rawXml.replace('<?xml version="1.0" encoding="UTF-8"?>', "").trim()}
     document.body.removeChild(form);
   } catch (error) {
     console.error("Erro ao visualizar DANFE:", error);
-    alert("Erro: " + error.message);
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: error.message,
+      confirmButtonColor: "#4a90e2",
+    });
   }
 }

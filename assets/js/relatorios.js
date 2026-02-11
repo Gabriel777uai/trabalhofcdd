@@ -1,9 +1,12 @@
 let url_base;
-if (window.location.hostname === "localhost" || window.location.hostname ===  "127.0.0.1") {
-  console.log('Testes em Desenvolvimento');
+if (
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+) {
+  console.log("Testes em Desenvolvimento");
   url_base = "http://localhost:8000/api/v1/";
 } else {
-  console.log('Rodando em Produção');
+  console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/api/v1/";
 }
 const usename = document.getElementById("user");
@@ -298,7 +301,10 @@ function gerarRelatorio(tipo) {
     usuarios: "Usuários",
     estoque: "Baixo Estoque",
   };
-  alert(
-    `Gerando Relatório de ${nomes[tipo]}...\n(Funcionalidade futura via PDF/Excel)`,
-  );
+  Swal.fire({
+    icon: "info",
+    title: "Gerando Relatório",
+    text: `Gerando Relatório de ${nomes[tipo]}... (Funcionalidade futura via PDF/Excel)`,
+    confirmButtonColor: "#4a90e2",
+  });
 }

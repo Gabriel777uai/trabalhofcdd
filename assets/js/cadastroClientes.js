@@ -1,9 +1,12 @@
 let url_base;
-if (window.location.hostname === "localhost"  ||  window.location.hostname ===  "127.0.0.1") {
-  console.log('Testes em Desenvolvimento');
+if (
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+) {
+  console.log("Testes em Desenvolvimento");
   url_base = "http://localhost:8000/";
 } else {
-  console.log('Rodando em Produção');
+  console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 
@@ -54,9 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
     btnBuscarCnpj.addEventListener("click", async () => {
       let cnpj = inputCnpj.value.replace(/\D/g, "");
       if (cnpj.length !== 14) {
-        alert(
-          "CNPJ inválido. Digite apenas números ou verifique a quantidade de dígitos.",
-        );
+        Swal.fire({
+          icon: "warning",
+          title: "CNPJ Inválido",
+          text: "CNPJ inválido. Digite apenas números ou verifique a quantidade de dígitos.",
+          confirmButtonColor: "#4a90e2",
+        });
         return;
       }
 
@@ -96,7 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.error("Erro busca CNPJ:", error);
-        alert("Erro ao buscar dados do CNPJ. Preencha manualmente.");
+        Swal.fire({
+          icon: "info",
+          title: "Aviso",
+          text: "Erro ao buscar dados do CNPJ. Preencha manualmente.",
+          confirmButtonColor: "#4a90e2",
+        });
       } finally {
         btnBuscarCnpj.disabled = false;
         btnBuscarCnpj.innerHTML = '<i class="bi bi-search"></i> Buscar';
@@ -193,19 +204,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
 
         if (response.ok) {
-          alert(result.output);
+          Swal.fire({
+            icon: "success",
+            title: "Sucesso!",
+            text: result.output,
+            confirmButtonColor: "#4a90e2",
+          });
           form.reset();
           if (toggleTipo) toggleTipo();
         } else {
           console.error("Erro na resposta:", result);
-          alert(
-            "Erro ao cadastrar: " +
-              (result.output || result.message || "Erro desconhecido"),
-          );
+          Swal.fire({
+            icon: "error",
+            title: "Erro ao cadastrar",
+            text: result.output || result.message || "Erro desconhecido",
+            confirmButtonColor: "#4a90e2",
+          });
         }
       } catch (error) {
         console.error("Erro na requisição:", error);
-        alert("Erro na comunicação com o servidor.");
+        Swal.fire({
+          icon: "error",
+          title: "Erro de comunicação",
+          text: "Erro na comunicação com o servidor.",
+          confirmButtonColor: "#4a90e2",
+        });
       }
     });
   }
@@ -251,7 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   inputBuscaCliente.addEventListener("keypress", async (e) => {
     if (e.key === "Enter") {
-            const term = inputBuscaCliente.value.trim();
+      const term = inputBuscaCliente.value.trim();
       if (!term) {
         fetchClients(); // Reload all if empty
         return;

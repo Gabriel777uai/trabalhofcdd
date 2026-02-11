@@ -5,6 +5,7 @@
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
+  "chat_model": "GPT-4o mini",
   "icons": [
     {
       "src": "../assets/img/favicon.png",

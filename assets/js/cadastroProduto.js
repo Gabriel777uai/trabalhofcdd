@@ -1,9 +1,12 @@
 let url_base;
-if (window.location.hostname === "localhost"  || window.location.hostname ===  "127.0.0.1") {
-  console.log('Testes em Desenvolvimento');
+if (
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+) {
+  console.log("Testes em Desenvolvimento");
   url_base = "http://localhost:8000/";
 } else {
-  console.log('Rodando em Produção');
+  console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 document.addEventListener("DOMContentLoaded", () => {
@@ -57,17 +60,30 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
 
         if (response.ok) {
-          alert("Produto cadastrado com sucesso!");
+          Swal.fire({
+            icon: "success",
+            title: "Sucesso!",
+            text: "Produto cadastrado com sucesso!",
+            confirmButtonColor: "#4a90e2",
+          });
           form.reset();
         } else {
           console.error("Erro na resposta:", result);
-          alert("Erro ao cadastrar: " + (result.status || "Erro desconhecido"));
+          Swal.fire({
+            icon: "error",
+            title: "Erro ao cadastrar",
+            text: result.status || "Erro desconhecido",
+            confirmButtonColor: "#4a90e2",
+          });
         }
       } catch (error) {
         console.error("Erro na requisição:", error);
-        alert(
-          "Erro na comunicação com o servidor. Verifique o console para mais detalhes.",
-        );
+        Swal.fire({
+          icon: "error",
+          title: "Erro de comunicação",
+          text: "Erro na comunicação com o servidor. Verifique o console para mais detalhes.",
+          confirmButtonColor: "#4a90e2",
+        });
       }
     });
   }

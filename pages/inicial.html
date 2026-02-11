@@ -26,14 +26,16 @@
             <h3>Menu</h3>
         </div>
         <ul class="menu-opcoes">
-            <li><a href="inicial.html" class="active"><i class="bi bi-house-fill"></i> Início</a></li>
-            <li><a href="cadastroProdutos.html"><i class="bi bi-box-seam"></i> Cadastrar Produtos</a></li>
-            <li><a href="cadastroUsuarios.html"><i class="bi bi-person-plus"></i> Cadastrar Usuários</a></li>
-            <li><a href="cadastroClientes.html"><i class="bi bi-people-fill"></i> Cadastrar Clientes</a></li>
-            <li><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
-            <li><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
-            <li><a href="configuracoes.html"><i class="bi bi-gear-fill"></i> Configurações</a></li>
-            <li><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+            <li data-role="1"><a href="inicial.html" class="active"><i class="bi bi-house-fill"></i> Início</a></li>
+            <li data-role="2"><a href="cadastroProdutos.html"><i class="bi bi-box-seam"></i> Cadastrar Produtos</a></li>
+            <li data-role="5"><a href="cadastroUsuarios.html"><i class="bi bi-person-plus"></i> Cadastrar Usuários</a>
+            </li>
+            <li data-role="3"><a href="cadastroClientes.html"><i class="bi bi-people-fill"></i> Cadastrar Clientes</a>
+            </li>
+            <li data-role="1"><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
+            <li data-role="3"><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
+            <li data-role="1"><a href="configuracoes.html"><i class="bi bi-gear-fill"></i> Configurações</a></li>
+            <li data-role="1"><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
         </ul>
     </div>
     <div class="overlay" id="overlay"></div>
@@ -177,9 +179,19 @@
         </div>
     </main>
     <!--Start of Tawk.to Script-->
+    <!-- Import Map to resolve bare modules -->
+    <script type="importmap">
+    {
+      "imports": {
+        "jwt-decode": "https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/esm/index.js"
+      }
+    }
+    </script>
+    <script type="module" src="../assets/js/menu_roles.js"></script>
     <script> window.chtlConfig = { chatbotId: "4416448636" } </script>
     <script async data-id="4416448636" id="chtl-script" type="text/javascript"
         src="https://chatling.ai/js/embed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="../assets/js/auth.js"></script>
     <script src="../assets/vendor/jquery/jquery.js"></script>
