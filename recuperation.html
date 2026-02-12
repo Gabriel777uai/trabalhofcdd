@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperação de senha</title>
+    <link rel="stylesheet" href="assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/login.css">
+    <link rel="shortcut icon" href="assets/img/login.png" type="image/x-icon">
+</head>
+<body>
+    <main id="container">
+        <div class="login-container">
+            <h1>Estoque Inteligente</h1>
+
+            <form id="form-recuperacao">
+            <label for="login">Confirme o email para o usuario</label>
+            <input type="text" id="login" name="name_user" placeholder="Digite seu usuário" required readonly/>
+            
+            <p style="font-size: 10px;">Email cadastrado: <span id="email-user"></span></p>
+            <div class="checkbox-flex">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Digite seu email" />
+            </div>
+
+            <button id="btnRecuperar" type="submit">Recuperar</button>
+            </form>
+            <div id="container">
+                <button class="btn btn-danger mt-1">cancalar processo</button>
+            </div>
+
+            <div class="footer-text">
+            © 2026 - Sistema Interno
+            </div>
+        </div>
+    </main>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/recuperation.js"></script>
+</body>
+</html>

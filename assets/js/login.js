@@ -42,20 +42,30 @@ formLogin.addEventListener("submit", async function (event) {
         window.location.href = "pages/inicial.html";
       }
     } else {
-      let alertDiv = document.createElement("div");
-      alertDiv.classList.add("alert", "alert-danger", "mt-3");
-      alertDiv.textContent = data.status;
-      formLogin.appendChild(alertDiv);
+      let redirect_recuperacao = document.createElement("a");
+      redirect_recuperacao.href = "recuperation.html";
+      redirect_recuperacao.textContent = "Esqueci minha senha";
+      redirect_recuperacao.classList.add("mt-3");
+      formLogin.appendChild(redirect_recuperacao);
+
       document.querySelector("button[type='submit']").disabled = false;
-      carregando.classList.add("d-none");
-      textoBotao.textContent = "Entrar";
+
+      localStorage.setItem("userErrorPassword", formData.get("login"));
+      
+      Swal.fire({
+        icon: "error",
+        title: "Erro ao fazer login",
+        text: data.status,
+        confirmButtonColor: "#4a90e2",
+      });
+
     }
   } catch (error) {
     console.error("Erro:", error);
     Swal.fire({
       icon: "error",
       title: "Erro",
-      text: "Ocorreu um erro. Por favor, tente novamente.",
+      text: "Credenciais inválidas",
       confirmButtonColor: "#4a90e2",
     });
   }
