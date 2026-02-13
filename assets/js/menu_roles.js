@@ -5,18 +5,17 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!token) return;
 
   try {
-    const decodedToken = jwtDecode(token);
-    const userRole = parseInt(decodedToken.role) || 1;
+    ;
 
     const menuItems = document.querySelectorAll(
       "#menuLateral .menu-opcoes li[data-role]",
     );
-    if (userRole < document.getElementById("menuLateral").getAttribute("data-role")) {
+    if (parseInt(jwtDecode(token).role) < document.getElementById("menuLateral").getAttribute("data-role")) {
       document.body.innerHTML = "";
     }
     menuItems.forEach((item) => {
       const requiredRole = parseInt(item.getAttribute("data-role"));
-      if (userRole < requiredRole) {
+      if (parseInt(jwtDecode(token).role) < requiredRole) {
         item.remove();
       }
     });
