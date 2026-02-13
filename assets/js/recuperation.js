@@ -6,6 +6,12 @@ const CONFIG = {
       : "https://trabalhofcdd-backend.onrender.com/",
 };
 
+let btnCancelar = document.getElementById("btnCancelar");
+btnCancelar.addEventListener("click", () => {
+  localStorage.removeItem("userErrorPassword");
+  window.location.href = "index.html";
+});
+
 const apiService = {
   async getUserData(login) {
     const response = await fetch(
@@ -14,10 +20,18 @@ const apiService = {
     return await response.json();
   },
 
-  async requestRecoveryCode(formData) {
+  async requestRecoveryCode(login, email, id_user) {
+    console.log(login, email, id_user);
     const response = await fetch(`${CONFIG.URL_BASE}api/v1/forgotpassword`, {
       method: "POST",
-      body: formData,
+      body: JSON.stringify({
+        name_user: `${login}`,
+        email: `${email}`,
+        id_user: `${id_user}`,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
     return await response.json();
   },
@@ -111,6 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       userLocalStorage || loginInput.value,
     );
 
+    console.log(dataUser);
     if (dataUser.response) {
       currentUserEmail = dataUser.output?.email;
       currentUserId = dataUser.output?.id;
@@ -139,7 +154,11 @@ async function handleRecoverySubmit(event) {
   const formData = new FormData(event.target);
 
   try {
-    const data = await apiService.requestRecoveryCode(formData);
+    const data = await apiService.requestRecoveryCode(
+      formData.get("name_user"),
+      formData.get("email"),
+      currentUserId,
+    );
     console.log("Recovery request result:", data);
 
     if (data.response) {
