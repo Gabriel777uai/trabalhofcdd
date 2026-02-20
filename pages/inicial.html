@@ -38,7 +38,10 @@
             <li data-role="1"><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
         </ul>
     </div>
-    <div class="overlay" id="overlay"></div>
+    <div class="overlay-carregamento">
+        <div class="spinner-grow" role="status">
+        </div>
+    </div>
     <main>
         <section class="search-section">
             <h2>Pesquisa de produtos</h2>
@@ -57,6 +60,11 @@
                         <option value="normal">Estoque normal</option>
                         <option value="alto">Estoque alto</option>
                     </select>
+                    <select id="itemsPerPage" class="form-control" style="max-width: 150px;">
+                        <option value="10" selected>10 por página</option>
+                        <option value="20">20 por página</option>
+                        <option value="50">50 por página</option>
+                    </select>
                 </div>
             </div>
 
@@ -64,6 +72,12 @@
                 <!-- Os produtos serão inseridos dinamicamente aqui -->
                 Carregando produtos...
             </div>
+
+            <nav aria-label="Navegação de produtos" class="mt-4">
+                <ul class="pagination justify-content-center" id="paginacao">
+                    <!-- Links de paginação serão inseridos aqui -->
+                </ul>
+            </nav>
         </section>
 
         <!-- Modal Visualizar Produto -->

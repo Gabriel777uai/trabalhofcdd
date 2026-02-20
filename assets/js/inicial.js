@@ -7,142 +7,194 @@ if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  console.log("Testes em Desenvolvimento");
-  console.log(window.location.hostname);
   API_BASE_URL = "http://localhost:8000/api/v1/products";
 } else {
-  console.log("Rodando em Produção");
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/products";
 }
-async function getDataApi(url) {
-  const request = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-    },
-  });
-  const data = await request.json();
 
-  let list = $("#listaProdutos");
+// Global State
+let allProducts = [];
+let filteredProducts = [];
+let currentPage = 1;
+let itemsPerPage = 10;
+
+async function getDataApi(url) {
+  document.querySelector(".overlay-carregamento").classList.add("active");
+  try {
+    const request = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+      },
+    });
+    allProducts = await request.json();
+    filteredProducts = [...allProducts];
+    currentPage = 1;
+    renderPage();
+  } catch (error) {
+    console.error("Erro ao buscar dados:", error);
+  } finally {
+    document.querySelector(".overlay-carregamento").classList.remove("active");
+  }
+}
+
+function renderPage() {
+  const list = $("#listaProdutos");
   list.html("");
-  for (let i = 0; i < data.length; i++) {
-    let media = data[i].ia_quantidadeproduto;
-    let estoque = data[i].ia_quantidadeideal;
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const productsToShow = filteredProducts.slice(startIndex, endIndex);
+
+  if (productsToShow.length === 0) {
+    list.html("<p class='text-center w-100'>Nenhum produto encontrado.</p>");
+    renderPagination(0);
+    return;
+  }
+
+  productsToShow.forEach((produto) => {
+    let media = produto.ia_quantidadeproduto;
+    let estoque = produto.ia_quantidadeideal;
     let message = "Estoque Normal!";
     let classBadge = "bg-success";
-    if (media < estoque) {
-      message = "Estoque muito baixo!";
-      classBadge = "bg-danger";
-    }
-    if (media < estoque / 2) {
-      message = "Estoque baixo!";
-      classBadge = "bg-warning";
-    }
+
     if (media == 0) {
       message = "Estoque zerado!";
       classBadge = "bg-dark";
+    } else if (media < estoque / 2) {
+      message = "Estoque baixo!";
+      classBadge = "bg-warning";
+    } else if (media < estoque) {
+      message = "Estoque muito baixo!";
+      classBadge = "bg-danger";
     }
+
     list.append(`
-    <div class="card h-100">
-    <span class="badge ${classBadge}">${message}</span>
-    <img src="${
-      data[i].ia_imagenslink ||
-      "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"
-    }" class="card-img-top" alt="${data[i].ia_nomeproduto}">
-    <div class="card-body d-flex flex-column">
-      <h5 class="card-title">${data[i].ia_nomeproduto}</h5>
-      <p class="card-text truncate">${data[i].ia_descricaoproduto || ""}</p>
-      <p class="mt-auto"><small>Estoque: <strong>${
-        data[i].ia_quantidadeproduto ?? 0
-      }</strong></small></p>
+      <div class="card h-100">
+        <span class="badge ${classBadge}">${message}</span>
+        <img src="${produto.ia_imagenslink || "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"}" 
+             class="card-img-top" alt="${produto.ia_nomeproduto}">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">${produto.ia_nomeproduto}</h5>
+          <p class="card-text truncate">${produto.ia_descricaoproduto || ""}</p>
+          <p class="mt-auto"><small>Estoque: <strong>${produto.ia_quantidadeproduto ?? 0}</strong></small></p>
+        </div>
+        <div class="card-footer d-flex gap-2">
+          <button class="btn btn-sm btn-primary" onclick="visualizarProduto('${produto.ia_idproduto}')">Visualizar</button>
+          <button class="btn btn-sm btn-warning" onclick="editarProduto('${produto.ia_idproduto}')">Editar</button>
+          <button class="btn btn-sm btn-danger" onclick="excluirProduto('${produto.ia_idproduto}')">Excluir</button>
+        </div>
       </div>
-      <div class="card-footer d-flex gap-2">
-      <button class="btn btn-sm btn-primary" onclick="visualizarProduto('${data[i].ia_idproduto}')">Visualizar</button>
-      <button class="btn btn-sm btn-warning" onclick="editarProduto('${data[i].ia_idproduto}')">Editar</button>
-      <button class="btn btn-sm btn-danger" onclick="excluirProduto('${data[i].ia_idproduto}')">Excluir</button>
-      </div>
-    </div>
+    `);
+  });
+
+  renderPagination(filteredProducts.length);
+}
+
+function renderPagination(totalItems) {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const paginationContainer = $("#paginacao");
+  paginationContainer.html("");
+
+  if (totalPages <= 1) return;
+
+  const maxVisiblePages = 5; // Number of page buttons to show around current page
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  // First Page Button
+  if (startPage > 1) {
+    paginationContainer.append(`
+      <li class="page-item">
+        <a class="page-link" href="#" onclick="changePage(1)">1</a>
+      </li>
+    `);
+    if (startPage > 2) {
+      paginationContainer.append(
+        `<li class="page-item disabled"><span class="page-link">...</span></li>`,
+      );
+    }
+  }
+
+  // Previous Button (Icon)
+  paginationContainer.append(`
+    <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+      <a class="page-link" href="#" onclick="changePage(${currentPage - 1})" aria-label="Anterior">
+        <i class="bi bi-chevron-left"></i>
+      </a>
+    </li>
+  `);
+
+  // Page Numbers
+  for (let i = startPage; i <= endPage; i++) {
+    paginationContainer.append(`
+      <li class="page-item ${i === currentPage ? "active" : ""}">
+        <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+      </li>
+    `);
+  }
+
+  // Next Button (Icon)
+  paginationContainer.append(`
+    <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+      <a class="page-link" href="#" onclick="changePage(${currentPage + 1})" aria-label="Próximo">
+        <i class="bi bi-chevron-right"></i>
+      </a>
+    </li>
+  `);
+
+  // Last Page Button
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) {
+      paginationContainer.append(
+        `<li class="page-item disabled"><span class="page-link">...</span></li>`,
+      );
+    }
+    paginationContainer.append(`
+      <li class="page-item">
+        <a class="page-link" href="#" onclick="changePage(${totalPages})">${totalPages}</a>
+      </li>
     `);
   }
 }
+
+window.changePage = function (page) {
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  if (page < 1 || page > totalPages) return;
+  currentPage = page;
+  renderPage();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+// Listeners
+document.getElementById("itemsPerPage").addEventListener("change", (e) => {
+  itemsPerPage = parseInt(e.target.value);
+  currentPage = 1;
+  renderPage();
+});
+
+document.getElementById("pesquisaProduto").addEventListener("input", (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  filteredProducts = allProducts.filter(
+    (p) =>
+      (p.ia_nomeproduto &&
+        p.ia_nomeproduto.toLowerCase().includes(searchTerm)) ||
+      (p.ia_codigoproduto &&
+        String(p.ia_codigoproduto).toLowerCase().includes(searchTerm)),
+  );
+  currentPage = 1;
+  renderPage();
+});
+
 getDataApi(API_BASE_URL);
-
-let search = document.getElementById("pesquisaProduto");
-search.addEventListener("keyup", () => {
-  let list = $("#listaProdutos");
-
-  list.html("Pesquisando...");
-});
-search.addEventListener("keyup", async () => {
-  let list = $("#listaProdutos");
-  if (search.value.length > 0) {
-    let pesquisaFeita = `${API_BASE_URL}/${search.value}`;
-    const request = await fetch(pesquisaFeita, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-      },
-    });
-    const data = await request.json();
-
-    list.html("");
-    for (let i = 0; i < data.length; i++) {
-      list.append(`
-    <div class="card h-100">
-    <img src="${
-      data[i].ia_imagenslink ||
-      "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"
-    }" class="card-img-top" alt="${data[i].ia_nomeproduto}">
-    <div class="card-body d-flex flex-column">
-      <h5 class="card-title">${data[i].ia_nomeproduto}</h5>
-      <p class="card-text truncate">${data[i].ia_descricaoproduto || ""}</p>
-      <p class="mt-auto"><small>Estoque: <strong>${
-        data[i].ia_quantidadeproduto ?? 0
-      }</strong></small></p>
-      </div>
-      <div class="card-footer d-flex gap-2">
-      <button class="btn btn-sm btn-primary" onclick="visualizarProduto('${data[i].ia_idproduto}')">Visualizar</button>
-      <button class="btn btn-sm btn-warning" onclick="editarProduto('${data[i].ia_idproduto}')">Editar</button>
-      <button class="btn btn-sm btn-danger" onclick="excluirProduto('${data[i].ia_idproduto}')">Excluir</button>
-      </div>
-    </div>
-    `);
-    }
-  } else {
-    let pesquisaFeita = `${API_BASE_URL}`;
-    const request = await fetch(pesquisaFeita, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-      },
-    });
-    const data = await request.json();
-
-    list.html("");
-    for (let i = 0; i < data.length; i++) {
-      list.append(`
-    <div class="card h-100">
-    <img src="${
-      data[i].ia_imagenslink ||
-      "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"
-    }" class="card-img-top" alt="${data[i].ia_nomeproduto}">
-    <div class="card-body d-flex flex-column">
-      <h5 class="card-title">${data[i].ia_nomeproduto}</h5>
-      <p class="card-text truncate">${data[i].ia_descricaoproduto || ""}</p>
-      <p class="mt-auto"><small>Estoque: <strong>${
-        data[i].ia_quantidadeproduto ?? 0
-      }</strong></small></p>
-      </div>
-      <div class="card-footer d-flex gap-2">
-      <button class="btn btn-sm btn-primary btn-visualizar" onclick="visualizarProduto('${data[i].ia_idproduto}')">Visualizar</button>
-      <button class="btn btn-sm btn-warning btn-editar" onclick="editarProduto('${data[i].ia_idproduto}')">Editar</button>
-      <button class="btn btn-sm btn-danger btn-excluir" onclick="excluirProduto('${data[i].ia_idproduto}')">Excluir</button>
-      </div>
-    </div>
-    `);
-    }
-  }
-});
 
 // Global functions for inline onclick calls
 window.visualizarProduto = async function (id) {
+  document.querySelector(".overlay-carregamento").classList.add("active");
+
   if (!window.bootstrap) {
     console.error("Bootstrap não foi carregado corretamente.");
     return;
@@ -187,6 +239,9 @@ window.visualizarProduto = async function (id) {
       const modal = new window.bootstrap.Modal(
         document.getElementById("modalVisualizarProduto"),
       );
+      document
+        .querySelector(".overlay-carregamento")
+        .classList.remove("active");
       modal.show();
     }
   } catch (error) {
@@ -195,6 +250,7 @@ window.visualizarProduto = async function (id) {
 };
 
 window.editarProduto = async function (id) {
+  document.querySelector(".overlay-carregamento").classList.add("active");
   if (!window.bootstrap) {
     console.error("Bootstrap não foi carregado corretamente.");
     return;
@@ -235,6 +291,9 @@ window.editarProduto = async function (id) {
       const modal = new window.bootstrap.Modal(
         document.getElementById("modalEditarProduto"),
       );
+      document
+        .querySelector(".overlay-carregamento")
+        .classList.remove("active");
       modal.show();
     }
   } catch (error) {

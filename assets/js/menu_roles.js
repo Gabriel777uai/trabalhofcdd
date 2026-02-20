@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    if (userRole === 5) {
+    if (parseInt(jwtDecode(token).role) === 5) {
       document.getElementById("menuLateral").classList.add("admin");
     }
   } catch (error) {

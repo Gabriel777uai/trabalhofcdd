@@ -1,12 +1,3 @@
-import { jwtDecode } from "jwt-decode";
-const token = localStorage.getItem("acessToken");
-const decodedToken = jwtDecode(token);
-const userRole = parseInt(decodedToken.role) || 1;
-
-if (userRole < 1) {
-  document.getElementById("conteudo").innerHTML = "<h1 id='msg'>Você não tem permissão para acessar esta página!<br><span>consulte um administrador para mais informações.<br> <a href='inicial.html'>Voltar para a página inicial</a></span></h1>";
-  throw new Error("Sem permissão para acessar esta página!");
-}
 let url_base;
 
 if (
@@ -115,58 +106,64 @@ document.getElementById("formVenda").addEventListener("submit", async (e) => {
   }
 });
 
-document.getElementById("inputProduto").addEventListener("keyup", async (e) => {
-  const search = e.target.value.trim();
-  const resultsContainer = document.getElementById("productResultsContainer");
-  const tableBody = document.getElementById("listaProdutosBusca");
+document
+  .getElementById("inputProduto")
+  .addEventListener("keypress", async (e) => {
+    const search = e.target.value.trim();
 
-  if (search.length > 0) {
-    resultsContainer.style.display = "block";
-    tableBody.innerHTML =
-      '<tr><td colspan="4" class="text-center">Pesquisando...</td></tr>';
+    if (e.key === "Enter") {
+      const resultsContainer = document.getElementById(
+        "productResultsContainer",
+      );
+      const tableBody = document.getElementById("listaProdutosBusca");
 
-    try {
-      const response = await fetch(`${url_base}api/v1/products/${search}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-        },
-      });
-
-      if (!response.ok) throw new Error("Erro na busca");
-
-      const data = await response.json();
-      tableBody.innerHTML = "";
-
-      if (data.length === 0) {
+      if (search.length > 0) {
+        resultsContainer.style.display = "block";
         tableBody.innerHTML =
-          '<tr><td colspan="4" class="text-center">Nenhum produto encontrado.</td></tr>';
-        return;
-      }
+          '<tr><td colspan="4" class="text-center">Pesquisando...</td></tr>';
 
-      data.forEach((product) => {
-        const tr = document.createElement("tr");
-        const productImg =
-          product.ia_imagenslink ||
-          product.ia_imagem ||
-          "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1";
-        const media = product.ia_quantidadeproduto;
-        const estoque = product.ia_quantidadeideal;
-        let message = "Estoque Normal!";
-        let classBadge = "bg-success";
-        if (media < estoque) {
-          message = "Estoque baixo!";
-          classBadge = "bg-warning";
-        }
-        if (media < estoque / 2) {
-          message = "Estoque muito baixo!";
-          classBadge = "bg-danger";
-        }
-        if (media == 0) {
-          message = "Estoque zerado!";
-          classBadge = "bg-dark";
-        }
-        tr.innerHTML = `
+        try {
+          const response = await fetch(`${url_base}api/v1/products/${search}`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+            },
+          });
+
+          if (!response.ok) throw new Error("Erro na busca");
+
+          const data = await response.json();
+          tableBody.innerHTML = "";
+
+          if (data.length === 0) {
+            tableBody.innerHTML =
+              '<tr><td colspan="4" class="text-center">Nenhum produto encontrado.</td></tr>';
+            return;
+          }
+
+          data.forEach((product) => {
+            const tr = document.createElement("tr");
+            const productImg =
+              product.ia_imagenslink ||
+              product.ia_imagem ||
+              "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1";
+            const media = product.ia_quantidadeproduto;
+            const estoque = product.ia_quantidadeideal;
+            let message = "Estoque Normal!";
+            let classBadge = "bg-success";
+            if (media < estoque) {
+              message = "Estoque baixo!";
+              classBadge = "bg-warning";
+            }
+            if (media < estoque / 2) {
+              message = "Estoque muito baixo!";
+              classBadge = "bg-danger";
+            }
+            if (media == 0) {
+              message = "Estoque zerado!";
+              classBadge = "bg-dark";
+            }
+            tr.innerHTML = `
         <td><img src="${productImg}" alt="${product.ia_nomeproduto}" class="img-fluid" style="max-width: 50px; max-height: 50px; object-fit: cover; border-radius: 5px;"></td>
         <span class="badge ${classBadge}" style="color: #fffffff5">${message}</span>
                     <td>${product.ia_nomeproduto}</td>
@@ -183,45 +180,46 @@ document.getElementById("inputProduto").addEventListener("keyup", async (e) => {
                         </button>
                     </td>
                 `;
-        tableBody.appendChild(tr);
-      });
+            tableBody.appendChild(tr);
+          });
 
-      document.querySelectorAll(".btn-visualizar").forEach((btn) => {
-        btn.addEventListener("click", function () {
-          const id = this.getAttribute("data-id");
-          const nome = this.getAttribute("data-nome");
-          const desc = this.getAttribute("data-desc");
-          const preco = parseFloat(this.getAttribute("data-preco"));
-          const img = this.getAttribute("data-img");
+          document.querySelectorAll(".btn-visualizar").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const id = this.getAttribute("data-id");
+              const nome = this.getAttribute("data-nome");
+              const desc = this.getAttribute("data-desc");
+              const preco = parseFloat(this.getAttribute("data-preco"));
+              const img = this.getAttribute("data-img");
 
-          document.getElementById("modalProdutoId").value = id;
-          document.getElementById("modalProdutoNome").textContent = nome;
-          document.getElementById("modalProdutoDesc").textContent = desc;
-          document.getElementById("modalProdutoImg").src = img;
-          document.getElementById("modalProdutoPrecoBadge").textContent =
-            `R$ ${preco.toFixed(2)}`;
-          document.getElementById("inputPrecoVenda").value = preco;
-          document.getElementById("inputQuantidade").value = 1;
+              document.getElementById("modalProdutoId").value = id;
+              document.getElementById("modalProdutoNome").textContent = nome;
+              document.getElementById("modalProdutoDesc").textContent = desc;
+              document.getElementById("modalProdutoImg").src = img;
+              document.getElementById("modalProdutoPrecoBadge").textContent =
+                `R$ ${preco.toFixed(2)}`;
+              document.getElementById("inputPrecoVenda").value = preco;
+              document.getElementById("inputQuantidade").value = 1;
 
-          updateModalSubtotal();
+              updateModalSubtotal();
 
-          const modal = new bootstrap.Modal(
-            document.getElementById("modalQuantidade"),
-          );
+              const modal = new bootstrap.Modal(
+                document.getElementById("modalQuantidade"),
+              );
 
-          modal.show();
-        });
-      });
-    } catch (error) {
-      console.error("Erro na busca:", error);
-      tableBody.innerHTML =
-        '<tr><td colspan="4" class="text-center text-danger">Erro ao buscar produtos.</td></tr>';
+              modal.show();
+            });
+          });
+        } catch (error) {
+          console.error("Erro na busca:", error);
+          tableBody.innerHTML =
+            '<tr><td colspan="4" class="text-center text-danger">Erro ao buscar produtos.</td></tr>';
+        }
+      } else {
+        resultsContainer.style.display = "none";
+        tableBody.innerHTML = "";
+      }
     }
-  } else {
-    resultsContainer.style.display = "none";
-    tableBody.innerHTML = "";
-  }
-});
+  });
 
 document.getElementById("btnAumentar").addEventListener("click", () => {
   const input = document.getElementById("inputQuantidade");
