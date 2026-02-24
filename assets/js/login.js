@@ -1,7 +1,7 @@
 (function () {
   "use strict";
   const mostrarSenha = document.getElementById("mostrarSenha");
-  const campoSenha = document.getElementById("senha");
+  const campoSenha = document.getElementById("validationCustom02");
 
   // Mostrar/Esconder senha
   mostrarSenha.addEventListener("change", function () {
@@ -46,7 +46,10 @@ formLogin.addEventListener("submit", async function (event) {
       redirect_recuperacao.href = "recuperation.html";
       redirect_recuperacao.textContent = "Esqueci minha senha";
       redirect_recuperacao.classList.add("mt-3");
-      formLogin.appendChild(redirect_recuperacao);
+      redirect_recuperacao.id = "recuperaton_link";
+      if (!document.getElementById('recuperaton_link')) {
+        formLogin.appendChild(redirect_recuperacao);
+      }
 
       document.querySelector("button[type='submit']").disabled = false;
 

@@ -158,10 +158,10 @@
                         <button class="btn btn-outline-success shadow-sm" onclick="gerarRelatorio('pedidos')">
                             <i class="bi bi-journal-check"></i> Relatório de Pedidos
                         </button>
-                        <button class="btn btn-outline-dark shadow-sm" onclick="gerarRelatorio('usuarios')">
+                        <!-- <button class="btn btn-outline-dark shadow-sm" onclick="gerarRelatorio('usuarios')">
                             <i class="bi bi-people"></i> Relatório de Usuários
-                        </button>
-                        <button class="btn btn-outline-danger shadow-sm" onclick="gerarRelatorio('estoque')">
+                        </button> -->
+                        <button class="btn btn-outline-danger shadow-sm" onclick="gerarRelatorio('baixo_estoque')">
                             <i class="bi bi-box-arrow-down"></i> Baixo Estoque
                         </button>
                     </div>
@@ -190,8 +190,9 @@
     }
     </script>
     <script type="module" src="../assets/js/menu_roles.js"></script>
+    <script type="module" src="../assets/js/validation/validation_relatorio.js"></script>
     <script src="../assets/js/auth.js"></script>
-    <script type="module" src="../assets/js/relatorios.js"></script>
+    <script src="../assets/js/relatorios.js"></script>
     <script src="../assets/js/logout.js"></script>
     <script src="../assets/js/responsive.js"></script>
 </body>

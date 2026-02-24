@@ -1,14 +1,16 @@
-import { jwtDecode } from "jwt-decode";
-const token = localStorage.getItem("acessToken");
-const decodedToken = jwtDecode(token);
-const userRole = parseInt(decodedToken.role) || 1;
-
-if (userRole < 3) {
-  document.getElementById("conteudo").innerHTML = "<h1 id='msg'>Você não tem permissão para acessar esta página!<br><span>consulte um administrador para mais informações.<br> <a href='inicial.html'>Voltar para a página inicial</a></span></h1>";
-  throw new Error("Sem permissão para acessar esta página!");
-}
+/**
+ * 
+ * Codigo criado por Gabriel de souza barros
+ * 
+ * @alias relatorys
+ * 
+ * @alias github https://github.com/Gabriel777uai/
+ * Este codigo foi feito a algum tempo a suas funcoes estao bem separadas
+ * 
+ */
 
 let url_base;
+
 if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
@@ -39,7 +41,7 @@ async function fetchData(endpoint) {
       throw new Error(`Erro API ${endpoint}: ${response.status}`);
     const data = await response.json();
     console.log(`Dados recebidos de ${endpoint}:`, data);
-    return data.output || data;
+    return data?.output || data;
   } catch (error) {
     console.error(error);
     return null;
@@ -53,29 +55,41 @@ document.addEventListener("DOMContentLoaded", async function () {
   let categoriesVendas = [];
 
   if (dadosVendasMes && Array.isArray(dadosVendasMes)) {
-    if (dadosVendasMes.length > 0 && dadosVendasMes[0].sum) {
-      totalVendasMes = parseFloat(dadosVendasMes[0].sum);
-      categoriesVendas.push("Mês Atual");
-      seriesVendas.push(totalVendasMes);
-    } else {
-      dadosVendasMes.forEach((item) => {
-        const mes = item.mes || item.month || "Mês";
-        const valor = parseFloat(
-          item.total_mes || item.valor || item.total || 0,
-        );
-        categoriesVendas.push(mes);
-        seriesVendas.push(parseFloat(valor.toFixed(2)));
-      });
-      if (seriesVendas.length > 0) {
-        totalVendasMes = seriesVendas[seriesVendas.length - 1];
-      }
-    }
+    const nomesMeses = [
+      "Jan",
+      "Fev",
+      "Mar",
+      "Abr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Set",
+      "Out",
+      "Nov",
+      "Dez",
+    ];
 
-    document.getElementById("cardVendasMes").textContent =
-      new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(totalVendasMes);
+    const mesAtual = new Date().getMonth() + 1;
+
+    dadosVendasMes.forEach((item) => {
+      const numMes = parseInt(item.mes);
+      const mesNome = nomesMeses[numMes - 1] || `Mês ${numMes}`;
+      const valor = parseFloat(item.total || 0);
+
+      categoriesVendas.push(mesNome);
+      seriesVendas.push(parseFloat(valor.toFixed(2)));
+
+      if (numMes === mesAtual) {
+        totalVendasMes = valor;
+      }
+    });
+    const traducao = new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(totalVendasMes);
+
+    document.getElementById("cardVendasMes").textContent = traducao;
   }
 
   const optionsVendas = {
@@ -94,7 +108,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     xaxis: {
       categories: categoriesVendas.length ? categoriesVendas : ["Sem dados"],
     },
-    tooltip: { y: { formatter: (val) => `R$ ${val}` } },
+    tooltip: {
+      y: {
+        formatter: (val) =>
+          new Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          }).format(val),
+      },
+    },
   };
   new ApexCharts(
     document.querySelector("#chartVendas"),
@@ -305,16 +327,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 function gerarRelatorio(tipo) {
-  const nomes = {
-    clientes: "Clientes",
-    pedidos: "Pedidos",
-    usuarios: "Usuários",
-    estoque: "Baixo Estoque",
-  };
   Swal.fire({
     icon: "info",
     title: "Gerando Relatório",
-    text: `Gerando Relatório de ${nomes[tipo]}... (Funcionalidade futura via PDF/Excel)`,
+    text: `Gerando Relatório de ${nomes[tipo]}... Aguarde!`,
     confirmButtonColor: "#4a90e2",
   });
+  window.location.href = `${url_base}print/${tipo}/${localStorage.getItem("id")}`;
+  return;
 }

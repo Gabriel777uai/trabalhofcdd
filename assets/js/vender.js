@@ -195,8 +195,9 @@ document
               document.getElementById("modalProdutoNome").textContent = nome;
               document.getElementById("modalProdutoDesc").textContent = desc;
               document.getElementById("modalProdutoImg").src = img;
+              let precoUnit = new Intl.NumberFormat('pt-br', {style: 'currency', currency: 'BRL'}).format(preco.toFixed(2))
               document.getElementById("modalProdutoPrecoBadge").textContent =
-                `R$ ${preco.toFixed(2)}`;
+                `${precoUnit}`;
               document.getElementById("inputPrecoVenda").value = preco;
               document.getElementById("inputQuantidade").value = 1;
 
@@ -245,8 +246,10 @@ function updateModalSubtotal() {
     parseFloat(document.getElementById("inputPrecoVenda").value) || 0;
   const subtotal = qtd * preco;
 
+  let valorTotsub = new Intl.NumberFormat('pt-br', {style: 'currency', currency: 'BRL'}).format(subtotal.toFixed(2))
+
   document.getElementById("modalItemSubtotal").textContent =
-    `R$ ${subtotal.toFixed(2)}`;
+    `${valorTotsub}`;
 }
 
 document
@@ -290,7 +293,7 @@ document
       console.log("Status da resposta adicionar:", response.status);
       const dataResponse = await response.json().catch(() => ({}));
 
-      if (dataResponse.response === false && dataResponse.code === 3) {
+      if (dataResponse.response === false && dataResponse.code === 4) {
         Swal.fire({
           icon: "error",
           title: "Erro",
@@ -385,7 +388,9 @@ async function loadOrderItems(pedidoId) {
       });
     }
 
-    totalPedido.textContent = `R$ ${total.toFixed(2)}`;
+    let valorTot = new Intl.NumberFormat('pt-br', {style: 'currency', currency: 'BRL'}).format(total.toFixed(2))
+
+    totalPedido.textContent = `${valorTot}`;
 
     if (items.length > 0 && !window.currentOrderIsFinalized) {
       if (btnFinalizar) btnFinalizar.disabled = false;
