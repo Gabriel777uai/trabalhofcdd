@@ -7,9 +7,9 @@ if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  API_BASE_URL = "http://localhost:8000/api/v1/products";
+  API_BASE_URL = "http://localhost:8000/api/v1/";
 } else {
-  API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/products";
+  API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/";
 }
 
 // Global State
@@ -189,7 +189,7 @@ document.getElementById("pesquisaProduto").addEventListener("input", (e) => {
   renderPage();
 });
 
-getDataApi(API_BASE_URL);
+getDataApi(`${API_BASE_URL}products`);
 
 // Global functions for inline onclick calls
 window.visualizarProduto = async function (id) {
@@ -202,7 +202,7 @@ window.visualizarProduto = async function (id) {
 
   try {
     const response = await fetch(
-      `https://trabalhofcdd-backend.onrender.com/api/v1/productsforid/${id}`,
+      `${API_BASE_URL}productsforid/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
@@ -211,7 +211,9 @@ window.visualizarProduto = async function (id) {
     );
     const data = await response.json();
 
-    const produto = data[0];
+    console.log(data)
+
+    const produto = data;
 
     if (produto) {
       document.getElementById("viewImg").src =
@@ -258,7 +260,7 @@ window.editarProduto = async function (id) {
 
   try {
     const response = await fetch(
-      `https://trabalhofcdd-backend.onrender.com/api/v1/productsforid/${id}`,
+      `${API_BASE_URL}productsforid/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
@@ -267,7 +269,7 @@ window.editarProduto = async function (id) {
     );
     const data = await response.json();
 
-    const produto = data[0];
+    const produto = data;
 
     if (produto) {
       document.getElementById("editId").value = produto.ia_idproduto;
@@ -324,7 +326,7 @@ window.salvarProduto = async function () {
 
   try {
     const response = await fetch(
-      `https://trabalhofcdd-backend.onrender.com/api/v1/update/produto/${id}`,
+      `${API_BASE_URL}update/produto/${id}`,
       {
         method: "PUT",
         headers: {
@@ -351,7 +353,7 @@ window.salvarProduto = async function () {
         modalInstance.hide();
       }
       // Recarregar lista
-      getDataApi(API_BASE_URL);
+      getDataApi(`${API_BASE_URL}products`);
     } else {
       Swal.fire({
         icon: "error",
@@ -386,7 +388,7 @@ window.excluirProduto = async function (id) {
   if (result.isConfirmed) {
     try {
       const response = await fetch(
-        `https://trabalhofcdd-backend.onrender.com/api/v1/delete/${id}`,
+        `${API_BASE_URL}delete/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -402,7 +404,7 @@ window.excluirProduto = async function (id) {
           text: "Produto excluído com sucesso!",
           confirmButtonColor: "#4a90e2",
         });
-        getDataApi(API_BASE_URL);
+        getDataApi(`${API_BASE_URL}products`);
       } else {
         Swal.fire({
           icon: "error",

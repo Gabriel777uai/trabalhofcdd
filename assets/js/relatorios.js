@@ -330,7 +330,7 @@ function gerarRelatorio(tipo) {
   Swal.fire({
     icon: "info",
     title: "Gerando Relatório",
-    text: `Gerando Relatório de ${nomes[tipo]}... Aguarde!`,
+    text: `Gerando Relatório de ${tipo}... Aguarde!`,
     confirmButtonColor: "#4a90e2",
   });
   window.location.href = `${url_base}print/${tipo}/${localStorage.getItem("id")}`;

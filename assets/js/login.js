@@ -7,6 +7,9 @@
   mostrarSenha.addEventListener("change", function () {
     campoSenha.type = this.checked ? "text" : "password";
   });
+  if (localStorage.getItem("acessToken")) {
+    window.location.href = "pages/inicial.html";
+  }
 })();
 
 let formLogin = document.getElementById("form-login");
@@ -38,6 +41,11 @@ formLogin.addEventListener("submit", async function (event) {
       localStorage.setItem("acessToken", data.refreshToken);
       localStorage.setItem("id", data.id);
       localStorage.setItem("usuario", data.userName);
+      localStorage.setItem("role", data.role);
+      if (localStorage.getItem('role') === "vendedor"){
+        window.location.href = 'pages/vender.html';
+        return;
+      } 
       if (localStorage.getItem("acessToken")) {
         window.location.href = "pages/inicial.html";
       }

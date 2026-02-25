@@ -38,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const grupo = this.value;
       let cargo = "";
       switch (grupo) {
+        case "0":
+          cargo = "Vendedor";
+          break;
         case "1":
           cargo = "Funcinario normal";
           break;
@@ -72,6 +75,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const cargo = document.getElementById("cargo").value;
       const adress = document.getElementById("adress").value;
       const numero = document.getElementById("numero").value;
+      const role = "user";
+      if (grupoAcesso === 0) {
+        role = "vendedor";
+        cargo = "Vendedor";
+        grupoAcesso = 3;
+      }
+      if (grupoAcesso === 5) {
+        role = "adimin";
+        grupoAcesso = 5;
+      }
 
       // Construct payload matching PHP expectation
       const data = {
@@ -84,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cargo: cargo,
         adress: adress,
         numero: numero,
+        role: role
       };
 
       try {
