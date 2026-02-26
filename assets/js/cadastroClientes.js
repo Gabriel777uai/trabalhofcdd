@@ -209,6 +209,14 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           body: JSON.stringify(payload),
         });
+        const dataEmail = {
+          nameCliente: payload.nome_cliente,
+          emailCliente: payload.email
+        }
+        const sendEmail = await fetch('https://n8n-3dg1.onrender.com/webhook/605cfe06-1915-4739-b60c-d43b776dc2b7', {
+          method: 'POST',
+          body: JSON.stringify(dataEmail)
+        })
 
         const result = await response.json();
 
