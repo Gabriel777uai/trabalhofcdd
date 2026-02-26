@@ -64,24 +64,26 @@ document.addEventListener("DOMContentLoaded", () => {
   if (form) {
     form.addEventListener("submit", async function (event) {
       event.preventDefault();
-
+        document
+        .querySelector(".overlay-carregamento")
+        .classList.add("active");
       // Gather form data
       const name = document.getElementById("name").value;
       const sobrenome = document.getElementById("sobrenome").value;
       const email = document.getElementById("email").value;
       const senha = document.getElementById("senha").value;
       const dataNasc = document.getElementById("dataNasc").value;
-      const grupoAcesso = document.getElementById("grupoAcesso").value;
-      const cargo = document.getElementById("cargo").value;
+      let grupoAcesso = document.getElementById("grupoAcesso").value;
+      let cargo = document.getElementById("cargo").value;
       const adress = document.getElementById("adress").value;
       const numero = document.getElementById("numero").value;
-      const role = "user";
-      if (grupoAcesso === 0) {
+      let role = "user";
+      if (grupoAcesso == 0) {
         role = "vendedor";
         cargo = "Vendedor";
         grupoAcesso = 3;
       }
-      if (grupoAcesso === 5) {
+      if (grupoAcesso == 5) {
         role = "adimin";
         grupoAcesso = 5;
       }
@@ -99,6 +101,24 @@ document.addEventListener("DOMContentLoaded", () => {
         numero: numero,
         role: role
       };
+      const dataEmail = {
+        emailuser: data.email,
+        senha: data.senha,
+        login: data.name,
+        nameUser: data.name,
+      }
+      if (role == "user") {
+        const sendEmail = await fetch('https://n8n-3dg1.onrender.com/webhook/605cfe06-1915-4739-b60c-d43b776dc2b5', {
+          method: 'POST',
+          body: JSON.stringify(dataEmail)
+        });
+      }
+      if (role == "vendedor") {
+        const sendEmail = await fetch('https://n8n-3dg1.onrender.com/webhook/605cfe06-1915-4739-b60c-d43b776dc2b6', {
+          method: 'POST',
+          body: JSON.stringify(dataEmail)
+        });
+      }
 
       try {
         const response = await fetch(`${url_base}api/v1/cadastro/user`, {
@@ -113,6 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = await response.json();
 
         if (result.response) {
+        document.querySelector(".overlay-carregamento").classList.remove("active");
           Swal.fire({
             icon: "success",
             title: "Sucesso!",
