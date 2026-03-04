@@ -33,6 +33,7 @@
             <li data-role="3"><a href="cadastroClientes.html"><i class="bi bi-people-fill"></i> Cadastrar Clientes</a>
             </li>
             <li data-role="1" id="vendedor"><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
+            <li data-role="1" id="vendedor"><a href="pedidos.html"><i class="bi bi-shop"></i> Pedidos</a></li>
             <li data-role="3"><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
             <li data-role="1"><a href="configuracoes.html"><i class="bi bi-gear-fill"></i> Configurações</a></li>
             <li data-role="1"><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
@@ -45,21 +46,8 @@
     <main>
         <section class="search-section">
             <h2>Pesquisa de produtos</h2>
-            <div class="search-container">
+            <div class="d-flex gap-1">
                 <input type="text" class="form-control" id="pesquisaProduto" placeholder="Digite o nome do produto">
-                <div class="filter-options d-flex gap-2 mt-2">
-                    <select id="filterCategoria" class="form-control">
-                        <option value="">Todas as categorias</option>
-                        <option value="automotivos">Automotivos</option>
-                        <option value="alimentos">Moto peças</option>
-                        <option value="vestuario">Ferramentas</option>
-                    </select>
-                    <select id="filterEstoque" class="form-control">
-                        <option value="">Todos os estoques</option>
-                        <option value="baixo">Estoque baixo</option>
-                        <option value="normal">Estoque normal</option>
-                        <option value="alto">Estoque alto</option>
-                    </select>
                     <select id="itemsPerPage" class="form-control" style="max-width: 150px;">
                         <option value="10" selected>10 por página</option>
                         <option value="20">20 por página</option>

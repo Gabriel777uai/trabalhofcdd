@@ -1,0 +1,129 @@
+!
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/inicial.css">
+    <title>Meus Pedidos</title>
+</head>
+
+<body>
+    <span id="topo"></span>
+
+    <!-- Header -->
+    <div id="header">
+        <button id="btnMobileToggle"><i class="bi bi-list"></i></button>
+        <h1>Paínel de Controle</h1>
+        <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="50px" class="ms-4">
+        <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
+    </div>
+
+    <!-- Menu lateral -->
+    <div class="menu-lateral" id="menuLateral">
+        <div class="menu-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="menu-opcoes">
+            <li data-role="1"><a href="inicial.html"><i class="bi bi-house-fill"></i> Início</a></li>
+            <li data-role="2"><a href="cadastroProdutos.html"><i class="bi bi-box-seam"></i> Cadastrar Produtos</a></li>
+            <li data-role="5"><a href="cadastroUsuarios.html"><i class="bi bi-person-plus"></i> Cadastrar Usuários</a>
+            </li>
+            <li data-role="3"><a href="cadastroClientes.html"><i class="bi bi-people-fill"></i> Cadastrar Clientes</a>
+            </li>
+            <li data-role="1"><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
+            <li data-role="1" id="vendedor"><a href="pedidos.html" class="active"><i class="bi bi-shop"></i> Pedidos</a>
+            </li>
+            <li data-role="3"><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
+            <li data-role="1"><a href="configuracoes.html"><i class="bi bi-gear-fill"></i>
+                    Configurações</a></li>
+            <li data-role="1"><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+        </ul>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Conteúdo principal -->
+    <main>
+        <h1>Meus Pedidos</h1>
+        <section class="list-of-order">
+            <article class="m-3 mb-1 line">
+                Pesquisa Pedidos:
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
+                        aria-describedby="basic-addon2">
+                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+                </div>
+            </article>
+            <article id="list-order">
+
+            </article>
+        </section>
+<!-- 
+        <section class="modals">
+            Modal de visualização
+            <div class="modal-dialog modal-xl active-view">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">@</span>
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                        aria-describedby="basic-addon1">
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Recipient’s username"
+                        aria-label="Recipient’s username" aria-describedby="basic-addon2">
+                    <span class="input-group-text" id="basic-addon2">@example.com</span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="basic-url" class="form-label">Your vanity URL</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon3">https://example.com/users/</span>
+                        <input type="text" class="form-control" id="basic-url"
+                            aria-describedby="basic-addon3 basic-addon4">
+                    </div>
+                    <div class="form-text" id="basic-addon4">Example help text goes outside the input group.</div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+                    <span class="input-group-text">.00</span>
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username">
+                    <span class="input-group-text">@</span>
+                    <input type="text" class="form-control" placeholder="Server" aria-label="Server">
+                </div>
+            </div>
+
+        </section> 
+    -->
+    </main>
+    <script> window.chtlConfig = { chatbotId: "4416448636" } </script>
+    <script async data-id="4416448636" id="chtl-script" type="text/javascript"
+        src="https://chatling.ai/js/embed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/jquery/jquery.js"></script>
+    <!-- Import Map to resolve bare modules -->
+    <script type="importmap">
+    {
+      "imports": {
+        "jwt-decode": "https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/esm/index.js"
+      }
+    }
+    </script>
+    <script type="module" src="../assets/js/menu_roles.js"></script>
+    <script src="../assets/js/pedidos.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/logout.js"></script>
+    <script src="../assets/js/responsive.js"></script>
+</body>
+
+</html>
