@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       menuItems[0].remove();
       menuItems[1].remove();
       menuItems[2].remove();
-      menuItems[5].remove();
+      menuItems[6].remove();
     }
 
     if (role === "adimin") {
