@@ -149,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
             text: result.output || "Erro desconhecido",
             confirmButtonColor: "#4a90e2",
           });
+          document.querySelector(".overlay-carregamento").classList.remove("active");
         }
       } catch (error) {
         console.error("Erro na requisição:", error);

@@ -99,3 +99,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+document.getElementById('valor').addEventListener('input', function() {
+  let input = event.target;
+  
+  // 1. Remove tudo que não é dígito
+  let apenasNumeros = input.value.replace(/\D/g, '');
+
+  // 2. Se não houver números, limpa o campo e sai da função
+  if (!apenasNumeros) {
+    input.value = "";
+    return;
+  }
+
+  // 3. Converte para número e define as casas decimais (centavos)
+  let valorNumerico = parseFloat(apenasNumeros) / 100;
+
+  // 4. Formata usando o padrão americano 'en-US'
+  input.value = valorNumerico.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+})

@@ -384,6 +384,7 @@ main {
   width: 60%;
   height: 80vh;
   transition: .5s linear;
+  box-shadow: 1px 20px 90px #66666683;
 }
 
 .modal-xl.active-view {
