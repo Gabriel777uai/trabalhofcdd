@@ -36,6 +36,44 @@
             <li data-role="1" id="vendedor"><a href="pedidos.html"><i class="bi bi-shop"></i> Pedidos</a></li>
             <li data-role="3"><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
             <li data-role="1"><a href="configuracoes.html"><i class="bi bi-gear-fill"></i> Configurações</a></li>
+            <li data-role="1">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                        
+                    </div>
+                    <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                            aria-controls="flush-collapseTwo">
+                            <i class="bi bi-box-arrow-down-right me-2"></i> 
+                            Mais opções
+                        </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse show"
+                        data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            <a class="dropdown-item bg-red" href="#" ><i class="bi bi-briefcase-fill"></i> Fornecedores</a>
+                            <a class="dropdown-item" href="#"><i class="bi bi-cart4"></i> Compras</a>
+                            <a class="dropdown-item" href="#"><i class="bi bi-card-checklist"></i> Listar compras</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <!-- <li data-role="1">
+                <div class="dropdown">
+                    <button data-bs-toggle="dropdown" aria-expanded="false" class="border border-0 bg-transparent  p-3">
+                        <i class="bi bi-box-arrow-down-right"></i>
+                        Mais opções
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-briefcase-fill"></i> Fornecedores</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-cart4"></i> Compras</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-card-checklist"></i> Listar compras</a>
+                        </li>
+                    </ul>
+                </div>
+            </li> -->
             <li data-role="1"><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
         </ul>
     </div>
@@ -48,12 +86,12 @@
             <h2>Pesquisa de produtos</h2>
             <div class="d-flex gap-1">
                 <input type="text" class="form-control" id="pesquisaProduto" placeholder="Digite o nome do produto">
-                    <select id="itemsPerPage" class="form-control" style="max-width: 150px;">
-                        <option value="10" selected>10 por página</option>
-                        <option value="20">20 por página</option>
-                        <option value="50">50 por página</option>
-                    </select>
-                </div>
+                <select id="itemsPerPage" class="form-control" style="max-width: 150px;">
+                    <option value="10" selected>10 por página</option>
+                    <option value="20">20 por página</option>
+                    <option value="50">50 por página</option>
+                </select>
+            </div>
             </div>
 
             <div class="products-grid" id="listaProdutos">
