@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
+    <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/inicial.css">
+    <title>Compras</title>
+</head>
+
+<body>
+    <span id="topo"></span>
+    <div id="header">
+        <button id="btnMobileToggle"><i class="bi bi-list"></i></button>
+        <h1>Paínel de Controle</h1>
+        <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="50px" class="ms-4">
+        <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
+    </div>
+
+    <div class="menu-lateral" id="menuLateral">
+        <div class="menu-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="menu-opcoes">
+            <li data-role="1"><a href="inicial.html"><i class="bi bi-house-fill"></i> Início</a></li>
+            <li data-role="2"><a href="cadastroProdutos.html"><i class="bi bi-box-seam"></i> Cadastrar Produtos</a></li>
+            <li data-role="5"><a href="cadastroUsuarios.html"><i class="bi bi-person-plus"></i> Cadastrar Usuários</a>
+            </li>
+            <li data-role="3"><a href="cadastroClientes.html"><i class="bi bi-people-fill"></i> Cadastrar Clientes</a>
+            </li>
+            <li data-role="1" id="vendedor"><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
+            <li data-role="1" id="vendedor"><a href="pedidos.html"><i class="bi bi-shop"></i> Pedidos</a></li>
+            <li data-role="3"><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
+            <li data-role="1"><a href="configuracoes.html"><i class="bi bi-gear-fill"></i> Configurações</a></li>
+            <li data-role="1">
+                <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseTwo" aria-expanded="true"
+                                aria-controls="flush-collapseTwo">
+                                <i class="bi bi-box-arrow-down-right me-2"></i>
+                                Mais opções
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse show"
+                            data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <a class="dropdown-item" href="fornecedores.html"><i class="bi bi-briefcase-fill"></i>
+                                    Fornecedores</a>
+                                <a class="dropdown-item" style="background-color: rgba(13, 110, 253, 0.25);" href="compras.html"><i class="bi bi-cart4"></i>
+                                    Compras</a>
+                                <a class="dropdown-item" href="listarCompras.html"><i class="bi bi-card-checklist"></i>
+                                    Listar compras</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li data-role="1"><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
+        </ul>
+    </div>
+    <div class="overlay-carregamento">
+        <div class="spinner-grow" role="status">
+        </div>
+    </div>
+    <main>
+        <section class="search-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2>Registrar Compra</h2>
+                    <p class="text-muted mb-0">Entrada de produtos no estoque através de compras.</p>
+                </div>
+            </div>
+
+            <form id="formCompra" class="p-4 border rounded bg-white shadow-sm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Fornecedor</label>
+                        <select class="form-select" id="idFornecedor" required>
+                            <option value="">Selecione um fornecedor</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Data da Compra</label>
+                        <input type="date" class="form-control" id="dataCompra" required>
+                    </div>
+                    <hr>
+                    <div class="col-md-8">
+                        <label class="form-label">Produto</label>
+                        <select class="form-select" id="idProduto">
+                            <option value="">Selecione um produto</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Quantidade</label>
+                        <input type="number" class="form-control" id="qtdCompra">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-outline-primary w-100" onclick="adicionarItem()"><i
+                                class="bi bi-plus"></i></button>
+                    </div>
+
+                    <div class="col-12">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Qtd</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itensCompra">
+                                <!-- Itens adicionados -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-end">
+                    <button type="reset" class="btn btn-secondary">Limpar</button>
+                    <button type="button" class="btn btn-primary" onclick="finalizarCompra()">Finalizar Compra</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script type="importmap">
+    {
+      "imports": {
+        "jwt-decode": "https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/esm/index.js"
+      }
+    }
+    </script>
+    <script type="module" src="../assets/js/menu_roles.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/jquery/jquery.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/compras.js"></script>
+    <script src="../assets/js/logout.js"></script>
+    <script src="../assets/js/responsive.js"></script>
+</body>
+
+</html>

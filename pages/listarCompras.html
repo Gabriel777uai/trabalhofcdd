@@ -1,4 +1,3 @@
-!
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -9,13 +8,11 @@
     <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../assets/css/inicial.css">
-    <title>Meus Pedidos</title>
+    <title>Lista de Compras</title>
 </head>
 
 <body>
     <span id="topo"></span>
-
-    <!-- Header -->
     <div id="header">
         <button id="btnMobileToggle"><i class="bi bi-list"></i></button>
         <h1>Paínel de Controle</h1>
@@ -23,7 +20,6 @@
         <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
     </div>
 
-    <!-- Menu lateral -->
     <div class="menu-lateral" id="menuLateral">
         <div class="menu-header">
             <h3>Menu</h3>
@@ -35,31 +31,29 @@
             </li>
             <li data-role="3"><a href="cadastroClientes.html"><i class="bi bi-people-fill"></i> Cadastrar Clientes</a>
             </li>
-            <li data-role="1"><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
-            <li data-role="1" id="vendedor"><a href="pedidos.html" class="active"><i class="bi bi-shop"></i> Pedidos</a>
-            </li>
+            <li data-role="1" id="vendedor"><a href="vender.html"><i class="bi bi-cash-coin"></i> Vendas</a></li>
+            <li data-role="1" id="vendedor"><a href="pedidos.html"><i class="bi bi-shop"></i> Pedidos</a></li>
             <li data-role="3"><a href="relatorios.html"><i class="bi bi-graph-up"></i> Relatórios</a></li>
-            <li data-role="1"><a href="configuracoes.html"><i class="bi bi-gear-fill"></i>
-                    Configurações</a></li>
+            <li data-role="1"><a href="configuracoes.html"><i class="bi bi-gear-fill"></i> Configurações</a></li>
             <li data-role="1">
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#flush-collapseTwo" aria-expanded="false"
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#flush-collapseTwo" aria-expanded="true"
                                 aria-controls="flush-collapseTwo">
                                 <i class="bi bi-box-arrow-down-right me-2"></i>
                                 Mais opções
                             </button>
                         </h2>
-                        <div id="flush-collapseTwo" class="accordion-collapse collapse"
+                        <div id="flush-collapseTwo" class="accordion-collapse collapse show"
                             data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
                                 <a class="dropdown-item" href="fornecedores.html"><i class="bi bi-briefcase-fill"></i>
                                     Fornecedores</a>
                                 <a class="dropdown-item" href="compras.html"><i class="bi bi-cart4"></i> Compras</a>
-                                <a class="dropdown-item" href="listarCompras.html"><i class="bi bi-card-checklist"></i>
-                                    Listar compras</a>
+                                <a class="dropdown-item" href="listarCompras.html"><i
+                                        class="bi bi-card-checklist"></i> Listar compras</a>
                             </div>
                         </div>
                     </div>
@@ -68,39 +62,42 @@
             <li data-role="1"><a href="#" id="btnLogout"><i class="bi bi-box-arrow-right"></i> Sair</a></li>
         </ul>
     </div>
-
-    <div class="overlay" id="overlay"></div>
-
-    <!-- Conteúdo principal -->
+    <div class="overlay-carregamento">
+        <div class="spinner-grow" role="status">
+        </div>
+    </div>
     <main>
-        <h1>Meus Pedidos</h1>
-        <section class="list-of-order">
-            <article class="m-3 mb-1 line">
-                Pesquisa Pedidos:
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
-                        aria-describedby="basic-addon2">
-                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
+        <section class="search-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2>Histórico de Compras</h2>
+                    <p class="text-muted mb-0">Consulte as compras realizadas anteriormente.</p>
                 </div>
-            </article>
-            <article id="list-order">
+            </div>
 
-            </article>
-        </section>
-        <section class="modals">
-            <!-- Modal de visualização -->
-            <div id="visualizacao">
-
+            <div class="table-responsive bg-white p-3 rounded shadow-sm">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fornecedor</th>
+                            <th>Data</th>
+                            <th>Total Itens</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaCompras">
+                        <!-- Compras serão carregadas aqui -->
+                        <tr>
+                            <td colspan="5" class="text-center">Nenhuma compra registrada (Simulação).</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
     </main>
-    <script> window.chtlConfig = { chatbotId: "4416448636" } </script>
-    <script async data-id="4416448636" id="chtl-script" type="text/javascript"
-        src="https://chatling.ai/js/embed.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
-    <script src="../assets/vendor/jquery/jquery.js"></script>
-    <!-- Import Map to resolve bare modules -->
+
+    <!-- Scripts -->
     <script type="importmap">
     {
       "imports": {
@@ -109,8 +106,11 @@
     }
     </script>
     <script type="module" src="../assets/js/menu_roles.js"></script>
-    <script src="../assets/js/pedidos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/jquery/jquery.js"></script>
     <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/listarCompras.js"></script>
     <script src="../assets/js/logout.js"></script>
     <script src="../assets/js/responsive.js"></script>
 </body>

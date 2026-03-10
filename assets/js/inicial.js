@@ -31,6 +31,19 @@ async function getDataApi(url) {
     currentPage = 1;
     renderPage();
   } catch (error) {
+    Swal.fire({
+      title: 'Acesso Expirado!',
+      text: "Acesso expirado ou teve algum erro no servidor... Entre em contato com um desenvolvedor ou faça login novamente!",
+      icon: 'error',
+      confirmButtonColor: '#3085d6', // Cor do botão de confirmar
+      confirmButtonText: 'Fazer login novamente!' // Texto do botão
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear();
+        window.location.href = '../index.html';
+      }
+    });
+      
     console.error("Erro ao buscar dados:", error);
   } finally {
     document.querySelector(".overlay-carregamento").classList.remove("active");
