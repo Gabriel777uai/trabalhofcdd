@@ -586,7 +586,9 @@ function renderOrders(orders) {
     const vlr_total = parseFloat(pedido.vlr_total || pedido.vlr_pedido || 0);
     const cd_cliente = pedido.cd_cliente || pedido.cd_clinte;
 
-    let status = pedido.f_fechado || pedido.situacao || "N";
+    let status = pedido.f_fechado || pedido.situacao;
+    let cancelado = pedido.f_cancelado;
+
     let statusText = "Em andamento";
     let statusClass = "text-warning";
     let btns = "";
@@ -599,7 +601,7 @@ function renderOrders(orders) {
                 <button class="btn btn-sm btn-outline-secondary ms-1" onclick="generateNFe(${cd_pedido})" title="Baixar XML"><i class="bi bi-file-earmark-code"></i></button>
                 <button class="btn btn-sm btn-outline-info ms-1" onclick="viewDANFE(${cd_pedido})" title="Ver DANFE"><i class="bi bi-printer"></i></button>
             `;
-    } else if (status === "C") {
+    } else if (cancelado == 'S') {
       statusText = "Cancelado";
       statusClass = "text-danger";
       btns = `
@@ -716,7 +718,7 @@ async function confirmarCancelamento(cd_pedido) {
   }
 
   try {
-    const response = await fetch(`${url_base}api/v1/cancelarpedido`, {
+    const response = await fetch(`${url_base}api/v1/cancelarpedido/${cd_pedido}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

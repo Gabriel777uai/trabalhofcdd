@@ -12,6 +12,42 @@ if (
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/";
 }
 
+if (!localStorage.getItem('count')) {
+  localStorage.setItem('count', 0);
+}
+
+if (localStorage.getItem('count') == 0) {
+  let div = document.createElement('div');
+  div.innerHTML = '<strong>Seja Bem vindo(a)!</strong>';
+  div.classList.add('messageInitial');
+  div.style.position = 'fixed';
+  div.style.left = '45%';
+  div.style.top = '190%';
+  div.style.background = '#0087bdee';
+  div.style.color = '#ffffffff';
+  div.style.padding = '4px';
+  div.style.boxShadow = '2px 1px 10px #696969b9'
+  div.style.borderRadius = '4px';
+  document.body.append(div);
+  console.log('estou na condição!') ;
+  
+  setTimeout (() => {
+    div.style.transition = '1s'
+    div.style.top = '90%';
+  }, 100); 
+  setTimeout(() => {
+  
+    div.style.transition = '2s'
+    div.style.top = '190%';
+    
+  }, 4000) 
+  if (document.querySelector('.messageInitial')) {
+    localStorage.setItem('count', 1);
+  }
+}
+
+
+
 // Global State
 let allProducts = [];
 let filteredProducts = [];
