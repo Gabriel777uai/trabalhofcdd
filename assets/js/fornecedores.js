@@ -21,11 +21,41 @@ if (
 async function carregarFornecedores() {
   document.querySelector(".overlay-carregamento").classList.add("active");
   try {
-    // This is a placeholder until the actual API endpoint is ready
-    // For now, let's just show an empty list or mock data
     const tbody = document.getElementById("listaFornecedores");
-    tbody.innerHTML =
-      '<tr><td colspan="5" class="text-center">Nenhum fornecedor encontrado (Simulação).</td></tr>';
+
+    const response = await fetch(
+      `${API_BASE_URL}fornecedores/${localStorage.getItem("id")}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+      },
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+    let list = [];
+    data.forEach((itens) => {
+      list.push(
+        `<tr>
+          <th scope="row">${itens.cd_fornecedor}</th>
+          <td>${itens.cpf || itens.cnpj}</td>
+          <td>${itens.fantasia}</td>
+          <td>
+            <button class="btn btn-warning p-1">
+              <i style="font-size: 10px;" class="bi bi-pencil"></i>
+            </button>
+            <button onclick="excluir(${itens.cd_fornecedor})" class="btn btn-danger p-1 ms-1">
+              <i style="font-size: 10px;" class="bi bi-trash"></i>
+            </button>
+          </td>
+        </tr>`,
+      );
+    });
+
+    tbody.innerHTML = list.join("");
   } catch (error) {
     console.error("Erro ao carregar fornecedores:", error);
   } finally {
@@ -33,21 +63,97 @@ async function carregarFornecedores() {
   }
 }
 
-window.salvarFornecedor = async function () {
-  const nome = document.getElementById("nomeFornecedor").value;
-  const doc = document.getElementById("documentoFornecedor").value;
+document
+  .getElementById("formFornecedor")
+  .addEventListener("submit", async function (e) {
+    e.preventDefault();
+    try {
+      let payload = {
+        fantasia: document.getElementById("fantasia").value,
+        cpf: document.getElementById("cpf").value || "",
+        cnpj: document.getElementById("cnpj").value || "",
+        name: document.getElementById("name").value,
+        cd_cadastrante: localStorage.getItem("id"),
+      };
 
-  if (!nome || !doc) {
-    Swal.fire("Erro", "Nome e Documento são obrigatórios.", "error");
-    return;
+      console.log(payload);
+      const reponse = await fetch(`${API_BASE_URL}fornecedores/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await reponse.json();
+
+      if (data.response == true) {
+        Swal.fire({
+          icon: "success",
+          title: "Sucesso",
+          text: data.output,
+          confirmButtonColor: "#4a90e2",
+        });
+        this.reset();
+        bootstrap.Modal.getInstance(
+          document.getElementById("modalCadastroFornecedor"),
+        ).hide();
+
+        carregarFornecedores();
+      }
+    } catch (err) {
+      console.error("Falha ao cadastar o fornecedor: " + err);
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: "Erro ao cadastrar fornecedor.",
+        confirmButtonColor: "#4a90e2",
+      });
+    }
+  });
+
+async function excluir(id) {
+  const result = await Swal.fire({
+    title: "Tem certeza?",
+    text: "Deseja realmente excluir o cadastro desse fornecedor?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sim, excluir!",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (result.isConfirmed) {
+    try {
+      const reponse = await fetch(`${API_BASE_URL}fornecedores/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+      });
+
+      const data = await reponse.json();
+
+      if (data.response) {
+        Swal.fire({
+          title: "Operaçaõ finalizada!",
+          text: "O cadastro do fornecedor foi excluido com sucesso!",
+          icon: "success",
+          confirmButtonText: "ok",
+        });
+
+        carregarFornecedores();
+      }
+    } catch (err) {
+      Swal.fire({
+          title: "Falha ao finalizar a operação!",
+          text: "Ouve algum problema ao excluir dados, favor entrar em contato com o desenvolvedor!",
+          icon: "error",
+          confirmButtonText: "ok",
+        });
+    }
   }
-
-  Swal.fire(
-    "Sucesso",
-    "Fornecedor cadastrado com sucesso (Simulação)!",
-    "success",
-  );
-  bootstrap.Modal.getInstance(
-    document.getElementById("modalCadastroFornecedor"),
-  ).hide();
-};
+}

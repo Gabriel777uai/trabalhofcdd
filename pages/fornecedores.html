@@ -86,7 +86,6 @@
                             <th>Nome</th>
                             <th>CNPJ/CPF</th>
                             <th>Telefone</th>
-                            <th>E-mail</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -108,34 +107,31 @@
                 </div>
                 <div class="modal-body">
                     <form id="formFornecedor">
-                        <div class="row g-3">
+                        <div class="row g-3 mb-1">
                             <div class="col-md-6">
-                                <label class="form-label">Nome/Razão Social</label>
-                                <input type="text" class="form-control" id="nomeFornecedor" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">CNPJ/CPF</label>
-                                <input type="text" class="form-control" id="documentoFornecedor" required>
+                                <label class="form-label">Razão Social</label>
+                                <input type="text" class="form-control" name="fantasia" id="fantasia" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">E-mail</label>
-                                <input type="email" class="form-control" id="emailFornecedor">
+                                <label class="form-label">Nome</label>
+                                <input type="text" name="name" class="form-control" id="name" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Telefone</label>
-                                <input type="tel" class="form-control" id="telefoneFornecedor">
+                                <label class="form-label">CPF</label>
+                                <input type="number" name="cpf" class="form-control" id="cpf">
                             </div>
-                            <div class="col-12">
-                                <label class="form-label">Endereço</label>
-                                <input type="text" class="form-control" id="enderecoFornecedor">
+                            <div class="col-md-6">
+                                <label class="form-label">CNPJ</label>
+                                <input type="number" name="cnpj" class="form-control" id="cnpj">
                             </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Salvar</button>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="salvarFornecedor()">Salvar</button>
-                </div>
+                
             </div>
         </div>
     </div>

@@ -15,10 +15,12 @@ if (
 }
 
 function renderList(data) {
-    if (data.length < 1) {
-        $("#list-order").append("<p class='ms-3'>Sem pedidos para este Usuario...</p>");
-        return;
-    }
+  if (data.length < 1) {
+    $("#list-order").append(
+      "<p class='ms-3'>Sem pedidos para este Usuario...</p>",
+    );
+    return;
+  }
   data.forEach((items) => {
     let Arraybuttons = {
       visualizar: `<a title="visualuzar pedido" href="#" onclick="visualizarPedido(${items.codigo_compra})" class="btn btn-primary m-1"><i class="bi bi-eye"></i></a>`,
@@ -102,7 +104,7 @@ async function getPedidos(baseUrl, id) {
   }
 }
 
-getPedidos(url_base, localStorage.getItem('id'));
+getPedidos(url_base, localStorage.getItem("id"));
 
 async function visualizarPedido(id) {
   const response = await fetch(`${url_base}api/v1/pedidos/${id}`, {
@@ -128,7 +130,9 @@ async function visualizarPedido(id) {
     );
   });
 
-  const dataFormatada = new Date(data.cabececalho[0].d_cadastro).toLocaleDateString('pt-BR')
+  const dataFormatada = new Date(
+    data.cabececalho[0].d_cadastro,
+  ).toLocaleDateString("pt-BR");
   console.log(list);
 
   html = `
@@ -173,4 +177,15 @@ function closeModalView() {
   setTimeout(() => {
     document.querySelector(".modal-xl").remove();
   }, 2000);
+}
+
+function gerarPdf(numPedido) {
+  const link = document.createElement('a');
+  link.href = `${url_base}api/v1/print/pedidos-individual/${localStorage.getItem("id")}/${numPedido}`;
+  link.download = "relatorio_pedidos.pdf";
+  link.target = '_blank';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link)
 }
