@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../assets/css/inicial.css">
+    <link rel="stylesheet" href="../assets/css/pedidos.css">
     <title>Meus Pedidos</title>
 </head>
 
@@ -72,28 +73,31 @@
     <div class="overlay" id="overlay"></div>
 
     <!-- Conteúdo principal -->
-    <main>
-        <h1>Meus Pedidos</h1>
-        <section class="list-of-order">
-            <article class="m-3 mb-1 line">
-                Pesquisa Pedidos:
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
-                        aria-describedby="basic-addon2">
-                    <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"></i></span>
-                </div>
-            </article>
-            <article id="list-order">
+    <main class="pedidos-main">
+        <header class="pedidos-header mb-4">
+            <h1>Meus Pedidos</h1>
+        </header>
 
-            </article>
+        <section class="search-section mb-4">
+            <div class="search-box">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar pedidos..." aria-label="Pesquisar pedidos">
+            </div>
         </section>
-        <section class="modals">
-            <!-- Modal de visualização -->
-            <div id="visualizacao">
 
+        <section class="list-of-order">
+            <div id="list-order" class="pedidos-grid">
+                <!-- Cards renderizados no JS -->
             </div>
         </section>
     </main>
+
+    <section class="modals">
+        <!-- Modal de visualização premium -->
+        <div id="visualizacao" class="premium-modal-overlay">
+        </div>
+    </section>
+
     <script> window.chtlConfig = { chatbotId: "4416448636" } </script>
     <script async data-id="4416448636" id="chtl-script" type="text/javascript"
         src="https://chatling.ai/js/embed.js"></script>

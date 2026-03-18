@@ -13,7 +13,7 @@ if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  API_BASE_URL = "http://localhost:8000/api/v1/";
+  API_BASE_URL = "http://localhost/api/v1/";
 } else {
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/";
 }

@@ -20,7 +20,7 @@ if (
 ) {
   console.log("Testes em Desenvolvimento");
 
-  url_base = "http://localhost:8000/";
+  url_base = "http://localhost/";
 } else {
   console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";

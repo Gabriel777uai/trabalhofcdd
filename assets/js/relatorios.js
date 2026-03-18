@@ -5,7 +5,7 @@
  * @alias relatorys
  * 
  * @alias github https://github.com/Gabriel777uai/
- * Este codigo foi feito a algum tempo a suas funcoes estao bem separadas
+ * nos graficos foram usados as libs do apexcharts
  * 
  */
 
@@ -16,7 +16,7 @@ if (
   window.location.hostname === "127.0.0.1"
 ) {
   console.log("Testes em Desenvolvimento");
-  url_base = "http://localhost:8000/api/v1/";
+  url_base = "http://localhost/api/v1/";
 } else {
   console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/api/v1/";
@@ -333,6 +333,6 @@ function gerarRelatorio(tipo) {
     text: `Gerando Relatório de ${tipo}... Aguarde!`,
     confirmButtonColor: "#4a90e2",
   });
-  window.location.href = `${url_base}print/${tipo}/${localStorage.getItem("id")}`;
+  window.location.href = `${url_base}print/${tipo}/${localStorage.getItem("id")}/null`;
   return;
 }

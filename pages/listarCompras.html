@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
     <link rel="shortcut icon" href="../assets/img/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../assets/css/inicial.css">
+    <link rel="stylesheet" href="../assets/css/pedidos.css">
     <title>Lista de Compras</title>
 </head>
 
@@ -66,36 +67,42 @@
         <div class="spinner-grow" role="status">
         </div>
     </div>
-    <main>
-        <section class="search-section">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h2>Histórico de Compras</h2>
-                    <p class="text-muted mb-0">Consulte as compras realizadas anteriormente.</p>
-                </div>
-            </div>
+    <main class="pedidos-main">
+        <header class="pedidos-header mb-4">
+            <h1>Histórico de Compras</h1>
+        </header>
 
-            <div class="table-responsive bg-white p-3 rounded shadow-sm">
-                <table class="table table-hover">
+        <section class="search-section mb-4">
+            <div class="search-box">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar compras pelo produto ou comprador..." aria-label="Pesquisar compras">
+            </div>
+        </section>
+
+        <section class="list-of-order">
+            <div class="table-responsive bg-white rounded shadow-sm">
+                <table class="table premium-table table-hover align-middle mb-0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Fornecedor</th>
-                            <th>Data</th>
-                            <th>Total Itens</th>
-                            <th>Ações</th>
+                            <th class="ps-4">Código</th>
+                            <th>Produto</th>
+                            <th>Qtd</th>
+                            <th>Comprador</th>
+                            <th>Status</th>
+                            <th class="text-end pe-4">Ações</th>
                         </tr>
                     </thead>
                     <tbody id="listaCompras">
-                        <!-- Compras serão carregadas aqui -->
-                        <tr>
-                            <td colspan="5" class="text-center">Nenhuma compra registrada (Simulação).</td>
-                        </tr>
+                        <!-- Compras renderizadas no JS -->
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
+
+    <section class="modals">
+        <div id="visualizacao" class="premium-modal-overlay"></div>
+    </section>
 
     <!-- Scripts -->
     <script type="importmap">

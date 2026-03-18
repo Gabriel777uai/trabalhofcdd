@@ -8,54 +8,55 @@ if (
 ) {
   console.log("Testes em Desenvolvimento");
 
-  url_base = "http://localhost:8000/";
+  url_base = "http://localhost/";
 } else {
   console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 
 function renderList(data) {
+  $("#list-order").empty();
   if (data.length < 1) {
     $("#list-order").append(
-      "<p class='ms-3'>Sem pedidos para este Usuario...</p>",
+      `
+      <div class="pedidos-empty">
+          <i class="bi bi-inbox"></i>
+          <p>Nenhum pedido encontrado</p>
+      </div>
+      `
     );
     return;
   }
+  
   data.forEach((items) => {
-    let Arraybuttons = {
-      visualizar: `<a title="visualuzar pedido" href="#" onclick="visualizarPedido(${items.codigo_compra})" class="btn btn-primary m-1"><i class="bi bi-eye"></i></a>`,
-      pdf: `<a title="Gerar arquivo pdf pedido" href="#" onclick="gerarPdf(${items.codigo_compra})" class="btn btn-secondary m-1"><i class="bi bi-filetype-pdf"></i></a>`,
-      cancelar: `<a title="Cacelar pedido" href="#" onclick="cancelarPedido(${items.codigo_compra})" class="btn btn-danger m-1"><i class="bi bi-x"></i></a>`,
-      fechar: `<a title="Fibalizar pedido" href="#" onclick="finalizarPedido(${items.codigo_compra})" class="btn btn-success m-1"><i class="bi bi-check"></i></a>`,
-    };
     let buttons = [];
-    let classe;
-    let color;
-    let text;
+    let badgeClass = "";
+    let statusText = "";
+    let mainColor = ""; // Usado na variável do pseudo-elemento
+
     if (items.f_fechado == "S") {
-      buttons = [];
-      buttons.push(Arraybuttons.pdf);
-      buttons.push(Arraybuttons.visualizar);
-      classe = "bi bi-bag-check";
-      color = "green";
-      text = "Finalizado";
+      buttons.push(`<button title="Gerar PDF" onclick="gerarPdf(${items.codigo_compra})" class="btn-icon-premium btn-pdf"><i class="bi bi-filetype-pdf"></i></button>`);
+      buttons.push(`<button title="Visualizar pedido" onclick="visualizarPedido(${items.codigo_compra})" class="btn-icon-premium btn-view"><i class="bi bi-eye"></i></button>`);
+      badgeClass = "status-finalizado";
+      statusText = "Finalizado";
+      mainColor = "#2e7d32";
     } else {
-      buttons = [];
-      buttons.push(Arraybuttons.cancelar);
-      buttons.push(Arraybuttons.pdf);
-      buttons.push(Arraybuttons.visualizar);
-      buttons.push(Arraybuttons.fechar);
-      classe = "bi bi-info-lg";
-      color = "#e9dc2aff";
-      text = "Aguardando";
+      buttons.push(`<button title="Cancelar pedido" onclick="cancelarPedido(${items.codigo_compra})" class="btn-icon-premium btn-cancel"><i class="bi bi-x-lg"></i></button>`);
+      buttons.push(`<button title="Gerar PDF" onclick="gerarPdf(${items.codigo_compra})" class="btn-icon-premium btn-pdf"><i class="bi bi-filetype-pdf"></i></button>`);
+      buttons.push(`<button title="Visualizar pedido" onclick="visualizarPedido(${items.codigo_compra})" class="btn-icon-premium btn-view"><i class="bi bi-eye"></i></button>`);
+      buttons.push(`<button title="Finalizar pedido" onclick="finalizarPedido(${items.codigo_compra})" class="btn-icon-premium btn-finish"><i class="bi bi-check-lg"></i></button>`);
+      badgeClass = "status-aguardando";
+      statusText = "Aguardando";
+      mainColor = "#ff8f00";
     }
+
     if (items.f_cancelado == "S") {
-      buttons = [];
-      buttons.push(Arraybuttons.pdf);
-      buttons.push(Arraybuttons.visualizar);
-      classe = "bi bi-exclamation-octagon";
-      color = "red";
-      text = "Cancelado";
+      buttons = []; // Remove os botões de ação e deixa só PDF e visualização
+      buttons.push(`<button title="Gerar PDF" onclick="gerarPdf(${items.codigo_compra})" class="btn-icon-premium btn-pdf"><i class="bi bi-filetype-pdf"></i></button>`);
+      buttons.push(`<button title="Visualizar pedido" onclick="visualizarPedido(${items.codigo_compra})" class="btn-icon-premium btn-view"><i class="bi bi-eye"></i></button>`);
+      badgeClass = "status-cancelado";
+      statusText = "Cancelado";
+      mainColor = "#c62828";
     }
 
     const convertBrl = new Intl.NumberFormat("pt-br", {
@@ -64,25 +65,20 @@ function renderList(data) {
     }).format(items.vlr_total);
 
     let html = `
-        <div class="card text-start m-3">
-            <div class="card-header">
-                ${text} <span style="color: ${color};"><i class="${classe}"></i></span>
+        <div class="pedido-card" style="--card-color: ${mainColor}">
+            <div class="pedido-header">
+                <span class="pedido-status ${badgeClass}">${statusText}</span>
+                <span class="pedido-codigo">#${items.codigo_compra}</span>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">${items.nome_cliente}</h5>
-                <div class="card"></div>
-                <span>pedido ${items.codigo_compra}</span>
-                <div class="d-flex flex-wrap align-items-center justify-content-end">
-                    ${buttons.join("")}
-                </div>
+            <div class="pedido-body">
+                <h3 class="pedido-cliente" title="${items.nome_cliente}">${items.nome_cliente}</h3>
+                <div class="pedido-vlr">${convertBrl}</div>
             </div>
-            <div class="card-footer text-body-secondary">
-                Valor ${convertBrl}
+            <div class="pedido-actions">
+                ${buttons.join("")}
             </div>
         </div>
-        
-        `;
-    console.log(items.codigo_compra);
+    `;
 
     $("#list-order").append(html);
   });
@@ -125,58 +121,85 @@ async function visualizarPedido(id) {
   let list = [];
 
   data.itens.forEach((items) => {
+    let vlr_item = new Intl.NumberFormat("pt-br", { style: "currency", currency: "BRL" }).format(items.vlr_item_final);
     list.push(
-      `<tr><th scope="row">${items.codigo_item}</th><td>${items.nr_quantidade}</td><td>${items.vlr_item_final}</td><td>@mdo</td></tr>`,
+      `<tr>
+        <td style="font-family: monospace; font-weight: 600;">#${items.codigo_item}</td>
+        <td>${items.nr_quantidade} un</td>
+        <td>${vlr_item}</td>
+       </tr>`
     );
   });
 
   const dataFormatada = new Date(
     data.cabececalho[0].d_cadastro,
   ).toLocaleDateString("pt-BR");
-  console.log(list);
 
-  html = `
-    <div class="modal-xl">
-        <div class="text-end">
-            <button onclick="closeModalView()" class="btn p-0">X</button>
+  let statusText = "Aguardando";
+  if (data.cabececalho[0].f_fechado == "S") statusText = "Finalizado";
+  if (data.cabececalho[0].f_cancelado == "S") statusText = "Cancelado";
+
+  let htmlInner = `
+    <div class="premium-modal-content">
+        <div class="modal-head">
+            <h3><i class="bi bi-receipt"></i> Detalhes do Pedido</h3>
+            <button onclick="closeModalView()" class="btn-close-modal"><i class="bi bi-x-lg"></i></button>
         </div>
-        <span>Data cadastro: ${dataFormatada}</span>
-        <article class="dados-pedido">
-            <p>Numero pedido: ${data.cabececalho[0].codigo_compra}</p>
-            <p>fechado: ${data.cabececalho[0].f_fechado}</p>
-            <p>Nome cliente: ${data.cabececalho[0].nome_cliente}</p>
-            <p>cancelado: ${data.cabececalho[0].f_cancelado}</p>
-        </article>
-        <article class="tabela-itens">
-            <table class="table">
-                <thead>
-                    <tr >
-                        <th class="fixed" scope="col">Codigo item</th>
-                        <th class="fixed" scope="col">quantidade</th>
-                        <th class="fixed" scope="col">Valor item total</th>
-                        <th class="fixed" scope="col">Handle</th>
-                    </tr>
-                </thead>
-                <tbody class="overflow-list">
-                 ${list.join("")}
-                </tbody>
-            </table>
-        </article>
-        <span class="mt-1">Total pedido: ${vlr_total}</span>
+        
+        <div class="modal-body-scroll">
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Número</span>
+                    <span class="info-value">#${data.cabececalho[0].codigo_compra}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Data</span>
+                    <span class="info-value">${dataFormatada}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Status</span>
+                    <span class="info-value">${statusText}</span>
+                </div>
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <span class="info-label">Cliente</span>
+                    <span class="info-value">${data.cabececalho[0].nome_cliente}</span>
+                </div>
+            </div>
+
+            <div class="items-table-wrapper">
+                <table class="premium-table">
+                    <thead>
+                        <tr>
+                          <th>Cód. Item</th>
+                          <th>Quantidade</th>
+                          <th>Vlr. Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                     ${list.join("")}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal-foot">
+            <span class="total-label">Total Gasto</span>
+            <span class="total-value">${vlr_total}</span>
+        </div>
     </div>
-    `;
-  $("#visualizacao").html(html);
-  setTimeout(() => {
-    $(".modal-xl").addClass("active-view");
-    console.log("add");
-  }, 100);
+  `;
+  
+  $("#visualizacao").html(htmlInner);
+  // Garante reflow pra aplicar a transição css
+  void document.getElementById("visualizacao").offsetWidth;
+  $("#visualizacao").addClass("active-view");
 }
 
 function closeModalView() {
-  document.querySelector(".modal-xl").classList.remove("active-view");
+  $("#visualizacao").removeClass("active-view");
   setTimeout(() => {
-    document.querySelector(".modal-xl").remove();
-  }, 2000);
+    $("#visualizacao").empty();
+  }, 300);
 }
 
 function gerarPdf(numPedido) {
@@ -189,3 +212,38 @@ function gerarPdf(numPedido) {
   link.click();
   document.body.removeChild(link)
 }
+
+/* Lógica de Pesquisa de Pedidos */
+document.getElementById('searchInput')?.addEventListener('input', function(e) {
+  const term = e.target.value.toLowerCase();
+  const cards = document.querySelectorAll('.pedido-card');
+  let hasVisible = false;
+
+  cards.forEach(card => {
+      // Procura dentro de todo o texto do card
+      const text = card.textContent.toLowerCase();
+      if (text.includes(term)) {
+          card.style.display = 'flex';
+          hasVisible = true;
+      } else {
+          card.style.display = 'none';
+      }
+  });
+
+  // Mostrar mensagem se nada for encontrado
+  const isExistingEmptyMsg = document.querySelector('.temp-empty-msg');
+  if (!hasVisible && cards.length > 0) {
+      if (!isExistingEmptyMsg) {
+          $("#list-order").append(`
+              <div class="pedidos-empty temp-empty-msg" style="grid-column: 1 / -1; width: 100%;">
+                  <i class="bi bi-search"></i>
+                  <p>Nenhum resultado para "<b>${e.target.value}</b>"</p>
+              </div>
+          `);
+      } else {
+          isExistingEmptyMsg.querySelector('p').innerHTML = `Nenhum resultado para "<b>${e.target.value}</b>"`;
+      }
+  } else {
+      $('.temp-empty-msg').remove();
+  }
+});
