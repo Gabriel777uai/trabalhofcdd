@@ -44,6 +44,7 @@ window.finalizarCompra = async function () {
   const produtoNome = document.getElementById("nomeProduto").value;
   const qtd = document.getElementById("qtdCompra").value;
   const fornecedorId = document.getElementById("idFornecedor").value;
+  const cdProduto = document.getElementById("cdProduto").value;
   
   const compradorId = parseInt(localStorage.getItem("id"));
   const compradorNome = localStorage.getItem("usuario") || "Anônimo";
@@ -65,7 +66,7 @@ window.finalizarCompra = async function () {
       comprador: compradorNome,
       produto: produtoNome,
       cd_comprador: compradorId,
-      cd_produto: 0,
+      cd_produto: cdProduto,
       cd_fornecedor: parseInt(fornecedorId),
       quantidade: parseInt(qtd)
     };
