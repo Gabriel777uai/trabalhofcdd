@@ -93,7 +93,7 @@ async function getPedidos(baseUrl, id) {
     });
     const data = await reponse.json();
     console.log(data);
-
+    
     renderList(data);
   } catch (err) {
     console.error("erro ao fazer a requisição");
@@ -109,6 +109,7 @@ async function visualizarPedido(id) {
       Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
     },
   });
+  
 
   const data = await response.json();
   console.log("dados recebidos: " + id);
@@ -190,7 +191,7 @@ async function visualizarPedido(id) {
   `;
   
   $("#visualizacao").html(htmlInner);
-  // Garante reflow pra aplicar a transição css
+
   void document.getElementById("visualizacao").offsetWidth;
   $("#visualizacao").addClass("active-view");
 }
@@ -203,14 +204,13 @@ function closeModalView() {
 }
 
 function gerarPdf(numPedido) {
-  const link = document.createElement('a');
-  link.href = `${url_base}api/v1/print/pedidos-individual/${localStorage.getItem("id")}/${numPedido}`;
-  link.download = "relatorio_pedidos.pdf";
-  link.target = '_blank';
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link)
+  Swal.fire({
+    icon: "info",
+    title: "Gerando Relatório",
+    text: `Gerando Relatório de pedido... Aguarde!`,
+    confirmButtonColor: "#4a90e2",
+  });
+  window.location.href = `${url_base}api/v1/print/pedidos-individual/${localStorage.getItem("id")}/${numPedido}`;
 }
 
 /* Lógica de Pesquisa de Pedidos */
@@ -247,3 +247,128 @@ document.getElementById('searchInput')?.addEventListener('input', function(e) {
       $('.temp-empty-msg').remove();
   }
 });
+
+async function cancelarPedido(cd_pedido) {
+  document.getElementById("modalCancelOrderId").textContent = cd_pedido;
+  document.getElementById("motivoCancelamento").value = "";
+
+  const modal = new bootstrap.Modal(
+    document.getElementById("modalCancelarPedido"),
+  );
+  modal.show();
+
+  const btnConfirmar = document.getElementById("btnConfirmarCancelamento");
+
+  const newBtn = btnConfirmar.cloneNode(true);
+  btnConfirmar.parentNode.replaceChild(newBtn, btnConfirmar);
+
+  newBtn.addEventListener("click", () => confirmarCancelamento(cd_pedido));
+}
+
+async function confirmarCancelamento(cd_pedido) {
+  const motivo = document.getElementById("motivoCancelamento").value.trim();
+
+  if (!motivo) {
+    Swal.fire({
+      icon: "warning",
+      title: "Campo obrigatório",
+      text: "Por favor, informe o motivo do cancelamento.",
+      confirmButtonColor: "#4a90e2",
+    });
+    return;
+  }
+
+  try {
+    const response = await fetch(`${url_base}api/v1/cancelarpedido/${cd_pedido}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+      },
+      body: JSON.stringify({
+        codigo_compra: cd_pedido.toString(),
+        c_motivo: motivo,
+      }),
+    });
+
+    if (!response.ok) throw new Error("Erro ao cancelar pedido");
+
+    Swal.fire({
+      icon: "success",
+      title: "Pedido Cancelado",
+      text: `Pedido ${cd_pedido} cancelado com sucesso!`,
+      confirmButtonColor: "#4a90e2",
+    });
+
+    const modalElement = document.getElementById("modalCancelarPedido");
+    const modal = bootstrap.Modal.getInstance(modalElement);
+    if (modal) modal.hide();
+
+    getPedidos(url_base, localStorage.getItem("id"));
+  } catch (error) {
+    console.error("Erro ao cancelar pedido:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: "Falha ao cancelar o pedido.",
+      confirmButtonColor: "#4a90e2",
+    });
+  }
+}
+
+async function finalizarPedido(cd_pedido) {
+  const result = await Swal.fire({
+    title: "Finalizar pedido?",
+    text: `Deseja realmente finalizar o pedido ${cd_pedido}?`,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#28a745",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sim, finalizar",
+    cancelButtonText: "Cancelar",
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const response = await fetch(
+      `${url_base}api/v1/finalizarpedido/${cd_pedido}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
+        },
+        body: JSON.stringify({
+          codigo_compra: cd_pedido,
+        }),
+      },
+    );
+    const data = await response.json();
+
+    if (data.reponse) {
+      Swal.fire({
+      icon: "success",
+      title: "Sucesso",
+      text: data.output || "Pedido finalizado com sucesso!",
+      confirmButtonColor: "#4a90e2",
+    });
+    } else {
+      Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: data.output || "Pedido não finalizado, erro desconecido! Procure um desenvolvedor.",
+      confirmButtonColor: "#4a90e2",
+    });
+    }
+    getPedidos(url_base, localStorage.getItem("id"));
+  } catch (error) {
+    console.error("Erro ao finalizar pedido:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Erro",
+      text: "Falha ao finalizar o pedido.",
+      confirmButtonColor: "#4a90e2",
+    });
+  }
+}

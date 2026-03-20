@@ -792,16 +792,23 @@ async function finalizarPedido(cd_pedido) {
       },
     );
 
-    if (!response.ok) throw new Error("Erro ao finalizar pedido");
-
     const data = await response.json();
-    Swal.fire({
-      icon: "success",
-      title: "Sucesso",
-      text: data.output,
-      confirmButtonColor: "#4a90e2",
-    });
 
+    if (data.response) {
+      Swal.fire({
+        icon: "success",
+        title: "Sucesso",
+        text: data.output || "Pedido finalizado com sucesso!",
+        confirmButtonColor: "#4a90e2",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: data.output || "Pedido não finalizado, erro desconecido! Procure um desenvolvedor.",
+        confirmButtonColor: "#4a90e2",
+      });
+    }
     fetchOrders();
 
     if (document.getElementById("codigoCompra").value == cd_pedido) {
