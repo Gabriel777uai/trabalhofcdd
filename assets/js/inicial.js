@@ -121,7 +121,7 @@ function renderPage() {
       <div class="card h-100">
         <span class="badge ${classBadge}">${message}</span>
         <img src="${produto.ia_imagenslink || "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"}" 
-             class="card-img-top" alt="${produto.ia_nomeproduto}">
+             class="card-img-top" alt="${produto.ia_nomeproduto}" class="loader" onload="this.classList.remove('loader')">
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">${produto.ia_nomeproduto}</h5>
           <p class="card-text truncate">${produto.ia_descricaoproduto || ""}</p>

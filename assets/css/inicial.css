@@ -404,5 +404,11 @@ main {
   min-height: 195px;
   max-height: 195px;
 }
-
+  .loader {
+    background: url('../assets/img/bx_loader.gif') no-repeat center;
+    background-size: 50px;
+    min-width: 100px;
+    min-height: 100px;
+    display: inline-block;
+  }
 
