@@ -18,7 +18,64 @@
         <button id="btnMobileToggle"><i class="bi bi-list"></i></button>
         <h1>Paínel de Controle</h1>
         <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="50px" class="ms-4">
+        
         <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
+        <div class="notifications">   
+            <div class="dropdown">
+                <button type="button" class="btn-notify" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    <span>1</span>
+                    <i class="bi bi-bell-fill"></i>
+                </button>
+                <div class="dropdown-menu p-2">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Todas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Visualizadas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Lidas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Não lidas</a>
+                        </li>
+                    </ul>
+                    <div class="list-notify" id="list-notify">
+                        <article class="card-message d-flex">
+                            <div class="fist-flex">
+                                <div>
+                                    <img id="image_agent" src="https://estoque-images.vercel.app/agent_logo.png" width="65px" alt="logo_agent">
+                                </div>
+                                <div class="img-model">
+                                    <p id="title">Notificação de produtos Agent</p>
+                                    <p class="model">Agent Gemini</p>
+                                </div>
+                            </div>                       
+                            <div class="d-flex data">
+                                <p>DD/MM/YYYY</p>
+                                <p> . </p>
+                            </div>     
+                        </article>
+                        <article class="card-message d-flex">
+                            <div class="fist-flex">
+                                <div>
+                                    <img id="image_agent" src="https://estoque-images.vercel.app/agent_logo.png" width="65px" alt="logo_agent">
+                                </div>
+                                <div class="img-model">
+                                    <p id="title">Notificação de produtos Agent</p>
+                                    <p class="model">Agent Gemini</p>
+                                </div>
+                            </div>                       
+                            <div class="d-flex data">
+                                <p>DD/MM/YYYY</p>
+                                <p> . </p>
+                            </div>     
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="menu-lateral" id="menuLateral">

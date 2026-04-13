@@ -16,6 +16,10 @@ if (!localStorage.getItem('count')) {
   localStorage.setItem('count', 0);
 }
 
+//notifications
+
+
+
 if (localStorage.getItem('count') == 0) {
   let div = document.createElement('div');
   div.innerHTML = '<strong>Seja Bem vindo(a)!</strong>';
@@ -63,7 +67,7 @@ async function getDataApi(url) {
       },
     });
     allProducts = await request.json();
-    filteredProducts = [...allProducts];
+    filteredProducts = [...allProducts.result];
     currentPage = 1;
     renderPage();
   } catch (error) {
@@ -445,6 +449,7 @@ window.excluirProduto = async function (id) {
           },
         },
       );
+      const json = await response.json();
 
       if (response.ok) {
         Swal.fire({
@@ -458,7 +463,7 @@ window.excluirProduto = async function (id) {
         Swal.fire({
           icon: "error",
           title: "Erro",
-          text: "Erro ao excluir produto.",
+          text: json.output,
           confirmButtonColor: "#4a90e2",
         });
       }
@@ -467,7 +472,7 @@ window.excluirProduto = async function (id) {
       Swal.fire({
         icon: "error",
         title: "Erro",
-        text: "Erro ao tentar excluir o produto.",
+        text: "Erro de servidor!",
         confirmButtonColor: "#4a90e2",
       });
     }

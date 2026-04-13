@@ -302,7 +302,6 @@ main {
   .fixed:nth-child(3) {
     width: 39% !important;
   }
-
 }
 #arow {
   transition: 1.5s ease-in-out;
@@ -383,7 +382,7 @@ main {
   border-radius: 5px;
   width: 60%;
   height: 80vh;
-  transition: .5s linear;
+  transition: 0.5s linear;
   box-shadow: 1px 20px 90px #66666683;
 }
 
@@ -391,7 +390,7 @@ main {
   top: 70px;
   opacity: 1;
   left: 25%;
-  transition: .3s linear;
+  transition: 0.3s linear;
 }
 .dados-pedido {
   display: grid;
@@ -404,11 +403,72 @@ main {
   min-height: 195px;
   max-height: 195px;
 }
-  .loader {
-    background: url('../assets/img/bx_loader.gif') no-repeat center;
-    background-size: 50px;
-    min-width: 100px;
-    min-height: 100px;
-    display: inline-block;
+.loader {
+  background: url("../assets/img/bx_loader.gif") no-repeat center;
+  background-size: 50px;
+  min-width: 100px;
+  min-height: 100px;
+  display: inline-block;
+}
+.notifications {
+  margin: 0 15px 0 15px;
+}
+.notifications span {
+  color: white;
+  background: red;
+  padding: 5px;
+  font-size: 6px;
+  border-radius: 50%;
+  position: relative;
+  top: -10px;
+  left: 27px;
+}
+.notifications .btn-notify {
+  background: transparent;
+  border: none;
+  color: #1976d2;
+}
+.notifications .dropdown-menu {
+  min-width: 500px;
+}
+.notifications #title {
+  font-size: 14px;
+}
+.notifications .fist-flex {
+  display: flex;
+}
+.notifications .model {
+  font-size: 10px;
+}
+.notifications .data {
+  flex-direction: column;
+  font-size: 10px;
+}
+.img-model {
+  display: flex;
+  flex-direction: column;
+}
+.card-message {
+  gap: 80px;
+  transition: 0.2s;
+  &:hover {
+    background: rgba(128, 128, 128, 0.357);
+    transition: 0.2s;
   }
-
+}
+.card-message:hover #image_agent {
+  transition: 0.2s;
+  filter: brightness(0.82);
+}
+.card-message:hover[index]::before {
+  content: "Open";
+  position: absolute;
+  top: 70px;
+  z-index: 15;
+  color: #333;
+  text-align: center;
+}
+#list-notify {
+  display: flex;
+  flex-direction: column;
+}
