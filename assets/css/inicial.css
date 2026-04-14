@@ -413,7 +413,7 @@ main {
 .notifications {
   margin: 0 15px 0 15px;
 }
-.notifications span {
+.notifications span.notification-message-count.active {
   color: white;
   background: red;
   padding: 5px;
@@ -460,10 +460,21 @@ main {
   transition: 0.2s;
   filter: brightness(0.82);
 }
-.card-message:hover[index]::before {
-  content: "Open";
+.card-message:hover::before {
   position: absolute;
-  top: 70px;
+  content: "Abrir ";
+  width: 80px;
+  background-image: url('https://img.icons8.com/?size=100&id=82787&format=png&color=000000');
+  background-repeat: no-repeat;
+  background-position: 100%;
+  background-size: 20px;
+  font-weight: bold;
+  color: white;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  text-align: center;
+  font-size: large;
+  margin-left: 200px;
+  margin-top: 23px;
   z-index: 15;
   color: #333;
   text-align: center;
@@ -471,4 +482,32 @@ main {
 #list-notify {
   display: flex;
   flex-direction: column;
+}
+#icon_open {
+  background: transparent;
+  color: black;
+  font-size: 15px;
+}
+.modal-message.active {
+  position: fixed;
+  top: 12%;
+  left: 25%;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 1px 15px 15px #6658;
+  background: #F2F2F2;
+  width: 500px;
+  z-index: 15000;
+  transition: .5s;
+}
+.modal-message {
+  position: fixed;
+  top: -100%;
+  left: 25%;
+  transition: .5s;
+}
+.line_modal {
+  height: 1px;
+  width: 150px;
+  opacity: .2; 
 }

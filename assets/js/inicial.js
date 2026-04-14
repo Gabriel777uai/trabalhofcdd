@@ -12,45 +12,154 @@ if (
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/";
 }
 
-if (!localStorage.getItem('count')) {
-  localStorage.setItem('count', 0);
+if (!localStorage.getItem("count")) {
+  localStorage.setItem("count", 0);
 }
 
-//notifications
+//<notifications>
+async function updateListMessage() {
+  const response = await fetch(`${API_BASE_URL}notifications/update/viewed`, {
+    method: "put",
+  });
+}
 
 
+async function renderMessages(list) {
+  $("#list-notify").html("Carregando lista...");
+  const response = await fetch(`${API_BASE_URL}notifications`, {
+    method: "get",
+  });
+  const data = await response.json();
 
-if (localStorage.getItem('count') == 0) {
-  let div = document.createElement('div');
-  div.innerHTML = '<strong>Seja Bem vindo(a)!</strong>';
-  div.classList.add('messageInitial');
-  div.style.position = 'fixed';
-  div.style.left = '45%';
-  div.style.top = '190%';
-  div.style.background = '#0087bdee';
-  div.style.color = '#ffffffff';
-  div.style.padding = '4px';
-  div.style.boxShadow = '2px 1px 10px #696969b9'
-  div.style.borderRadius = '4px';
-  document.body.append(div);
-  console.log('estou na condição!') ;
-  
-  setTimeout (() => {
-    div.style.transition = '1s'
-    div.style.top = '90%';
-  }, 100); 
-  setTimeout(() => {
-  
-    div.style.transition = '2s'
-    div.style.top = '190%';
+  let arr;
+  let string_total;
+  let html = [];
+
+  switch (list) {
+    case "all" : 
+      string_total = `Total: ${data.output.quantidadeAll}`
+      arr = data.output.all;
+      break;
+    case "visualizates":
+      string_total = `visualizadas: ${data.output.quantidadeVisualizados}`
+      arr = data.output.visualizados;
+      break;
+    case "opens":
+      string_total = `vistas: ${data.output.quantidadeLidos}`
+      arr = data.output.lidos;
+      break;
+    case "notOpens":
+        string_total = `Não lidas: ${data.output.quantidadeNaoLidos}`
+        arr = data.output.naoLidos;
+      break;
+  }
+
+  if (data.output.qauntidadeNAoVisualizados > 0) {
+    document.querySelector('.notification-message-count').classList.add('active');
+    $('.notification-message-count').html(data.output.qauntidadeNAoVisualizados);
     
-  }, 4000) 
-  if (document.querySelector('.messageInitial')) {
-    localStorage.setItem('count', 1);
+  } else {
+    document.querySelector('.notification-message-count').classList.remove('active');
+    $('.notification-message-count').html("");
+  }
+  
+  for (let i = 0; i < arr.length;i++) {
+    let data = arr[i].d_notifi.split(' ')[0];
+    let sliptData = data.split("-");
+    let dataFormated = `${sliptData[2]}/${sliptData[1]}/${sliptData[0]}`;
+    
+   html.push(`
+    <article class="card-message d-flex" onclick="openMessage(${arr[i].id})">
+      <div class="fist-flex">
+          <div>
+            <img id="image_agent" src="${arr[i].agent_img}" width="65px" alt="logo_agent">
+          </div>
+          <div class="img-model">
+            <p id="title">${arr[i].cabecalho}</p>
+            <p class="model">Agent ${arr[i].agent}</p>
+          </div>
+      </div>                       
+      <div class="d-flex data">
+        <p>${dataFormated}</p>
+        <p> ${arr[i].type_notifi} </p>
+        <span id="icon_open"> ${arr[i].lida ? '<i class="bi bi-envelope-open"></i>' : '<i class="bi bi-envelope"></i>' } </span>
+      </div>     
+    </article>
+    `);
+  };
+
+  $("#total_messages").html("");
+  $("#total_messages").html(string_total);
+  $("#list-notify").html("");
+  $("#list-notify").append(html);
+  
+}
+//defaltValue
+renderMessages("all");
+
+async function message(param) {
+  let listButton = document.querySelectorAll(".nav-link");
+  for (let i = 0; i < listButton.length; i++) listButton[i].classList.remove("active");
+  document.getElementById(param).classList.add('active');
+ 
+  return await renderMessages(param);
+}
+
+let modal = document.querySelector('.modal-message');
+
+function closeModalMessage() {
+  modal.classList.remove('active')
+  renderMessages("all")
+}
+
+let text_area = document.getElementById('message-text');
+let title = document.getElementById('exampleModalLabel-message');
+let agent_name= document.getElementById('recipient-name');
+
+async function openMessage(param) { 
+  modal.classList.add('active')
+  console.log(param)
+  const response = await fetch(`${API_BASE_URL}notifications/${param}`, {
+    method: "get",
+  });
+  const response_update = await fetch(`${API_BASE_URL}notifications/update/read/${param}`, {
+    method: "put",
+  });
+  const data = await response.json();
+  let result_message = data.output.result;
+
+  text_area.textContent = result_message.message;
+  title.textContent = result_message.cabecalho;
+  agent_name.textContent = result_message.agent;
+}
+
+if (localStorage.getItem("count") == 0) {
+  let div = document.createElement("div");
+  div.innerHTML = "<strong>Seja Bem vindo(a)!</strong>";
+  div.classList.add("messageInitial");
+  div.style.position = "fixed";
+  div.style.left = "45%";
+  div.style.top = "190%";
+  div.style.background = "#0087bdee";
+  div.style.color = "#ffffffff";
+  div.style.padding = "4px";
+  div.style.boxShadow = "2px 1px 10px #696969b9";
+  div.style.borderRadius = "4px";
+  document.body.append(div);
+  console.log("estou na condição!");
+
+  setTimeout(() => {
+    div.style.transition = "1s";
+    div.style.top = "90%";
+  }, 100);
+  setTimeout(() => {
+    div.style.transition = "2s";
+    div.style.top = "190%";
+  }, 4000);
+  if (document.querySelector(".messageInitial")) {
+    localStorage.setItem("count", 1);
   }
 }
-
-
 
 // Global State
 let allProducts = [];
@@ -72,18 +181,18 @@ async function getDataApi(url) {
     renderPage();
   } catch (error) {
     Swal.fire({
-      title: 'Acesso Expirado!',
+      title: "Acesso Expirado!",
       text: "Acesso expirado ou teve algum erro no servidor... Entre em contato com um desenvolvedor ou faça login novamente!",
-      icon: 'error',
-      confirmButtonColor: '#3085d6', // Cor do botão de confirmar
-      confirmButtonText: 'Fazer login novamente!' // Texto do botão
+      icon: "error",
+      confirmButtonColor: "#3085d6", // Cor do botão de confirmar
+      confirmButtonText: "Fazer login novamente!", // Texto do botão
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.clear();
-        window.location.href = '../index.html';
+        window.location.href = "../index.html";
       }
     });
-      
+
     console.error("Erro ao buscar dados:", error);
   } finally {
     document.querySelector(".overlay-carregamento").classList.remove("active");
@@ -254,17 +363,14 @@ window.visualizarProduto = async function (id) {
   }
 
   try {
-    const response = await fetch(
-      `${API_BASE_URL}productsforid/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-        },
+    const response = await fetch(`${API_BASE_URL}productsforid/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
       },
-    );
+    });
     const data = await response.json();
 
-    console.log(data)
+    console.log(data);
 
     const produto = data;
 
@@ -312,14 +418,11 @@ window.editarProduto = async function (id) {
   }
 
   try {
-    const response = await fetch(
-      `${API_BASE_URL}productsforid/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-        },
+    const response = await fetch(`${API_BASE_URL}productsforid/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
       },
-    );
+    });
     const data = await response.json();
 
     const produto = data;
@@ -378,17 +481,14 @@ window.salvarProduto = async function () {
   };
 
   try {
-    const response = await fetch(
-      `${API_BASE_URL}update/produto/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-        },
-        body: JSON.stringify(dados),
+    const response = await fetch(`${API_BASE_URL}update/produto/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
       },
-    );
+      body: JSON.stringify(dados),
+    });
 
     const result = await response.json();
 
@@ -440,15 +540,12 @@ window.excluirProduto = async function (id) {
 
   if (result.isConfirmed) {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}delete/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
-          },
+      const response = await fetch(`${API_BASE_URL}delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
         },
-      );
+      });
       const json = await response.json();
 
       if (response.ok) {
