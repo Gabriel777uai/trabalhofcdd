@@ -22,6 +22,34 @@
         <h1>Paínel de Controle</h1>
         <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="50px" class="ms-4">
         <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
+         <div class="notifications">   
+            <div class="dropdown">
+                <button type="button" class="btn-notify" onclick="updateListMessage()" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    <span class="notification-message-count"></span>
+                    <i class="bi bi-bell-fill"></i>
+                </button>
+                <div class="dropdown-menu p-2">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="all" onclick="message('all')" aria-current="page" href="#">Todas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="visualizates" onclick="message('visualizates')" href="#">Visualizadas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="opens" onclick="message('opens')" href="#">Lidas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="notOpens" onclick="message('notOpens')" href="#">Não lidas</a>
+                        </li>
+                    </ul>
+                    <div class="list-notify" id="list-notify">
+                        
+                    </div>
+                    <div id="total_messages">cas</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Menu lateral -->
@@ -93,6 +121,32 @@
     </main>
 
     <section class="modals">
+        <div class="modal-message" id="exampleModal">
+            <div class="modal-dialog-message" role="document">
+                <div class="modal-content-message">
+                <div class="modal-header-message">
+                    <h5 class="modal-title-message" id="exampleModalLabel-message">Title message</h5>
+                    <span class="line_modal">________________________________________________________</span>
+                </div>
+                <div class="modal-body-message">
+                    <form>
+                    <div class="form-group-message">
+                        <label for="recipient-name" class="col-form-label">Agent:</label>
+                        <input type="text" class="form-control" id="recipient-name" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Message:</label>
+                        <textarea class="form-control" id="message-text" rows="8" disabled></textarea>
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer-message">
+                    <span class="line_modal">________________________________________________________</span>
+                    <button type="button" class="btn btn-secondary mt-2" data-dismiss="modal" onclick="closeModalMessage()">fechar</button>
+                </div>
+                </div>
+            </div>
+        </div>
         <!-- Modal de visualização premium -->
         <div id="visualizacao" class="premium-modal-overlay">
         </div>

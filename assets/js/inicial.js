@@ -23,6 +23,9 @@ async function updateListMessage() {
   });
 }
 
+setInterval(() =>{
+  renderMessages("all");
+}, 36000);
 
 async function renderMessages(list) {
   $("#list-notify").html("Carregando lista...");
@@ -340,13 +343,7 @@ document.getElementById("itemsPerPage").addEventListener("change", (e) => {
 
 document.getElementById("pesquisaProduto").addEventListener("input", (e) => {
   const searchTerm = e.target.value.toLowerCase();
-  filteredProducts = allProducts.filter(
-    (p) =>
-      (p.ia_nomeproduto &&
-        p.ia_nomeproduto.toLowerCase().includes(searchTerm)) ||
-      (p.ia_codigoproduto &&
-        String(p.ia_codigoproduto).toLowerCase().includes(searchTerm)),
-  );
+  filteredProducts = allProducts.result.filter((p) => (p.ia_nomeproduto && p.ia_nomeproduto.toLowerCase().includes(searchTerm)) || (p.ia_codigoproduto && String(p.ia_codigoproduto).toLowerCase().includes(searchTerm)));
   currentPage = 1;
   renderPage();
 });
