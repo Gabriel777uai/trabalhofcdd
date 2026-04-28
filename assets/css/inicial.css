@@ -464,13 +464,13 @@ main {
   position: absolute;
   content: "Abrir ";
   width: 80px;
-  background-image: url('https://img.icons8.com/?size=100&id=82787&format=png&color=000000');
+  background-image: url("https://img.icons8.com/?size=100&id=82787&format=png&color=000000");
   background-repeat: no-repeat;
   background-position: 100%;
   background-size: 20px;
   font-weight: bold;
   color: white;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   text-align: center;
   font-size: large;
   margin-left: 200px;
@@ -495,19 +495,50 @@ main {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 1px 15px 15px #6658;
-  background: #F2F2F2;
+  background: #f2f2f2;
   width: 500px;
   z-index: 15000;
-  transition: .5s;
+  transition: 0.5s;
 }
 .modal-message {
   position: fixed;
   top: -100%;
   left: 25%;
-  transition: .5s;
+  transition: 0.5s;
 }
 .line_modal {
   height: 1px;
   width: 150px;
-  opacity: .2; 
+  opacity: 0.2;
+}
+
+.widgets {
+  opacity: 1;
+  transition: 0.5s;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+.widgets:hover {
+  transform: translateY(-10px);
+  opacity: 0.7;
+  transition: 0.5s;
+}
+.widgets:hover::before {
+  position: absolute;
+  content: "Visualizar ";
+  width: 120px;
+  font-size: 3em;
+  background-image: url("https://img.icons8.com/?size=100&id=82787&format=png&color=000000");
+  background-repeat: no-repeat;
+  background-position: 100%;
+  background-size: 20px;
+  font-weight: bold;
+  color: white;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  text-align: center;
+  font-size: large;
+  margin-left: 90px;
+  margin-top: 230px;
+  z-index: 15;
+  color: #333;
+  text-align: center;
 }

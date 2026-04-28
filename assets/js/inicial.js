@@ -23,7 +23,7 @@ async function updateListMessage() {
   });
 }
 
-setInterval(() =>{
+setInterval(() => {
   renderMessages("all");
 }, 36000);
 
@@ -39,39 +39,44 @@ async function renderMessages(list) {
   let html = [];
 
   switch (list) {
-    case "all" : 
-      string_total = `Total: ${data.output.quantidadeAll}`
+    case "all":
+      string_total = `Total: ${data.output.quantidadeAll}`;
       arr = data.output.all;
       break;
     case "visualizates":
-      string_total = `visualizadas: ${data.output.quantidadeVisualizados}`
+      string_total = `visualizadas: ${data.output.quantidadeVisualizados}`;
       arr = data.output.visualizados;
       break;
     case "opens":
-      string_total = `vistas: ${data.output.quantidadeLidos}`
+      string_total = `vistas: ${data.output.quantidadeLidos}`;
       arr = data.output.lidos;
       break;
     case "notOpens":
-        string_total = `Não lidas: ${data.output.quantidadeNaoLidos}`
-        arr = data.output.naoLidos;
+      string_total = `Não lidas: ${data.output.quantidadeNaoLidos}`;
+      arr = data.output.naoLidos;
       break;
   }
 
   if (data.output.qauntidadeNAoVisualizados > 0) {
-    document.querySelector('.notification-message-count').classList.add('active');
-    $('.notification-message-count').html(data.output.qauntidadeNAoVisualizados);
-    
+    document
+      .querySelector(".notification-message-count")
+      .classList.add("active");
+    $(".notification-message-count").html(
+      data.output.qauntidadeNAoVisualizados,
+    );
   } else {
-    document.querySelector('.notification-message-count').classList.remove('active');
-    $('.notification-message-count').html("");
+    document
+      .querySelector(".notification-message-count")
+      .classList.remove("active");
+    $(".notification-message-count").html("");
   }
-  
-  for (let i = 0; i < arr.length;i++) {
-    let data = arr[i].d_notifi.split(' ')[0];
+
+  for (let i = 0; i < arr.length; i++) {
+    let data = arr[i].d_notifi.split(" ")[0];
     let sliptData = data.split("-");
     let dataFormated = `${sliptData[2]}/${sliptData[1]}/${sliptData[0]}`;
-    
-   html.push(`
+
+    html.push(`
     <article class="card-message d-flex" onclick="openMessage(${arr[i].id})">
       <div class="fist-flex">
           <div>
@@ -85,49 +90,52 @@ async function renderMessages(list) {
       <div class="d-flex data">
         <p>${dataFormated}</p>
         <p> ${arr[i].type_notifi} </p>
-        <span id="icon_open"> ${arr[i].lida ? '<i class="bi bi-envelope-open"></i>' : '<i class="bi bi-envelope"></i>' } </span>
+        <span id="icon_open"> ${arr[i].lida ? '<i class="bi bi-envelope-open"></i>' : '<i class="bi bi-envelope"></i>'} </span>
       </div>     
     </article>
     `);
-  };
+  }
 
   $("#total_messages").html("");
   $("#total_messages").html(string_total);
   $("#list-notify").html("");
   $("#list-notify").append(html);
-  
 }
 //defaltValue
 renderMessages("all");
 
 async function message(param) {
   let listButton = document.querySelectorAll(".nav-link");
-  for (let i = 0; i < listButton.length; i++) listButton[i].classList.remove("active");
-  document.getElementById(param).classList.add('active');
- 
+  for (let i = 0; i < listButton.length; i++)
+    listButton[i].classList.remove("active");
+  document.getElementById(param).classList.add("active");
+
   return await renderMessages(param);
 }
 
-let modal = document.querySelector('.modal-message');
+let modal = document.querySelector(".modal-message");
 
 function closeModalMessage() {
-  modal.classList.remove('active')
-  renderMessages("all")
+  modal.classList.remove("active");
+  renderMessages("all");
 }
 
-let text_area = document.getElementById('message-text');
-let title = document.getElementById('exampleModalLabel-message');
-let agent_name= document.getElementById('recipient-name');
+let text_area = document.getElementById("message-text");
+let title = document.getElementById("exampleModalLabel-message");
+let agent_name = document.getElementById("recipient-name");
 
-async function openMessage(param) { 
-  modal.classList.add('active')
-  console.log(param)
+async function openMessage(param) {
+  modal.classList.add("active");
+  console.log(param);
   const response = await fetch(`${API_BASE_URL}notifications/${param}`, {
     method: "get",
   });
-  const response_update = await fetch(`${API_BASE_URL}notifications/update/read/${param}`, {
-    method: "put",
-  });
+  const response_update = await fetch(
+    `${API_BASE_URL}notifications/update/read/${param}`,
+    {
+      method: "put",
+    },
+  );
   const data = await response.json();
   let result_message = data.output.result;
 
@@ -181,6 +189,23 @@ async function getDataApi(url) {
     allProducts = await request.json();
     filteredProducts = [...allProducts.result];
     currentPage = 1;
+
+    function showValueAllItensAndQuantity() {
+      console.log(allProducts.result);
+      const valueAll = allProducts.result.reduce((tot, item) => {
+        allValue = tot + item.ia_valor * item.ia_quantidadeproduto;
+        return allValue;
+      }, 0);
+      const ValueFormatBRL = new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+        useGrouping: true,
+      }).format(valueAll);
+      return ValueFormatBRL;
+    }
+    const valorTotalDeTodosItens = showValueAllItensAndQuantity();
+
+    console.log(valorTotalDeTodosItens);
     renderPage();
   } catch (error) {
     Swal.fire({
@@ -234,17 +259,17 @@ function renderPage() {
     }
 
     list.append(`
-      <div class="card h-100">
+      <div class="card h-100 widgets" style="cursor: pointer;" onclick="visualizarProduto('${produto.ia_idproduto}')">
         <span class="badge ${classBadge}">${message}</span>
         <img src="${produto.ia_imagenslink || "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"}" 
              class="card-img-top" alt="${produto.ia_nomeproduto}" class="loader" onload="this.classList.remove('loader')">
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">${produto.ia_nomeproduto}</h5>
-          <p class="card-text truncate">${produto.ia_descricaoproduto || ""}</p>
+          <p class="card-text truncate">${produto.ia_descricaoproduto || "Descrição não atribuida"}</p>
+          <p class="card-text">Codigo: ${produto.ia_codigoproduto || ""}</p>
           <p class="mt-auto"><small>Estoque: <strong>${produto.ia_quantidadeproduto ?? 0}</strong></small></p>
         </div>
         <div class="card-footer d-flex gap-2">
-          <button class="btn btn-sm btn-primary" onclick="visualizarProduto('${produto.ia_idproduto}')">Visualizar</button>
           <button class="btn btn-sm btn-warning" onclick="editarProduto('${produto.ia_idproduto}')">Editar</button>
           <button class="btn btn-sm btn-danger" onclick="excluirProduto('${produto.ia_idproduto}')">Excluir</button>
         </div>
@@ -343,7 +368,13 @@ document.getElementById("itemsPerPage").addEventListener("change", (e) => {
 
 document.getElementById("pesquisaProduto").addEventListener("input", (e) => {
   const searchTerm = e.target.value.toLowerCase();
-  filteredProducts = allProducts.result.filter((p) => (p.ia_nomeproduto && p.ia_nomeproduto.toLowerCase().includes(searchTerm)) || (p.ia_codigoproduto && String(p.ia_codigoproduto).toLowerCase().includes(searchTerm)));
+  filteredProducts = allProducts.result.filter(
+    (p) =>
+      (p.ia_nomeproduto &&
+        p.ia_nomeproduto.toLowerCase().includes(searchTerm)) ||
+      (p.ia_codigoproduto &&
+        String(p.ia_codigoproduto).toLowerCase().includes(searchTerm)),
+  );
   currentPage = 1;
   renderPage();
 });
