@@ -242,8 +242,8 @@ function renderPage() {
   }
 
   productsToShow.forEach((produto) => {
-    let media = produto.ia_quantidadeproduto;
-    let estoque = produto.ia_quantidadeideal;
+    let media = produto.ia_quantidadeideal;
+    let estoque = produto.ia_quantidadeproduto;
     let message = "Estoque Normal!";
     let classBadge = "bg-success";
 
@@ -259,7 +259,8 @@ function renderPage() {
     }
 
     list.append(`
-      <div class="card h-100 widgets" style="cursor: pointer;" onclick="visualizarProduto('${produto.ia_idproduto}')">
+      <div class="card h-100 widgets" style="cursor: pointer;" >
+        <div onclick="visualizarProduto('${produto.ia_idproduto}')">
         <span class="badge ${classBadge}">${message}</span>
         <img src="${produto.ia_imagenslink || "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"}" 
              class="card-img-top" alt="${produto.ia_nomeproduto}" class="loader" onload="this.classList.remove('loader')">
@@ -268,6 +269,7 @@ function renderPage() {
           <p class="card-text truncate">${produto.ia_descricaoproduto || "Descrição não atribuida"}</p>
           <p class="card-text">Codigo: ${produto.ia_codigoproduto || ""}</p>
           <p class="mt-auto"><small>Estoque: <strong>${produto.ia_quantidadeproduto ?? 0}</strong></small></p>
+        </div>
         </div>
         <div class="card-footer d-flex gap-2">
           <button class="btn btn-sm btn-warning" onclick="editarProduto('${produto.ia_idproduto}')">Editar</button>
