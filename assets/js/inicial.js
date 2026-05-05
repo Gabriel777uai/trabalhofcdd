@@ -80,7 +80,7 @@ async function renderMessages(list) {
     <article class="card-message d-flex" onclick="openMessage(${arr[i].id})">
       <div class="fist-flex">
           <div>
-            <img id="image_agent" src="${arr[i].agent_img}" width="65px" alt="logo_agent">
+            <img id="image_agent" src="${arr[i].agent_img}" width="65px" alt="logo_agent" loading="lazy">
           </div>
           <div class="img-model">
             <p id="title">${arr[i].cabecalho}</p>
@@ -263,7 +263,7 @@ function renderPage() {
         <div onclick="visualizarProduto('${produto.ia_idproduto}')">
         <span class="badge ${classBadge}">${message}</span>
         <img src="${produto.ia_imagenslink || "https://i0.wp.com/espaferro.com.br/wp-content/uploads/2024/06/placeholder-103.png?ssl=1"}" 
-             class="card-img-top" alt="${produto.ia_nomeproduto}" class="loader" onload="this.classList.remove('loader')">
+             class="card-img-top" alt="${produto.ia_nomeproduto}" class="loader" onload="this.classList.remove('loader')" loading="lazy">
         <div class="card-body d-flex flex-column">
           <h5 class="card-title">${produto.ia_nomeproduto}</h5>
           <p class="card-text truncate">${produto.ia_descricaoproduto || "Descrição não atribuida"}</p>
