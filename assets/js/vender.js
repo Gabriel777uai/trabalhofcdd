@@ -123,7 +123,7 @@ document
           '<tr><td colspan="4" class="text-center">Pesquisando...</td></tr>';
 
         try {
-          const response = await fetch(`${url_base}api/v1/products/${search}`, {
+          const response = await fetch(`${url_base}api/v1/searchproducts/${search}`, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("acessToken")}`,
@@ -739,12 +739,12 @@ async function confirmarCancelamento(cd_pedido) {
       confirmButtonColor: "#4a90e2",
     });
 
-    // Hide modal
+    // Esconde modal
     const modalElement = document.getElementById("modalCancelarPedido");
     const modal = bootstrap.Modal.getInstance(modalElement);
     if (modal) modal.hide();
 
-    // Refresh list
+    // Recarrega list
     fetchOrders();
 
     // If current order, refresh view
@@ -843,6 +843,15 @@ document
     }
   });
 
+/**
+ * daqui para baixo é geração do xml de teste não conta codigo
+ * Fontes stack overflow e chat lgbt
+ * A api de bucar os dados do pedido está alocada no backend
+ * @param {*} pedidoId 
+ * @returns XML
+ * 
+ *
+ */
 async function getNFeXML(pedidoId) {
   const itemsResponse = await fetch(
     `${url_base}api/v1/getitemsfororder/${pedidoId}`,
@@ -907,7 +916,9 @@ async function getNFeXML(pedidoId) {
   const nfeObj = {
     _declaration: { _attributes: { version: "1.0", encoding: "UTF-8" } },
     NFe: {
-      _attributes: { xmlns: "http://www.portalfiscal.inf.br/nfe" },
+      _attributes: {
+        xmlns: "http://www.portalfiscal.inf.br/nfe"
+      },
       infNFe: {
         _attributes: {
           Id: `NFe${chaveAcesso}`,

@@ -44,9 +44,6 @@ async function carregarFornecedores() {
           <td>${itens.cpf || itens.cnpj}</td>
           <td>${itens.fantasia}</td>
           <td>
-            <button class="btn btn-warning p-1">
-              <i style="font-size: 10px;" class="bi bi-pencil"></i>
-            </button>
             <button onclick="excluir(${itens.cd_fornecedor})" class="btn btn-danger p-1 ms-1">
               <i style="font-size: 10px;" class="bi bi-trash"></i>
             </button>
@@ -54,7 +51,10 @@ async function carregarFornecedores() {
         </tr>`,
       );
     });
-
+// btn futuro para editar cadastro de fornecedor
+// <button class="btn btn-warning p-1">
+//   <i style="font-size: 10px;" class="bi bi-pencil"></i>
+// </button>
     tbody.innerHTML = list.join("");
   } catch (error) {
     console.error("Erro ao carregar fornecedores:", error);
