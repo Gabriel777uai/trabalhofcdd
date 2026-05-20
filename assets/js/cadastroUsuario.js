@@ -108,13 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
         nameUser: data.name,
       }
       if (role == "user") {
-        const sendEmail = await fetch('https://n8n-3dg1.onrender.com/webhook/605cfe06-1915-4739-b60c-d43b776dc2b5', {
+        const sendEmail = await fetch('https://n8n-production-fa81.up.railway.app/webhook/605cfe06-1915-4739-b60c-d43b776dc2b5', {
           method: 'POST',
           body: JSON.stringify(dataEmail)
         });
       }
       if (role == "vendedor") {
-        const sendEmail = await fetch('https://n8n-3dg1.onrender.com/webhook/605cfe06-1915-4739-b60c-d43b776dc2b6', {
+        const sendEmail = await fetch('https://n8n-production-fa81.up.railway.app/webhook/605cfe06-1915-4739-b60c-d43b776dc2b6', {
           method: 'POST',
           body: JSON.stringify(dataEmail)
         });
