@@ -35,7 +35,7 @@ async function carregarFornecedores() {
 
     const data = await response.json();
 
-    console.log(data);
+    // console.log(data);
     let list = [];
     data.forEach((itens) => {
       list.push(
@@ -76,7 +76,7 @@ document
         cd_cadastrante: localStorage.getItem("id"),
       };
 
-      console.log(payload);
+      // console.log(payload);
       const reponse = await fetch(`${API_BASE_URL}fornecedores/create`, {
         method: "POST",
         headers: {

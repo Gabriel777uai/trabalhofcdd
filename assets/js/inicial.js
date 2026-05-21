@@ -3,20 +3,26 @@ let user = localStorage.getItem("usuario");
 usename.innerHTML = user;
 
 let API_BASE_URL;
+
+const logger = true;
+
+logger == false ? logger : console.log("Logs init!");
+
 if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
   API_BASE_URL = "http://localhost/api/v1/";
+  logger == false ? logger : console.log('Rodando em desenvolvimento');
 } else {
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1/";
+  logger == false ? logger : console.log('Rodando em Produção!');
 }
 
 if (!localStorage.getItem("count")) {
   localStorage.setItem("count", 0);
 }
 
-//<notifications>
 async function updateListMessage() {
   const response = await fetch(`${API_BASE_URL}notifications/update/viewed`, {
     method: "put",
@@ -101,7 +107,8 @@ async function renderMessages(list) {
   $("#list-notify").html("");
   $("#list-notify").append(html);
 }
-//defaltValue
+
+//defalt Value
 renderMessages("all");
 
 async function message(param) {
@@ -126,7 +133,7 @@ let agent_name = document.getElementById("recipient-name");
 
 async function openMessage(param) {
   modal.classList.add("active");
-  console.log(param);
+  logger == false ? logger : console.log(param);
   const response = await fetch(`${API_BASE_URL}notifications/${param}`, {
     method: "get",
   });
@@ -157,7 +164,7 @@ if (localStorage.getItem("count") == 0) {
   div.style.boxShadow = "2px 1px 10px #696969b9";
   div.style.borderRadius = "4px";
   document.body.append(div);
-  console.log("estou na condição!");
+  logger == false ? logger : console.log("estou na condição!");
 
   setTimeout(() => {
     div.style.transition = "1s";
@@ -191,7 +198,7 @@ async function getDataApi(url) {
     currentPage = 1;
 
     function showValueAllItensAndQuantity() {
-      console.log(allProducts.result);
+      logger == false ? logger : console.log(allProducts.result);
       const valueAll = allProducts.result.reduce((tot, item) => {
         allValue = tot + item.ia_valor * item.ia_quantidadeproduto;
         return allValue;
@@ -205,7 +212,7 @@ async function getDataApi(url) {
     }
     const valorTotalDeTodosItens = showValueAllItensAndQuantity();
 
-    console.log(valorTotalDeTodosItens);
+    logger == false ? logger : console.log(valorTotalDeTodosItens);
     renderPage();
   } catch (error) {
     Swal.fire({
@@ -247,16 +254,19 @@ function renderPage() {
     let message = "Estoque Normal!";
     let classBadge = "bg-success";
 
-    if (media == 0) {
+    if (estoque == 0) {
       message = "Estoque zerado!";
       classBadge = "bg-dark";
-    } else if (media < estoque / 2) {
-      message = "Estoque baixo!";
+    } 
+    if (estoque / 2 < media) {
+      message = "Estoque perto da quantidade ideal!";
       classBadge = "bg-warning";
-    } else if (media < estoque) {
-      message = "Estoque muito baixo!";
+    } 
+    if (estoque < media) {
+      message = "Estoque abaixo do estoque ideal!";
       classBadge = "bg-danger";
-    }
+    } 
+    
 
     list.append(`
       <div class="card h-100 widgets" style="cursor: pointer;" >
@@ -400,7 +410,7 @@ window.visualizarProduto = async function (id) {
     });
     const data = await response.json();
 
-    console.log(data);
+    logger == false ? logger : console.log(data);
 
     const produto = data;
 
@@ -509,7 +519,7 @@ window.salvarProduto = async function () {
     newImage: document.getElementById("editImg").value,
     newGrupo: document.getElementById("editGrupo").value,
   };
-
+  logger == false ? logger : console.log('dados para edição: ' + dados)
   try {
     const response = await fetch(`${API_BASE_URL}update/produto/${id}`, {
       method: "PUT",

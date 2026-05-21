@@ -7,6 +7,9 @@
 * {
   font-family: "fonte-principal", sans-serif;
 }
+main {
+  overflow: hidden;
+}
 
 .cart-table-container {
   margin-top: 20px;
@@ -94,10 +97,17 @@
   z-index: 8;
   background-color: #1976d2;
   color: white;
-  padding: 10px 10px;
-  border-radius: 55%;
+  padding: 15px 20px;
+  border-radius: 100%;
   cursor: pointer;
   border: none;
+  transition: .2s;
+}
+#btnVisualizarPedidos:hover {
+  transform: scale(
+    1.1
+  );
+  transition: .2s;
 }
 
 .visualizar-pedidos-control {

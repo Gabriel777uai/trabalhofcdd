@@ -18,11 +18,11 @@ if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  console.log("Testes em Desenvolvimento");
+  // console.log("Testes em Desenvolvimento");
 
   url_base = "http://localhost/";
 } else {
-  console.log("Rodando em Produção");
+  // console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 formLogin.addEventListener("submit", async function (event) {
@@ -90,7 +90,7 @@ form_of_testing.addEventListener("submit", async (e) => {
     <span class="visually-hidden">Aguarde...</span>
   </div>`;
   form_test_data = new FormData(form_of_testing);
-  console.log("Enviado com sucesso");
+  // console.log("Enviado com sucesso");
   try {
     const response = await fetch(
       "https://n8n-3dg1.onrender.com/webhook/605cfe06-1915-4739-b60c-d43b776dc2b10",

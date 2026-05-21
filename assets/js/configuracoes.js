@@ -10,10 +10,10 @@ if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  console.log("Testes em Desenvolvimento");
+  // console.log("Testes em Desenvolvimento");
   API_BASE_URL = "http://localhost/api/v1";
 } else {
-  console.log("Rodando em Produção");
+  // console.log("Rodando em Produção");
   API_BASE_URL = "https://trabalhofcdd-backend.onrender.com/api/v1";
 }
 
@@ -153,7 +153,7 @@ document
     let passConfirm = form.get("passConfirm");
     let userId = localStorage.getItem("id");
 
-    console.log(senha, passNow, passConfirm);
+    // console.log(senha, passNow, passConfirm);
 
     if (passNow !== passConfirm) {
       let r = document.getElementById("res");

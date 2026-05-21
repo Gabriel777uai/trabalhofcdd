@@ -6,11 +6,11 @@ if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  console.log("Testes em Desenvolvimento");
+  // console.log("Testes em Desenvolvimento");
 
   url_base = "http://localhost/";
 } else {
-  console.log("Rodando em Produção");
+  // console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 
@@ -92,7 +92,7 @@ async function getPedidos(baseUrl, id) {
       },
     });
     const data = await reponse.json();
-    console.log(data);
+    // console.log(data);
     
     renderList(data);
   } catch (err) {
@@ -112,7 +112,7 @@ async function visualizarPedido(id) {
   
 
   const data = await response.json();
-  console.log("dados recebidos: " + id);
+  // console.log("dados recebidos: " + id);
 
   let vlr_total = new Intl.NumberFormat("pt-br", {
     style: "currency",

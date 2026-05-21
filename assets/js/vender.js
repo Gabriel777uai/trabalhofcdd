@@ -1,13 +1,15 @@
 let url_base;
+const logger = true;
 
+logger == false ? logger : console.log("Logs init!");
 if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  console.log("Testes em Desenvolvimento");
+  logger == false ? logger : console.log("Testes em Desenvolvimento");
   url_base = "http://localhost/";
 } else {
-  console.log("Rodando em Produção");
+  logger == false ? logger : console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 
@@ -290,7 +292,7 @@ document
         }),
       });
 
-      console.log("Status da resposta adicionar:", response.status);
+      logger == false ? logger : console.log("Status da resposta adicionar:", response.status);
       const dataResponse = await response.json().catch(() => ({}));
 
       if (dataResponse.response === false && dataResponse.code === 4) {
@@ -352,7 +354,7 @@ async function loadOrderItems(pedidoId) {
     if (!response.ok) throw new Error("Erro ao carregar itens");
 
     const data = await response.json();
-    console.log("Dados recebidos loadOrderItems:", data);
+    logger == false ? logger : console.log("Dados recebidos loadOrderItems:", data);
 
     const items = Array.isArray(data.output) ? data.output : [];
 
@@ -841,7 +843,7 @@ document
     if (pedidoId) {
       finalizarPedido(pedidoId);
     }
-  });
+});
 
 /**
  * daqui para baixo é geração do xml de teste não conta codigo
@@ -951,11 +953,11 @@ async function getNFeXML(pedidoId) {
           xFant: { _text: "ESTOQUE INTELIGENTE" },
           enderEmit: {
             xLgr: { _text: "RUA DE EXEMPLO, LOTE  39 QUADRA 12" },
-            nro: { _text: "123" },
+            nro: { _text: "123456789" },
             xBairro: { _text: "BAIRRO DE EXEMPLO" },
             cMun: { _text: "3550308" },
-            xMun: { _text: "SAO PAULO" },
-            UF: { _text: "SP" },
+            xMun: { _text: "GOIÂNIA" },
+            UF: { _text: "GO" },
             CEP: { _text: "01310100" },
             cPais: { _text: "1058" },
             xPais: { _text: "BRASIL" },
@@ -1112,7 +1114,7 @@ ${rawXml.replace('<?xml version="1.0" encoding="UTF-8"?>', "").trim()}
 
     const form = document.createElement("form");
     form.method = "POST";
-    form.action = "https://www.webdanfeonline.com.br/print.php";
+    form.action = "https://www.webdanfeonline.com.br/";
     form.target = "_blank";
 
     const input = document.createElement("input");

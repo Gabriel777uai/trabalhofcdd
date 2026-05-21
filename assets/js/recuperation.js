@@ -21,7 +21,7 @@ const apiService = {
   },
 
   async requestRecoveryCode(login, email, id_user) {
-    console.log(login, email, id_user);
+    // console.log(login, email, id_user);
     const response = await fetch(`${CONFIG.URL_BASE}api/v1/forgotpassword`, {
       method: "POST",
       body: JSON.stringify({
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       userLocalStorage || loginInput.value,
     );
 
-    console.log(dataUser);
+    // console.log(dataUser);
     if (dataUser.response) {
       currentUserEmail = dataUser.output?.email;
       currentUserId = dataUser.output?.id;
@@ -159,7 +159,7 @@ async function handleRecoverySubmit(event) {
       formData.get("email"),
       currentUserId,
     );
-    console.log("Recovery request result:", data);
+    // console.log("Recovery request result:", data);
 
     if (data.response) {
       await uiService.showSuccess(
@@ -188,7 +188,7 @@ async function handleCodeValidationSubmit(event) {
 
   try {
     const data = await apiService.validateCode(currentUserId, formData);
-    console.log("Validation result:", data);
+    // console.log("Validation result:", data);
 
     if (data.response) {
       await uiService.showSuccess(
@@ -224,7 +224,7 @@ async function handlePasswordResetSubmit(event) {
 
   try {
     const data = await apiService.updatePassword(currentUserId, password);
-    console.log("Password reset result:", data);
+    // console.log("Password reset result:", data);
 
     if (data.response) {
       await uiService.showSuccess(

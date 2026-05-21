@@ -3,6 +3,10 @@ const token = localStorage.getItem("acessToken");
 const decodedToken = jwtDecode(token);
 const userRole = parseInt(decodedToken.role) || 1;
 
+const logger = true;
+
+logger == false ? logger : console.log("Logs init!");
+
 if (userRole < 3) {
   document.getElementById("conteudo").innerHTML = "<h1 id='msg'>Você não tem permissão para acessar esta página!<br><span>consulte um administrador para mais informações.<br> <a href='inicial.html'>Voltar para a página inicial</a></span></h1>";
   throw new Error("Sem permissão para acessar esta página!");
@@ -12,10 +16,10 @@ if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  console.log("Testes em Desenvolvimento");
+  logger == false ? logger : console.log("Testes em Desenvolvimento");
   url_base = "http://localhost/";
 } else {
-  console.log("Rodando em Produção");
+  logger == false ? logger : console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/";
 }
 
@@ -198,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
       }
 
-      console.log("Payload:", payload);
+      logger == false ? logger : console.log("Payload:", payload);
 
       try {
         const response = await fetch(`${url_base}api/v1/createclientes`, {
@@ -213,12 +217,14 @@ document.addEventListener("DOMContentLoaded", () => {
           nameCliente: payload.nome_cliente,
           emailCliente: payload.email
         }
-        const sendEmail = await fetch('https://n8n-3dg1.onrender.com/webhook/605cfe06-1915-4739-b60c-d43b776dc2b7', {
+        const sendEmail = await fetch('https://n8n-production-fa81.up.railway.app/webhook/605cfe06-1915-4739-b60c-d43b776dc2b7', {
           method: 'POST',
           body: JSON.stringify(dataEmail)
         })
 
         const result = await response.json();
+
+        logger == false ? logger : console.log(result);
 
         if (response.ok) {
           Swal.fire({
@@ -282,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) throw new Error("Erro ao buscar clientes");
 
       const data = await response.json();
+      logger == false ? logger : console.log(data)
       renderClients(data);
     } catch (error) {
       console.error("Erro fetchClients:", error);

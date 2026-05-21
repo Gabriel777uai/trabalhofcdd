@@ -10,15 +10,17 @@
  */
 
 let url_base;
+const logger = true;
 
+logger == false ? logger : console.log("Logs init!");
 if (
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
 ) {
-  console.log("Testes em Desenvolvimento");
+  logger == false ? logger : console.log("Testes em Desenvolvimento");
   url_base = "http://localhost/api/v1/";
 } else {
-  console.log("Rodando em Produção");
+  logger == false ? logger : console.log("Rodando em Produção");
   url_base = "https://trabalhofcdd-backend.onrender.com/api/v1/";
 }
 const usename = document.getElementById("user");
@@ -26,6 +28,14 @@ const user = localStorage.getItem("usuario");
 if (usename && user) {
   usename.innerHTML = user;
 }
+
+/**
+ * Função para buscar os dados diretamente da api do estoque inteligente.
+ * Buscando dados da API de replatorio passando somente o nome do relatorio.
+ * rota https://exemple.com/api/v1/relatorios/{NOME_RELATORIO} 
+ * method: GET
+ * Authorization: Required
+ */
 
 async function fetchData(endpoint) {
   try {
@@ -40,7 +50,7 @@ async function fetchData(endpoint) {
     if (!response.ok)
       throw new Error(`Erro API ${endpoint}: ${response.status}`);
     const data = await response.json();
-    console.log(`Dados recebidos de ${endpoint}:`, data);
+    logger == false ? logger :console.log(`Dados recebidos de ${endpoint}:`, data);
     return data?.output || data;
   } catch (error) {
     console.error(error);
@@ -90,7 +100,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).format(totalVendasMes);
 
     document.getElementById("cardVendasMes").textContent = traducao;
+    logger == false ? logger :  console.log(dadosVendasMes);
   }
+   logger == false ? logger : console.log('Meses de vendas: ' + categoriesVendas);
+   logger == false ? logger : console.log('Series de vendas: ' + seriesVendas.join(' '));
 
   const optionsVendas = {
     series: [
@@ -326,6 +339,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   ).render();
 });
 
+// fim da inicialização do DOMContentLoaded
+// Função para buscar os relatorios gerados via api.
 function gerarRelatorio(tipo) {
   Swal.fire({
     icon: "info",
