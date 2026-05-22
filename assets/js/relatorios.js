@@ -319,17 +319,25 @@ document.addEventListener("DOMContentLoaded", async function () {
       optionsTopCliente,
     ).render();
   }
+  const data_compras_user = await fetchData("getCompras");
+  const arr_name = [];
+  const arr_quantity = [];
+  data_compras_user.forEach((index) => {
+      arr_name.push(index.nome_comprador);
+      arr_quantity.push(index.compras_efetuadas);
+  });
+  logger == false ? logger : console.log("Dados de compras do usuário:", data_compras_user);
+
   const optionsUsuarioAtividade = {
     series: [
-      { name: "Itens", type: "column", data: [0] },
-      { name: "Valor", type: "line", data: [0] },
+      { name: "Itens", type: "column", data: arr_quantity },
+      
     ],
     chart: { height: 350, type: "line", toolbar: { show: false } },
     stroke: { width: [0, 4] },
-    labels: ["Sem dados"],
+    labels: arr_name,
     yaxis: [
       { title: { text: "Quantidade" } },
-      { opposite: true, title: { text: "Valor" } },
     ],
     colors: ["#388e3c", "#f57c00"],
   };

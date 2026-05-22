@@ -2,12 +2,12 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
-    <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../assets/css/inicial.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css" />
+    <link rel="shortcut icon" href="../assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../assets/css/inicial.css" />
     <title>Fornecedores</title>
 </head>
 
@@ -16,7 +16,7 @@
     <div id="header">
         <button id="btnMobileToggle"><i class="bi bi-list"></i></button>
         <h1>Paínel de Controle</h1>
-        <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="50px" class="ms-4">
+        <img src="../assets/img/estoque-logo.png" alt="logo-eia" width="50px" class="ms-4" />
         <h4 style="text-align: end;">Olá, <span id="user"></span>!</h4>
          <div class="notifications">   
             <div class="dropdown">
@@ -134,11 +134,11 @@
                     <form>
                     <div class="form-group-message">
                         <label for="recipient-name" class="col-form-label">Agent:</label>
-                        <input type="text" class="form-control" id="recipient-name" disabled>
+                        <input type="text" class="form-control" id="recipient-name" disabled="disabled" />
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Message:</label>
-                        <textarea class="form-control" id="message-text" rows="8" disabled></textarea>
+                        <textarea class="form-control" id="message-text" rows="8" disabled="disabled"></textarea>
                     </div>
                     </form>
                 </div>
@@ -164,19 +164,19 @@
                         <div class="row g-3 mb-1">
                             <div class="col-md-6">
                                 <label class="form-label">Razão Social</label>
-                                <input type="text" class="form-control" name="fantasia" id="fantasia" required>
+                                <input type="text" class="form-control" name="fantasia" id="fantasia" required/>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Nome</label>
-                                <input type="text" name="name" class="form-control" id="name" required>
+                                <input type="text" name="name" class="form-control" id="name" required/>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">CPF</label>
-                                <input type="number" name="cpf" class="form-control" id="cpf">
+                                <input type="number" name="cpf" class="form-control" id="cpf"/>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">CNPJ</label>
-                                <input type="number" name="cnpj" class="form-control" id="cnpj">
+                                <input type="number" name="cnpj" class="form-control" id="cnpj"/>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -192,14 +192,13 @@
     </div>
 
     <!-- Scripts -->
-    <script type="importmap">
-    {
-      "imports": {
-        "jwt-decode": "https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/esm/index.js"
-      }
-    }
-    </script>
-    <script src="../assets/js/inicial.js"></script>
+	<script type="importmap">
+		{
+		"imports": {
+		"jwt-decode": "https://cdn.jsdelivr.net/npm/jwt-decode@4.0.0/build/esm/index.js"
+		}
+		}
+	</script>
     <script type="module" src="../assets/js/menu_roles.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>

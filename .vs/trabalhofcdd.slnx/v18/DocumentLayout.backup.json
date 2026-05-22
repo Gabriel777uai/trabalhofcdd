@@ -1,0 +1,130 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\wamp64\\www\\trabalhofcdd\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\wamp64\\www\\trabalhofcdd\\pages\\fornecedores.html||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:pages\\fornecedores.html||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\wamp64\\www\\trabalhofcdd\\index.html||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:index.html||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\configuracoes.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\js\\configuracoes.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\cadastroProduto.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\js\\cadastroProduto.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\cadastroClientes.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\js\\cadastroClientes.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\auth.js||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\js\\auth.js||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "fornecedores.html",
+              "DocumentMoniker": "C:\\wamp64\\www\\trabalhofcdd\\pages\\fornecedores.html",
+              "RelativeDocumentMoniker": "pages\\fornecedores.html",
+              "ToolTip": "C:\\wamp64\\www\\trabalhofcdd\\pages\\fornecedores.html",
+              "RelativeToolTip": "pages\\fornecedores.html",
+              "ViewState": "AgIAAHMAAAAAAAAAAAAlwIgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-22T14:56:45.377Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "configuracoes.js",
+              "DocumentMoniker": "C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\configuracoes.js",
+              "RelativeDocumentMoniker": "assets\\js\\configuracoes.js",
+              "ToolTip": "C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\configuracoes.js",
+              "RelativeToolTip": "assets\\js\\configuracoes.js",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAmwDQAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-05-22T12:59:51.26Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "cadastroClientes.js",
+              "DocumentMoniker": "C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\cadastroClientes.js",
+              "RelativeDocumentMoniker": "assets\\js\\cadastroClientes.js",
+              "ToolTip": "C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\cadastroClientes.js",
+              "RelativeToolTip": "assets\\js\\cadastroClientes.js",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABsAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-05-22T12:59:38.867Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "cadastroProduto.js",
+              "DocumentMoniker": "C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\cadastroProduto.js",
+              "RelativeDocumentMoniker": "assets\\js\\cadastroProduto.js",
+              "ToolTip": "C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\cadastroProduto.js",
+              "RelativeToolTip": "assets\\js\\cadastroProduto.js",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAwAQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-05-22T12:44:57.712Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "auth.js",
+              "DocumentMoniker": "C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\auth.js",
+              "RelativeDocumentMoniker": "assets\\js\\auth.js",
+              "ToolTip": "C:\\wamp64\\www\\trabalhofcdd\\assets\\js\\auth.js",
+              "RelativeToolTip": "assets\\js\\auth.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-05-22T12:44:52.746Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "index.html",
+              "DocumentMoniker": "C:\\wamp64\\www\\trabalhofcdd\\index.html",
+              "RelativeDocumentMoniker": "index.html",
+              "ToolTip": "C:\\wamp64\\www\\trabalhofcdd\\index.html",
+              "RelativeToolTip": "index.html",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAABAAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2026-05-22T12:44:40.189Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
