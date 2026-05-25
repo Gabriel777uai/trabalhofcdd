@@ -345,6 +345,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.querySelector("#chartUsuarioAtividade"),
     optionsUsuarioAtividade,
   ).render();
+  const optionsCategoryProducts = {
+       
+  };
+  new ApexCharts(
+    document.querySelector("#comprarationsCategoryProducts"),
+    optionsCategoryProducts,
+  ).render();
 });
 
 // fim da inicialização do DOMContentLoaded
