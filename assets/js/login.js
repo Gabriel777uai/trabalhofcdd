@@ -27,6 +27,9 @@ if (
 }
 formLogin.addEventListener("submit", async function (event) {
   event.preventDefault();
+  const btn = document.getElementById('btnLogin');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>';
 
   let formData = new FormData(formLogin);
 
@@ -37,6 +40,8 @@ formLogin.addEventListener("submit", async function (event) {
     });
 
     let data = await response.json();
+    btn.disabled = false;
+    btn.innerHTML = "Entrar";
     if (data.response) {
       localStorage.setItem("acessToken", data.token);
       localStorage.setItem("id", data.id);
