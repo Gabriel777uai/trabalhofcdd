@@ -81,6 +81,7 @@ window.finalizarCompra = async function () {
       : "https://trabalhofcdd-backend.onrender.com/";
 
   try {
+
     const payload = {
       comprador: compradorNome,
       produto: produtoNome,
@@ -89,7 +90,16 @@ window.finalizarCompra = async function () {
       cd_fornecedor: parseInt(fornecedorId),
       quantidade: parseInt(qtd),
     };
-
+    // caso codigo de produto vier vazio remove do payload e deixa o backend decidir o codigo!
+    if (!cdProduto) {
+      const payload = {
+        comprador: compradorNome,
+        produto: produtoNome,
+        cd_comprador: compradorId,
+        cd_fornecedor: parseInt(fornecedorId),
+        quantidade: parseInt(qtd),
+      };
+    }
     await fetch(`${url_base}api/v1/compras/create`, {
       method: "POST",
       headers: {
