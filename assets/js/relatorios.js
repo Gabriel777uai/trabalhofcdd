@@ -345,13 +345,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.querySelector("#chartUsuarioAtividade"),
     optionsUsuarioAtividade,
   ).render();
-  const optionsCategoryProducts = {
-       
-  };
-  new ApexCharts(
-    document.querySelector("#comprarationsCategoryProducts"),
-    optionsCategoryProducts,
-  ).render();
+ 
+  const grupos = await fetchData('getGrupos');
+  const div_list = $('#comprarationsCategoryProducts')
+  grupos.forEach((itens) => {
+    div_list.append(`Grupo: ${itens.c_grupo} Codigo: ${itens.i_cdgrupo} </br>`);
+  })
+
 });
 
 // fim da inicialização do DOMContentLoaded

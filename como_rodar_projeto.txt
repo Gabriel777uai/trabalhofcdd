@@ -1,0 +1,3 @@
+para rodar esse ambiente em desenvolvimento, só é necessario ter instalado a extenção instalada no visual studio code, "Live server", após a instalação e preparação da sua IDE, só apertar em go live no canto inferior direito da sua tela!
+
+pronto front end rodando!
